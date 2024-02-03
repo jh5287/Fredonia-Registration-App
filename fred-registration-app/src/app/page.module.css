@@ -1,12 +1,32 @@
 .container {
+  margin: 3rem;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns for 8 evenly spaced divs */
+  grid-template-columns: repeat(2, 1fr) 25%; /* 3 columns */
   gap: 20px; /* Gap between grid items */
+  grid-auto-flow: dense; /* Fill in empty grid cells */
+  height: 100vh; /* Full height */
 }
 
 .item {
-  background-color: #f0f0f0; /* Background color */
+  color: black;
+  background-color: pink; /* Background color */
   padding: 20px; /* Padding for each grid item */
   border-radius: 8px; /* Border radius for rounded corners */
-  text-align: center; /* Center text */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+.item-header {
+  font-size: 1.5rem; /* Larger font size */
+  font-weight: bold; /* Bold font weight */
+  border-bottom: 1px solid #383737; /* Border bottom */
+}
+
+.CGPA {
+  grid-row: 1 / 6; /* Span across 3 rows */
+  grid-column-start: 3;
+}
+
+.user-info {
+  grid-row-start: 1;
+  grid-column: 1 / 3;
 }
