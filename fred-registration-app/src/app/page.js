@@ -16,54 +16,84 @@ const Page = () => {
   };
   return (
     <div>
-    <div className={styles.container}> {/* Apply container class */}
+    <div className='m-3 grid grid-cols-2 gap-5 h-full'> {/* Apply container class */}
       {/* First div spans across 3 columns */}
-      <CGPA classname={`${styles.item} ${styles['CGPA']}`} />{/* Second div spans across 3 columns */}
       {/* Remaining divs */}
-      <UserInfo classname={`${styles.item} ${styles['user-info']}`} />
+      <UserInfo classname={`${styles.item} row-start-1 col-span-2`} />
 
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 1
+        </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
         </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 2
         </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
+        </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 3
+        </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
         </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 4
         </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
+        </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 5
+        </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
         </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 6
         </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
+        </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 7
+        </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
         </div>
       </div>
       <div className={styles.item}>
         <div className={styles['item-header']}>
           Semester 8
         </div>
+        <div>
+          lorem ipsum dolor sit amet
+          lorem ipsum dolor sit amet
+        </div>
       </div>
     </div>
-    <div className='text-3xl font-bold underline'>Hello world</div>
     </div>
   );
 };

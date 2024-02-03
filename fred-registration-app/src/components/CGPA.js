@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './CGPA.module.css'; // Import CSS module
 
-const CGPA = ({classname}) => {
+const CGPA = () => {
     return (
-        <div className={`${classname} `}>
+        <div>
             CGPA
         </div>
     );

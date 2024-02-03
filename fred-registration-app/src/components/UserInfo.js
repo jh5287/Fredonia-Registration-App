@@ -3,16 +3,16 @@ import styles from './UserInfo.module.css'; // Import CSS module
 import { mdiAccount } from '@mdi/js';
 
 const UserInfo = ({classname}) => {
-  //const { user } = useAuth0();
+
   return (
-    <div className={`${classname} ${styles.container}`}>
-        <div className={styles.info}>
-            {/*<img src={user.picture} alt={user.name} />*/}
+    <div className={`${classname}  my-3 flex justify-between items-center`}>
+        <div className='flex flex-col'>
             <Icon path={mdiAccount} title="User Profile" size={2} />
-            {/*<h2>{user.name}</h2>*/}
-            {/*<p>{user.email}</p>*/}
-            User Name
+            Jane Roe
         </div>
+     <div>
+        <button className='py-3 px-5 bg-blue-500 text-white rounded-md'>Show CGPA</button>
+     </div>
       
     </div>
   );
