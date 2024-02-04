@@ -3,96 +3,38 @@ import React, {useState} from 'react';
 import styles from './page.module.css'; // Import CSS module
 import CGPA from '@/components/CGPA';
 import UserInfo from '@/components/UserInfo';
+import Semester from '@/components/Semester';
+import jsonData from './sem1.json';
+import sem1 from './sem1.json';
+import sem2 from './sem2.json';
+import sem3 from './sem3.json';
+import sem4 from './sem4.json';
 
 const Page = () => {
-  const [isSpanning, setIsSpanning] = useState(true);
+  const [showCGPA, setShowCGPA] = useState(false);
 
-  const handleClose = () => {
-    setIsSpanning(false);
-  };
+  const handleShowCGPA = () => {
+    const updatedShowCGPA = !showCGPA;
+    setShowCGPA(updatedShowCGPA);
+  }
 
-  const handlePutBack = () => {
-    setIsSpanning(true);
-  };
   return (
     <div>
-    <div className='m-3 grid grid-cols-2 gap-5 h-full'> {/* Apply container class */}
+    <UserInfo classname='text-black p-5 bg-[#dadada] shadow-md row-start-1 col-span-2 m-3' handleShowCGPA={handleShowCGPA}/>
+    <div className='m-3 grid grid-cols-1 gap-5 h-full md:grid-cols-2'> {/* Apply container class */}
       {/* First div spans across 3 columns */}
       {/* Remaining divs */}
-      <UserInfo classname={`${styles.item} row-start-1 col-span-2`} />
+      
+      <CGPA showCGPA={showCGPA} handleShowCGPA={handleShowCGPA}/>
+      <Semester number={1} data={sem1}/>
+      <Semester number={2} data={sem2}/>
+      <Semester number={3} data={sem3}/>
+      <Semester number={4} data={sem4}/>
+      <Semester number={5} data={jsonData}/>
+      <Semester number={6} data={jsonData}/>
+      <Semester number={7} data={jsonData}/>
+      <Semester number={8} data={jsonData}/>
 
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 1
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 2
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 3
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 4
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 5
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 6
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 7
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
-      <div className={styles.item}>
-        <div className={styles['item-header']}>
-          Semester 8
-        </div>
-        <div>
-          lorem ipsum dolor sit amet
-          lorem ipsum dolor sit amet
-        </div>
-      </div>
     </div>
     </div>
   );

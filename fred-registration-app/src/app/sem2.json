@@ -1,0 +1,33 @@
+[
+    {
+      "Course Code": "CSIT 221",
+      "Course Title": "Computer Science II",
+      "Credits": 3
+    },
+    {
+      "Course Code": "MATH 121",
+      "Course Title": "Survey of Calculus II (or)",
+      "Credits": 3
+    },
+    {
+      "Course Code": "MATH 123",
+      "Course Title": "University Calculus II",
+      "Credits": 0
+    },
+    {
+      "Course Code": "FF",
+      "Course Title": "Course",
+      "Credits": 3
+    },
+    {
+      "Course Code": "FF",
+      "Course Title": "Course",
+      "Credits": 3
+    },
+    {
+      "Course Code": "FF",
+      "Course Title": "Course",
+      "Credits": 3
+    }
+  ]
+  

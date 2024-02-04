@@ -1,0 +1,28 @@
+[
+    {
+      "Course Code": "CSIT 311",
+      "Course Title": "Assembly Language",
+      "Credits": 3
+    },
+    {
+      "Course Code": "CSIT 321",
+      "Course Title": "Paradigms of Programming Languages",
+      "Credits": 3
+    },
+    {
+      "Course Code": "FF",
+      "Course Title": "Course",
+      "Credits": 3
+    },
+    {
+      "Course Code": "FF",
+      "Course Title": "Course",
+      "Credits": 3
+    },
+    {
+      "Course Code": "SCI",
+      "Course Title": "Required Science Course",
+      "Credits": 3
+    }
+  ]
+  
