@@ -1,8 +1,7 @@
 import Icon from '@mdi/react';
-import styles from './UserInfo.module.css'; // Import CSS module
 import { mdiAccount } from '@mdi/js';
 
-const UserInfo = ({classname}) => {
+const UserInfo = ({classname, handleShowCGPA}) => {
 
   return (
     <div className={`${classname}  my-3 flex justify-between items-center`}>
@@ -11,7 +10,7 @@ const UserInfo = ({classname}) => {
             Jane Roe
         </div>
      <div>
-        <button className='py-3 px-5 bg-blue-500 text-white rounded-md'>Show CGPA</button>
+        <button onClick={() => handleShowCGPA()} className='py-3 px-5 bg-blue-500 text-white rounded-md'>Show CGPA</button>
      </div>
       
     </div>
