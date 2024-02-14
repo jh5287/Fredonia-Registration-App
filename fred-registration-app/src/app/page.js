@@ -1,14 +1,38 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './page.module.css'; // Import CSS module
 import UserInfo from '@/components/UserInfo';
 import RoadMap from '@/components/RoadMap';
 import Dropdown from '@/components/Dropdown';
 import Registration from '@/components/Registration';
+import { GetAllCourses, GetCourseBySemAndYr } from '@/api/sqlserver/queries';
 
 const Page = () => {
   const [showCGPA, setShowCGPA] = useState(false);
   const [currentPage , setCurrentPage] = useState('Road Map'); // ['Road Map', 'Registration']
+  const [courses , setCourses] = useState([]);
+
+  const getCourses = async () => {
+    const courses = await GetAllCourses();
+    console.log(courses[0]);
+    setCourses(courses);
+    console.log('CRN', courses[0].CRN)
+    console.log('CourseCode', courses[0].CourseCode)
+    console.log('Title', courses[0].Title)
+    console.log('Credits', courses[0].Credits)
+  }
+
+  const getSemYrCourses = async (semester, year) => {
+    const courses = await GetCourseBySemAndYr(semester, year);
+    console.log(courses);
+  }
+
+  useEffect(() => {
+    getCourses();
+    getSemYrCourses('Fall', 1);
+  }, []);
+
+
   const handleShowCGPA = () => {
     const updatedShowCGPA = !showCGPA;
     setShowCGPA(updatedShowCGPA);
