@@ -7,10 +7,56 @@ import Dropdown from '@/components/Dropdown';
 import Registration from '@/components/Registration';
 import { GetAllCourses, GetCourseBySemAndYr } from '@/api/sqlserver/queries';
 
+
+
+
+
+
+const TestSemester = ({number, data}) => {
+
+  return (
+      <div className='text-black p-5 bg-[#dadada] shadow-md'>
+      <div className='text-[1.5rem] font-bold border-b border-[#383737]'>
+        Semester {number}
+      </div>
+      <table className='table-auto'>
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Title</th>
+            <th>Credits</th>
+          </tr>
+        </thead>
+        <tbody className='[&>*:nth-child(odd)]:bg-white [&>*:nth-child(even)]:bg-gray'>
+        {data.map((item, index) => (
+          <tr key={index}>
+            <td>{item.CourseCode}</td>
+            <td>{item.Title}</td>
+            <td>{item.Credits}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+    </div>
+  )
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 const Page = () => {
   const [showCGPA, setShowCGPA] = useState(false);
   const [currentPage , setCurrentPage] = useState('Road Map'); // ['Road Map', 'Registration']
   const [courses , setCourses] = useState([]);
+  const [sem1 , setSem1] = useState([]);
 
   const getCourses = async () => {
     const courses = await GetAllCourses();
@@ -24,7 +70,14 @@ const Page = () => {
 
   const getSemYrCourses = async (semester, year) => {
     const courses = await GetCourseBySemAndYr(semester, year);
-    console.log(courses);
+    console.log('Object', courses);
+    for (var i = 0; i < courses.length; i++) {
+      console.log('CourseCode', courses[i].CourseCode)
+      console.log('Title', courses[i].Title)
+      console.log('Credits', courses[i].Credits)
+    }
+    setSem1(courses);
+
   }
 
   useEffect(() => {
@@ -58,6 +111,7 @@ const Page = () => {
         <Dropdown classname={'ml-10'} handleCurrentPage={handleCurrentPage}/>
         {currentPage === 'Road Map' ? <RoadMap showCGPA={showCGPA} handleShowCGPA={handleShowCGPA}/> : <Registration showCGPA={showCGPA} handleShowCGPA={handleShowCGPA}/>}
         {/*<RoadMap showCGPA={showCGPA} handleShowCGPA={handleShowCGPA}/>*/}
+        <TestSemester number={1} data={sem1}/>
       </div>
       
     </div>
