@@ -5,12 +5,13 @@ import CGPA from './CGPA';
 import Semester from './Semester';
 
 
-const Registration = ({showCGPA, handleShowCGPA}) => {
+const Registration = ({showCGPA, handleShowCGPA, data}) => {
   return (
     <div className='m-3 grid grid-cols-1 gap-5 h-full md:grid-cols-2'> 
           <CGPA showCGPA={showCGPA} handleShowCGPA={handleShowCGPA}/>
-          <Semester number={1} data={sem1}/>
-          <Semester number={2} data={sem2}/>
+          {data.map((item, index) => (
+            <Semester key={index+1} data={item}/>
+          ))}
     </div>
   );
 }

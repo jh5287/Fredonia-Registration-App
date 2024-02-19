@@ -19,10 +19,6 @@
       "Course Title": "Course",
       "Credits": 3
     },
-    {
-      "Course Code": "SCI",
-      "Course Title": "Required Science Course",
-      "Credits": 3
-    }
+    { "Course Code": "SCI", "Course Title": "Required Science Course","Credits": 3 }
   ]
   

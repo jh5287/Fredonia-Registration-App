@@ -11,6 +11,7 @@
   "dependencies": {
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
+    "axios": "^1.6.7",
     "mssql": "^10.0.2",
     "next": "14.1.0",
     "next-connect": "^1.0.0",

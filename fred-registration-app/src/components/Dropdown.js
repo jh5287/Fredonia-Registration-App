@@ -1,16 +1,28 @@
 // components/Dropdown.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const Dropdown = ({classname, handleCurrentPage}) => {
+const Dropdown = ({classname, handleRoadMap, handleRegistration}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+  // Attach event listener for clicks outside the div when the div is visible
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('click', toggleDropdown);
+    } else {
+      document.removeEventListener('click', toggleDropdown);
+    }
+    // Cleanup the event listener on unmount
+    return () => {
+      document.removeEventListener('click', toggleDropdown);
+    };
+  }, [isOpen]);
 
   return (
-    <div className={`${classname} relative inline-block text-left`}>
+    <div className={`${classname} relative inline-block text-left ml-[12px]`}>
       <div>
         <button
           onClick={toggleDropdown}
@@ -20,7 +32,7 @@ const Dropdown = ({classname, handleCurrentPage}) => {
           aria-haspopup="true"
           aria-expanded="true"
         >
-          Toggle Pages
+          Change View
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -46,10 +58,10 @@ const Dropdown = ({classname, handleCurrentPage}) => {
         >
           <div className="py-1" role="none">
               <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                <button className='w-full' onClick={() => handleCurrentPage()}>Road Map</button>
+                <button className='w-full' onClick={() => handleRoadMap()}>Road Map</button>
                 </div>
               <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-              <button className='w-full' onClick={() => handleCurrentPage()}>Registration</button>
+              <button className='w-full' onClick={() => handleRegistration()}>Registration</button>
                 </div>
           </div>
         </div>

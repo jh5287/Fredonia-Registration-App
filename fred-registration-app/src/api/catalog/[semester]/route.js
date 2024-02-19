@@ -1,23 +1,15 @@
-'use server';
+'use server'
 
-import { pool } from '../../db/server';
-import 'mssql'
+import pool from '../../../db/server';
 import sql from 'mssql';
+import 'mssql'
 
-export async function GetAllCourses() {
+export async function GET(request, params) {
     try {
-        await pool.connect();
-        const result = await pool.request().query('SELECT * FROM Course');
-        return result.recordset;
-    } catch (err) {
-        console.error('SQL error: ', err);
-    }
-}
-
-
-
-export async function GetCourseBySemAndYr(semester, year) {
-    try {
+        console.log('params', params);
+        const { semester, year } = request.params;
+        console.log('semester', semester);
+        console.log('year', year);
         await pool.connect();
 
         // Define SQL query with placeholders
