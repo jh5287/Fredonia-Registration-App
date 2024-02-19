@@ -1,5 +1,6 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { GetAllCoursesP } from '@/api/sqlserver/queries';
 import styles from './page.module.css'; // Import CSS module
 import CGPA from '@/components/CGPA';
 import UserInfo from '@/components/UserInfo';
@@ -17,6 +18,14 @@ const Page = () => {
     const updatedShowCGPA = !showCGPA;
     setShowCGPA(updatedShowCGPA);
   }
+
+  useEffect(() => {
+    GetAllCoursesP();
+    console.log('Page component mounted');
+    return () => {
+      console.log('Page component unmounted');
+    }
+  });
 
   return (
     <div>
