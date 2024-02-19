@@ -10,8 +10,8 @@ const Semester = ({number, data}) => {
         <table className='table-auto'>
           <thead>
             <tr>
-              <th>Course Code</th>
-              <th>Course Title</th>
+              <th className="whitespace-nowrap">Course Code</th>
+              <th className="w-[70%]">Course Title</th>
               <th>Credits</th>
             </tr>
           </thead>
