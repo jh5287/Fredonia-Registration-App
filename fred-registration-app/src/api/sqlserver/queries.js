@@ -19,52 +19,43 @@ export async function GetAllCourses() {
 
 export async function GetCourseBySemAndYr(semester, year) {
   try {
-    await pool.connect();
+    const result = await prisma.courseCatalog.findMany({
+      where: {
+        AND: [
+          {
+            CatalogID: 1,
+          },
+          {
+            RecommendedSemester: semester,
+          },
+          {
+            RecommendedYear: year,
+          },
+        ],
+      },
+      include: {
+        Course: true,
+      },
+    });
 
-    // Define SQL query with placeholders
-    const query = `
-            SELECT * 
-            FROM CourseCatalog as CC JOIN Course
-            ON (CC.CRN = Course.CRN)
-            WHERE CC.CatalogID = @CatalogID
-            AND CC.RecommendedSemester = @Semester
-            AND CC.RecommendedYear = @Year;
-        `;
-
-    // Execute the query with parameters
-    const result = await pool
-      .request()
-      .input("CatalogID", sql.Int, 1)
-      .input("Semester", sql.VarChar, semester)
-      .input("Year", sql.Int, year)
-      .query(query);
-
-    return result.recordset;
+    return result;
   } catch (err) {
-    console.error("SQL error: ", err);
+    console.error("Prisma error: ", err);
   }
 }
-
 export async function GetCatalog(catalogID) {
   try {
-    await pool.connect();
+    const result = await prisma.courseCatalog.findMany({
+      where: {
+        CatalogID: catalogID,
+      },
+      include: {
+        Course: true,
+      },
+    });
 
-    // Define SQL query with placeholders
-    const query = `
-        SELECT * 
-        FROM CourseCatalog as CC JOIN Course
-        ON (CC.CRN = Course.CRN)
-        WHERE CC.CatalogID = @CatalogID
-        `;
-
-    // Execute the query with parameters
-    const result = await pool
-      .request()
-      .input("CatalogID", sql.Int, catalogID)
-      .query(query);
-
-    return result.recordset;
+    return result;
   } catch (err) {
-    console.error("SQL error: ", err);
+    console.error("Prisma error: ", err);
   }
 }
