@@ -39,7 +39,17 @@ const Navbar = () => {
       </div>
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">Fredonia Registration</Link>
-        {status === 'authenticated' ? <p>{session.user?.name}</p> : null }
+      </div>
+      <div className="flex-none">
+        {session ? (
+          <Link href="/api/auth/signout">
+            { session.user?.name }
+          </Link>
+        ) : (
+          <Link href="/api/auth/signin">
+            Sign In
+          </Link>
+        )}
       </div>
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
