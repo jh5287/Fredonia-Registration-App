@@ -5,15 +5,16 @@ import UserInfo from '@/components/UserInfo';
 import RoadMap from '@/components/RoadMap';
 import Dropdown from '@/components/Dropdown';
 import Registration from '@/components/Registration';
-import { GetCourseBySemAndYr } from '@/api/sqlserver/queries';
 
-
+import { GetStudentData, GetCourseByCatalogID } from '@/app/api/sqlserver/queries';
 import test_data from './sem1.json';
 
 
 const Page = () => {
   const [showCGPA, setShowCGPA] = useState(false);
-  const [currentPage , setCurrentPage] = useState('Road Map'); // ['Road Map', 'Registration']
+  const [currentPage , setCurrentPage] = useState(true); 
+  const [studentData, setStudentData] = useState([]);
+  const [roadMapData, setRoadMapData] = useState([]);
   
   const [sem1 , setSem1] = useState([]);
   const [sem2 , setSem2] = useState([]);
@@ -25,48 +26,54 @@ const Page = () => {
   const [sem8 , setSem8] = useState([]);
 
 
-  const getSemYrCourses = async (semester, year) => {
-    const courses = await GetCourseBySemAndYr(semester, year);
-    console.log('Object', courses[0].CourseCode);
-    console.log('Object type', typeof(Object.values(courses)));
-    console.log('Semester 1 type after set', typeof(sem1));
-    console.log("is array? ",Array.isArray(courses))
-    return courses;
+
+  const fetchCatalog = async () => {
+      const courses = await fetch('/api/catalog');
+      const data = await courses.json();
   }
 
+  const fetchSemYrCourses = async (semester, year) => {
+    const courses = await fetch(`/api/catalog/${semester}/${year}`);
+    const data = await courses.json();
+    const data_array = [data.catalog];
+    return data_array[0]
+  }
+
+  const fetchCourseData = async (catalogID) => {
+    const courses = await GetCourseByCatalogID(catalogID);
+    return courses;
+  }
   
 
   useEffect(() => {
-    const fetchData = async () => {
-      const semesters = [
-        ['Fall', 1],
-        ['Spring', 1],
-        ['Fall', 2],
-        ['Spring', 2],
-        ['Fall', 3],
-        ['Spring', 3],
-        ['Fall', 4],
-        ['Spring', 4],
-      ];
-  
-      // Fetch course data for all semesters concurrently
-      const promises = semesters.map(([semester, year]) => getSemYrCourses(semester, year));
-  
-      // Wait for all promises to resolve
-      const allSemesterData = await Promise.all(promises);
-  
-      // Update state with fetched data
-      setSem1(allSemesterData[0]);
-      setSem2(allSemesterData[1]);
-      setSem3(allSemesterData[2]);
-      setSem4(allSemesterData[3]);
-      setSem5(allSemesterData[4]);
-      setSem6(allSemesterData[5]);
-      setSem7(allSemesterData[6]);
-      setSem8(allSemesterData[7]);
-    };
-  
-    fetchData();
+
+    const getRoadMapData = async () => {
+      const data = await fetchCourseData(1); //fetch course data by catalog id
+      const organized_data = []
+      for(let i = 1; i < 5; i++) {
+        const fallData = data.filter((item) => item.RecommendedYear === i && item.RecommendedSemester === 'Fall');
+        const springData = data.filter((item) => item.RecommendedYear === i && item.RecommendedSemester === 'Spring');
+        organized_data.push(fallData)
+        organized_data.push(springData)
+      }
+      setRoadMapData(organized_data);
+    }
+    getRoadMapData();
+
+
+
+
+    const getRegistrationData = async () => {
+      const data = await GetStudentData(5); //fetch student registration data by id
+      const organized_data = []
+      for(let i = 1; i < 7; i++) {
+        const semData = data.filter((item) => item.TermID === i);
+        organized_data.push(semData)
+      }
+      console.log('organized_data STUDENT', organized_data);
+      setStudentData(organized_data);
+    }
+    getRegistrationData();
   }, []);
 
   
@@ -78,31 +85,20 @@ const Page = () => {
   }
 
   const handleRoadMap = () => { 
-    setCurrentPage('Road Map');
+    setCurrentPage(false);
   }
 
   const handleRegistration = () => {
-    setCurrentPage('Registration');
+    setCurrentPage(true);
   }
 
-  
 
   return (
     <div>
       <UserInfo classname='text-black p-5 bg-[#dadada] shadow-md row-start-1 col-span-2 m-3' handleShowCGPA={handleShowCGPA}/>
       <div className=''>
-        {/*<button className=' border-t border-l border-r border-gray-500 hover:bg-gray-200 py-2 px-4 rounded'>Road Map</button>
-        <button className=' border-t border-l border-r border-gray-500 hover:bg-gray-200 py-2 px-4 rounded'>Registration</button>*/}
         <Dropdown classname={''} handleRoadMap={handleRoadMap} handleRegistration={handleRegistration}/>
-        {currentPage === 'Road Map' ? <RoadMap showCGPA={showCGPA} handleShowCGPA={handleShowCGPA}
-        sem1={sem1}
-        sem2={sem2}
-        sem3={sem3}
-        sem4={sem4}
-        sem5={sem5}
-        sem6={sem6}
-        sem7={sem7}
-        sem8={sem8}/> : <Registration showCGPA={showCGPA} handleShowCGPA={handleShowCGPA} data={test_data} />}
+        {currentPage === false ? <RoadMap showCGPA={showCGPA} handleShowCGPA={handleShowCGPA} data={roadMapData}/> : <Registration showCGPA={showCGPA} handleShowCGPA={handleShowCGPA} studentID={studentData}/>}
         
       </div>
       
