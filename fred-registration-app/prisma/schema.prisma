@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Attribute {
+  AttributeID     Int               @id(map: "PK__Attribut__C189298A9D588A55") @default(autoincrement())
+  Description     String?           @db.Text
+  CourseAttribute CourseAttribute[]
+}
+
+model Catalog {
+  CatalogID     Int             @id(map: "PK__Catalog__C2513B48325E343E") @default(autoincrement())
+  TermID        Int?
+  ProgramID     Int?
+  Program       Program?        @relation(fields: [ProgramID], references: [ProgramID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Catalog__Program__160F4887")
+  Term          Term?           @relation(fields: [TermID], references: [TermID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Catalog__TermID__151B244E")
+  CourseCatalog CourseCatalog[]
+}
+
+model Course {
+  CRN                                                           Int                   @id(map: "PK__Course__C1F887FFECF40417") @default(autoincrement())
+  CourseCode                                                    String?               @db.VarChar(64)
+  Title                                                         String?               @db.VarChar(256)
+  Credits                                                       Int?
+  Level                                                         String?               @db.VarChar(64)
+  DepartmentID                                                  Int?
+  Department                                                    Department?           @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Course__Departme__6A30C649")
+  CourseAttribute                                               CourseAttribute[]
+  CourseCatalog                                                 CourseCatalog[]
+  CourseCorequisite_CourseCorequisite_CorequisiteCRNToCourse    CourseCorequisite[]   @relation("CourseCorequisite_CorequisiteCRNToCourse")
+  CourseCorequisite_CourseCorequisite_CourseCRNToCourse         CourseCorequisite[]   @relation("CourseCorequisite_CourseCRNToCourse")
+  CourseFee                                                     CourseFee[]
+  CoursePrerequisite_CoursePrerequisite_CourseCRNToCourse       CoursePrerequisite[]  @relation("CoursePrerequisite_CourseCRNToCourse")
+  CoursePrerequisite_CoursePrerequisite_PrerequisiteCRNToCourse CoursePrerequisite[]  @relation("CoursePrerequisite_PrerequisiteCRNToCourse")
+  CourseRestriction                                             CourseRestriction[]
+  CourseSchedule                                                CourseSchedule[]
+  StudentRegistration                                           StudentRegistration[]
+}
+
+model CourseAttribute {
+  CRN         Int
+  AttributeID Int
+  Attribute   Attribute @relation(fields: [AttributeID], references: [AttributeID], onUpdate: NoAction, map: "FK__CourseAtt__Attri__75A278F5")
+  Course      Course    @relation(fields: [CRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseAttri__CRN__74AE54BC")
+
+  @@id([CRN, AttributeID], map: "PK__CourseAt__7DE015677FA13090")
+}
+
+model CourseCatalog {
+  CRN                 Int
+  CatalogID           Int
+  RecommendedSemester String? @db.VarChar(10)
+  RecommendedYear     Int?
+  Catalog             Catalog @relation(fields: [CatalogID], references: [CatalogID], onUpdate: NoAction, map: "FK__CourseCat__Catal__19DFD96B")
+  Course              Course  @relation(fields: [CRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseCatal__CRN__18EBB532")
+
+  @@id([CRN, CatalogID], map: "PK__CourseCa__5DDD944B393E61DA")
+}
+
+model CourseCorequisite {
+  CourseCRN                                       Int
+  CorequisiteCRN                                  Int
+  Course_CourseCorequisite_CorequisiteCRNToCourse Course @relation("CourseCorequisite_CorequisiteCRNToCourse", fields: [CorequisiteCRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseCor__Coreq__03F0984C")
+  Course_CourseCorequisite_CourseCRNToCourse      Course @relation("CourseCorequisite_CourseCRNToCourse", fields: [CourseCRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseCor__Cours__02FC7413")
+
+  @@id([CourseCRN, CorequisiteCRN], map: "PK__CourseCo__875F77891D5B2418")
+}
+
+model CourseFee {
+  CRN    Int
+  FeeID  Int
+  Course Course @relation(fields: [CRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseFee__CRN__6D0D32F4")
+  Fee    Fee    @relation(fields: [FeeID], references: [FeeID], onUpdate: NoAction, map: "FK__CourseFee__FeeID__6E01572D")
+
+  @@id([CRN, FeeID], map: "PK__CourseFe__4AC0FCDFF4D69E13")
+}
+
+model CoursePrerequisite {
+  CourseCRN                                         Int
+  PrerequisiteCRN                                   Int
+  Course_CoursePrerequisite_CourseCRNToCourse       Course @relation("CoursePrerequisite_CourseCRNToCourse", fields: [CourseCRN], references: [CRN], onUpdate: NoAction, map: "FK__CoursePre__Cours__7F2BE32F")
+  Course_CoursePrerequisite_PrerequisiteCRNToCourse Course @relation("CoursePrerequisite_PrerequisiteCRNToCourse", fields: [PrerequisiteCRN], references: [CRN], onUpdate: NoAction, map: "FK__CoursePre__Prere__00200768")
+
+  @@id([CourseCRN, PrerequisiteCRN], map: "PK__CoursePr__5438AF5F0DA87C5C")
+}
+
+model CourseRestriction {
+  CRN           Int
+  RestrictionID Int
+  Restriction   Restriction @relation(fields: [RestrictionID], references: [RestrictionID], onUpdate: NoAction, map: "FK__CourseRes__Restr__71D1E811")
+  Course        Course      @relation(fields: [CRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseRestr__CRN__70DDC3D8")
+
+  @@id([CRN, RestrictionID], map: "PK__CourseRe__74D15F969ADC0852")
+}
+
+model CourseSchedule {
+  ScheduleID      Int         @id(map: "PK__CourseSc__9C8A5B69BABE1545") @default(autoincrement())
+  CRN             Int?
+  StartDate       DateTime?   @db.Date
+  EndDate         DateTime?   @db.Date
+  Days            String?     @db.VarChar(32)
+  Time            String?     @db.VarChar(32)
+  Location        String?     @db.VarChar(256)
+  InstructorID    Int?
+  TermID          Int?
+  Status          String?     @db.VarChar(32)
+  InstructionMode String?     @db.VarChar(32)
+  Instructor      Instructor? @relation(fields: [InstructorID], references: [InstructorID], onDelete: NoAction, onUpdate: NoAction, map: "FK__CourseSch__Instr__07C12930")
+  Term            Term?       @relation(fields: [TermID], references: [TermID], onDelete: NoAction, onUpdate: NoAction, map: "FK__CourseSch__TermI__08B54D69")
+  Course          Course?     @relation(fields: [CRN], references: [CRN], onDelete: NoAction, onUpdate: NoAction, map: "FK__CourseSched__CRN__06CD04F7")
+}
+
+model Department {
+  DepartmentID         Int                    @id(map: "PK__Departme__B2079BCDE4B7CE0A") @default(autoincrement())
+  Name                 String?                @db.VarChar(64)
+  Course               Course[]
+  Instructor           Instructor[]
+  InstructorDepartment InstructorDepartment[]
+  Student              Student[]
+  StudentDepartment    StudentDepartment[]
+}
+
+model Fee {
+  FeeID       Int         @id(map: "PK__Fee__B387B20986EFD026") @default(autoincrement())
+  Description String?     @db.Text
+  Amount      Decimal?    @db.Decimal(10, 2)
+  CourseFee   CourseFee[]
+}
+
+model Instructor {
+  InstructorID         Int                    @id(map: "PK__Instruct__9D010B7B570456D1") @default(autoincrement())
+  FirstName            String?                @db.VarChar(64)
+  LastName             String?                @db.VarChar(64)
+  DepartmentID         Int?
+  CourseSchedule       CourseSchedule[]
+  Department           Department?            @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Instructo__Depar__5EBF139D")
+  InstructorDepartment InstructorDepartment[]
+}
+
+model InstructorDepartment {
+  DepartmentID Int
+  InstructorID Int
+  Department   Department @relation(fields: [DepartmentID], references: [DepartmentID], onUpdate: NoAction, map: "FK__Instructo__Depar__0B91BA14")
+  Instructor   Instructor @relation(fields: [InstructorID], references: [InstructorID], onUpdate: NoAction, map: "FK__Instructo__Instr__0C85DE4D")
+
+  @@id([DepartmentID, InstructorID], map: "PK__Instruct__1BD78B7A460AE624")
+}
+
+model Program {
+  ProgramID  Int       @id(map: "PK__Program__752560380B0DF6B7") @default(autoincrement())
+  Name       String?   @db.VarChar(255)
+  DegreeType String?   @db.VarChar(50)
+  Catalog    Catalog[]
+}
+
+model Restriction {
+  RestrictionID     Int                 @id(map: "PK__Restrict__529D869A54375F65") @default(autoincrement())
+  Description       String?             @db.Text
+  CourseRestriction CourseRestriction[]
+}
+
+model Student {
+  StudentID           Int                   @id(map: "PK__Student__32C52A79591BDCD9") @default(autoincrement())
+  FirstName           String?               @db.VarChar(64)
+  LastName            String?               @db.VarChar(64)
+  Level               String?               @db.VarChar(64)
+  DepartmentID        Int?
+  Department          Department?           @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Student__Departm__619B8048")
+  StudentDepartment   StudentDepartment[]
+  StudentRegistration StudentRegistration[]
+}
+
+model StudentDepartment {
+  DepartmentID Int
+  StudentID    Int
+  Department   Department @relation(fields: [DepartmentID], references: [DepartmentID], onUpdate: NoAction, map: "FK__StudentDe__Depar__0F624AF8")
+  Student      Student    @relation(fields: [StudentID], references: [StudentID], onUpdate: NoAction, map: "FK__StudentDe__Stude__10566F31")
+
+  @@id([DepartmentID, StudentID], map: "PK__StudentD__312BC96A9E5AF4F6")
+}
+
+model StudentRegistration {
+  RegistrationID Int       @id(map: "PK__StudentR__6EF58830FEBF26DF") @default(autoincrement())
+  StudentID      Int?
+  CRN            Int?
+  TermID         Int?
+  GradeMode      String?   @db.VarChar(32)
+  Status         String?   @db.VarChar(32)
+  Grade          String?   @db.VarChar(32)
+  RegisteredOn   DateTime? @db.Date
+  Student        Student?  @relation(fields: [StudentID], references: [StudentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__StudentRe__Stude__7A672E12")
+  Term           Term?     @relation(fields: [TermID], references: [TermID], onDelete: NoAction, onUpdate: NoAction, map: "FK__StudentRe__TermI__7C4F7684")
+  Course         Course?   @relation(fields: [CRN], references: [CRN], onDelete: NoAction, onUpdate: NoAction, map: "FK__StudentRegi__CRN__7B5B524B")
+}
+
+model Term {
+  TermID              Int                   @id(map: "PK__Term__410A2E457A03D0CE") @default(autoincrement())
+  TermName            String?               @db.VarChar(64)
+  StartDate           DateTime?             @db.Date
+  EndDate             DateTime?             @db.Date
+  Catalog             Catalog[]
+  CourseSchedule      CourseSchedule[]
+  StudentRegistration StudentRegistration[]
+}
