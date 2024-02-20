@@ -37,12 +37,12 @@ export async function GetCourseBySemAndYr(semester, year) {
         Course: true,
       },
     });
-
     return result;
   } catch (err) {
     console.error("Prisma error: ", err);
   }
 }
+
 export async function GetCatalog(catalogID) {
   try {
     const result = await prisma.courseCatalog.findMany({
@@ -53,7 +53,7 @@ export async function GetCatalog(catalogID) {
         Course: true,
       },
     });
-
+    console.log(result)
     return result;
   } catch (err) {
     console.error("Prisma error: ", err);

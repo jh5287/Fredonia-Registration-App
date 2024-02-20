@@ -17,9 +17,9 @@ const Semester = ({ number, data }) => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
-                <td>{item.CourseCode}</td>
-                <td>{item.Title}</td>
-                <td>{item.Credits}</td>
+                <td>{item.Course.CourseCode}</td>
+                <td>{item.Course.Title}</td>
+                <td>{item.Course.Credits}</td>
               </tr>
             ))}
           </tbody>

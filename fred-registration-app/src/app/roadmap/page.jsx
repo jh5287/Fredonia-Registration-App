@@ -10,8 +10,9 @@ const RoadMap = () => {
     // Assume GetCatalog() fetches all courses, then filters are applied per semester
     const fetchCatalog = async () => {
       try {
-        const fullCatalog = await GetCatalog(1);
-        setCatalog(fullCatalog);
+        const res = await fetch('/api/catalog?catID=1');
+        const data = await res.json();
+        setCatalog(data);
       } catch (err) {
         console.error("Failed to fetch catalog:", err);
       }
