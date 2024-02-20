@@ -42,20 +42,3 @@ export async function GetCourseBySemAndYr(semester, year) {
     console.error("Prisma error: ", err);
   }
 }
-
-export async function GetCatalog(catalogID) {
-  try {
-    const result = await prisma.courseCatalog.findMany({
-      where: {
-        CatalogID: catalogID,
-      },
-      include: {
-        Course: true,
-      },
-    });
-    console.log(result)
-    return result;
-  } catch (err) {
-    console.error("Prisma error: ", err);
-  }
-}

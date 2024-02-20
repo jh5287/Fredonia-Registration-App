@@ -1,8 +1,10 @@
 'use client'; 
 import Link from "next/link";
 import React from "react";
+import { useSession } from 'next-auth/react'
 
 const Navbar = () => {
+  const { data: session, status } = useSession();
   return (
     <div className="navbar bg-base-100 sticky top-0 z-50 border-b-2">
       <div className="flex-none">
@@ -37,6 +39,7 @@ const Navbar = () => {
       </div>
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">Fredonia Registration</Link>
+        {status === 'authenticated' ? <p>{session.user?.name}</p> : null }
       </div>
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">
