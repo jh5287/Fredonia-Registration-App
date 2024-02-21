@@ -4,6 +4,31 @@ import { pool } from '../../../db/server';
 import 'mssql'
 import sql from 'mssql';
 
+
+export async function GetCatalog(catalogID) {
+    try {
+      await pool.connect();
+  
+      // Define SQL query with placeholders
+      const query = `
+          SELECT * 
+          FROM CourseCatalog as CC JOIN Course
+          ON (CC.CRN = Course.CRN)
+          WHERE CC.CatalogID = @CatalogID
+          `;
+  
+      // Execute the query with parameters
+      const result = await pool
+        .request()
+        .input("CatalogID", sql.Int, catalogID)
+        .query(query);
+  
+      return result.recordset;
+    } catch (err) {
+      console.error("SQL error: ", err);
+    }
+  }
+
 export async function GetAllCourses() {
     try {
         await pool.connect();

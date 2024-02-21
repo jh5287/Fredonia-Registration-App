@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Semester from "@/components/Semester";
-import { GetCatalog } from "@/api/sqlserver/queries";
+import { GetCatalog } from "../api/sqlserver/queries";
 
 const RoadMap = () => {
   const [catalog, setCatalog] = useState([]);
