@@ -11,5 +11,7 @@ const config = {
     }
 };
 
+
+
 export const pool = new sql.ConnectionPool(config);
 
