@@ -1,0 +1,43 @@
+[
+[
+    {"CourseCode": "CSIT 121", "Title": "Computer Science I", "Credits": 3},
+    {"CourseCode": "CSIT 201", "Title": "Computer Security and Ethics", "Credits": 3},
+    {"CourseCode": "MATH 120", "Title": "Survey of Calculus I (or)", "Credits": 3},
+    {"CourseCode": "MATH 122", "Title": "University Calculus I", "Credits": 3},
+    {"CourseCode": "FF", "Title": "Course", "Credits": 3},
+    {"CourseCode": "FF", "Title": "Course", "Credits": 3}
+
+],
+[
+    {
+      "CourseCode": "CSIT 221",
+      "Title": "Computer Science II",
+      "Credits": 3
+    },
+    {
+      "CourseCode": "MATH 121",
+      "Title": "Survey of Calculus II (or)",
+      "Credits": 3
+    },
+    {
+      "CourseCode": "MATH 123",
+      "Title": "University Calculus II",
+      "Credits": 0
+    },
+    {
+      "CourseCode": "FF",
+      "Title": "Course",
+      "Credits": 3
+    },
+    {
+      "CourseCode": "FF",
+      "Title": "Course",
+      "Credits": 3
+    },
+    {
+      "CourseCode": "FF",
+      "Title": "Course",
+      "Credits": 3
+    }
+  ]
+]

@@ -1,18 +1,30 @@
 // This file is used to connect to the MSSQL database. 
 //It uses the mssql package to connect to the database.
-const sql = require('mssql')
+const sql = require('mssql');
 
 const config = {
-  server: 'fredonia-registration.database.windows.net',
-  database: 'Fredonia Registration',
-  user: 'FredoniaRegAdim',
-  password: 'kzBahXz8q%w$',
+    server: 'fred-registration.database.windows.net',
+    database: 'fredonia-registration',
+    user: 'FredoniaRegAdmin',
+    password: 'kzBahXz8q%w$',
+    options: {
+        trustServerCertificate: true,
+        encrypt: true
+    }
+};
+
+
+const local_config = {
+  server: '127.0.0.1',
+  database: 'TestDb',
+  user: 'sa',
+  password: 'MyPass@word',
   options: {
-    encrypt: true
+      trustServerCertificate: true,
+      encrypt: true
   }
-}
+};
 
-const pool = new sql.ConnectionPool(config)
+export const pool = new sql.ConnectionPool(local_config);
 
 
-export default pool;
