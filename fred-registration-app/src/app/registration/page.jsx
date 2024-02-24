@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Semester from "@/components/Semester";
 import { GetStudentData } from "../api/sqlserver/queries";
 import { cn } from "@/lib/utils";
+import Icon from '@mdi/react';
+import { mdiProgressHelper } from '@mdi/js';
 
 const RegSemester = ({ number, data }) => {
 
@@ -56,7 +58,7 @@ const RegSemester = ({ number, data }) => {
   return (
     <>
     <div className="">
-      <h1 className=" tooltip py-2 pl-1 text-lg" data-tip={calculateGPA(data)}>Semester {number}</h1>
+      <h1 className="tooltip py-2 pl-1 text-lg" data-tip={calculateGPA(data)}>Semester {number}</h1>
       <div className="border rounded">
         <table className="table">
           <thead>
@@ -69,12 +71,15 @@ const RegSemester = ({ number, data }) => {
           </thead>
           <tbody>
             {data.map((item, index) => (
-              <tr key={index}>
+              <tr key={index} className={cn({" bg-red-200" : item.Grade === 'F', 'bg-green-200': item.Grade === 'A'}, )}>
                 <td>{item.CourseCode}</td>
                 <td>{item.Title}</td>
                 <td>{item.Credits}</td>
+
+                {/* If the grade is null, display a progress icon, else display the grade */}
                 <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
-                >{item.Grade}</td>
+                >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
+                item.Grade}</td>
               </tr>
             ))}
           </tbody>
@@ -118,7 +123,7 @@ const Registration = () => {
   return (
     <>
     <h1 className="p-3 py-5 text-2xl">Current Registration</h1>
-    <div className="m-3 grid grid-cols-1 gap-5 h-full md:grid-cols-2">
+    <div className="m-3 grid grid-cols-1 gap-8 h-full md:grid-cols-2">
     {studentData.map((item, index) => (
             <RegSemester key={index+1} number={index+1} data={item}/>
           ))}
