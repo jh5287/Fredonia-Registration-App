@@ -5,10 +5,58 @@ import { GetStudentData } from "../api/sqlserver/queries";
 import { cn } from "@/lib/utils";
 
 const RegSemester = ({ number, data }) => {
+
+  const calculateGPA = (data) => {
+    let totalCredits = 0;
+    let totalPoints = 0;
+    data.forEach((item) => {
+      totalCredits += item.Credits;
+      switch (item.Grade) {
+        case 'A':
+          totalPoints += 4 * item.Credits;
+          break;
+        case 'A-':
+          totalPoints += 3.7 * item.Credits;
+          break;
+        case 'B+':
+          totalPoints += 3.3 * item.Credits;
+          break;
+        case 'B':
+          totalPoints += 3 * item.Credits;
+          break;
+        case 'B-':
+          totalPoints += 2.7 * item.Credits;
+          break;
+        case 'C+':
+          totalPoints += 2.3 * item.Credits;
+          break;
+        case 'C':
+          totalPoints += 2 * item.Credits;
+          break;
+        case 'C-':
+          totalPoints += 1.7 * item.Credits;
+          break;
+        case 'D+':
+          totalPoints += 1.3 * item.Credits;
+          break;
+        case 'D':
+          totalPoints += 1 * item.Credits;
+          break;
+        case 'D-':
+          totalPoints += 0.7 * item.Credits;
+          break;
+        default:
+          totalPoints += 0;
+      }
+    });
+    return "GPA: "+ (totalPoints / totalCredits).toFixed(2);
+  }
+
+
   return (
     <>
     <div className="">
-      <h1 className="py-2 pl-1 text-lg">Semester {number}</h1>
+      <h1 className=" tooltip py-2 pl-1 text-lg" data-tip={calculateGPA(data)}>Semester {number}</h1>
       <div className="border rounded">
         <table className="table">
           <thead>
@@ -42,6 +90,11 @@ const Registration = () => {
   
 
   useEffect(() => {
+    //fetchStudentData gets all of the courses the student has taken
+    //this includes S.FirstName, SR.Grade, C.CourseCode, C.Title, C.Credits, SR.TermID
+    //It is then filtered by TermID in order to separate which courses were taken during which semester
+    //The data is then organized into an array of arrays, where each array is a semester
+    //The array is mapped onto the RegSemester component
     const fetchStudentData = async () => {
       try {
         const studentData = await GetStudentData(5);
