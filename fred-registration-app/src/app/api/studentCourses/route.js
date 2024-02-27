@@ -29,6 +29,6 @@ export async function GET(request) {
   } 
   catch (err) {
     console.error("Prisma error: ", err);
-    return Response("Error fetching data", { status: 500 });
+    return new Response("Error fetching data", { status: 500 });
   }
 }
