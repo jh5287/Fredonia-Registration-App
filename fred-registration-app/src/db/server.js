@@ -16,9 +16,9 @@ const config = {
 
 const local_config = {
   server: '127.0.0.1',
-  database: 'TestDb',
-  user: 'sa',
-  password: 'MyPass@word',
+  database: process.env.LOCAL_SERVER_DB,
+  user: process.env.LOCAL_SERVER_USER,
+  password: process.env.LOCAL_SERVER_PASS,
   options: {
       trustServerCertificate: true,
       encrypt: true
