@@ -2,7 +2,6 @@ import React from "react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 
 const Semester = ({ number, catalogData, userCourses }) => {
-  console.log("userCourses", userCourses);
 
   const getCourseStatusIcon = (crn) => {
     const courseExists = userCourses.find((course) => course.CRN === crn);

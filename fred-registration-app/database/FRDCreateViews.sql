@@ -1,7 +1,7 @@
 CREATE VIEW
   StudentGPA AS
 SELECT
-  sr.studentid,
+  sr.StudentID,
   sr.termid,
   SUM(gp.GradePoint * c.credits) / SUM(c.credits) AS GPA
 FROM
@@ -12,7 +12,7 @@ FROM
 WHERE
   GETDATE () > t.EndDate
 GROUP BY
-  sr.studentid,
+  sr.StudentID,
   sr.termid;
 
 
@@ -23,9 +23,9 @@ GO
 CREATE VIEW
   StudentCGPA AS
 SELECT
-  studentid,
+  StudentID,
   AVG(GPA) AS CGPA
 FROM
   StudentGPA
 GROUP BY
-  studentid;
+  StudentID;
