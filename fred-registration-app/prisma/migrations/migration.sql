@@ -132,7 +132,7 @@ CREATE TABLE [dbo].[Restriction] (
     [RestrictionID] INT NOT NULL IDENTITY(1,1),
     [Description] TEXT,
     CONSTRAINT [PK__Restrict__529D869A54375F65] PRIMARY KEY CLUSTERED ([RestrictionID])
-);
+)
 
 -- CreateTable
 CREATE TABLE [dbo].[Student] (
