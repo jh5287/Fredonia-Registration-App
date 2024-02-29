@@ -4,11 +4,12 @@ export async function GET(request) {
     try {
         const prisma = new PrismaClient();
         const searchParams = request.nextUrl.searchParams;
-        const query = searchParams.get('CRN');
-        console.log(query);
+        const searchCRN = searchParams.get('CRN');
+        const searchCourseCode = searchParams.get('CourseCode');
         const res = await prisma.course.findMany({
             where: {
-                CRN: query === null ? undefined: Number(query)
+                CRN: searchCRN === null ? undefined: Number(searchCRN),
+                CourseCode: searchCourseCode === null ? undefined: searchCourseCode
             }
         });
 
