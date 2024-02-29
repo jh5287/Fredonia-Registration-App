@@ -13,7 +13,7 @@ const Semester = ({ number, catalogData, userCourses }) => {
         case "Enrolled":
           return <FaUserCheck color="blue" />;
         case "Failed":
-          return <FaTimesCircle color="red" />;
+          return <FaTimesCircle color="red"/>;
         default:
           return null;
       }
@@ -39,12 +39,13 @@ const Semester = ({ number, catalogData, userCourses }) => {
             <tbody>
               {catalogData.map((item, index) => {
                 const statusIcon = getCourseStatusIcon(item.Course.CRN);
+                const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
                 return (
                   <tr key={index}>
                     <td>{item.Course.CourseCode}</td>
                     <td className="w-[60%]">{item.Course.Title}</td>
                     <td>{item.Course.Credits}</td>
-                    <td>{statusIcon}</td>
+                    <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
                   </tr>
                 );
               })}
