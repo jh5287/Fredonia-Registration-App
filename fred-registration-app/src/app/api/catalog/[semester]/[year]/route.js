@@ -8,25 +8,27 @@ export async function GET(request, params) {
         const { semester, year } = params.params;
         await pool.connect();
 
-        // Define SQL query with placeholders
-        const query = `
-            SELECT * 
-            FROM CourseCatalog as CC JOIN Course
-            ON (CC.CRN = Course.CRN)
-            WHERE CC.CatalogID = @CatalogID
-            AND CC.RecommendedSemester = @Semester
-            AND CC.RecommendedYear = @Year;
-        `;
-
-        // Execute the query with parameters
-        const result = await pool.request()
-            .input('CatalogID', sql.Int, 1)
-            .input('Semester', sql.VarChar, semester)
-            .input('Year', sql.Int, year)
-            .query(query);
+        const result = await prisma.courseCatalog.findMany({
+            where: {
+              AND: [
+                {
+                  catalogID: catalogID,
+                },
+                {
+                  recommendedSemester: semester,
+                },
+                {
+                  recommendedYear: year,
+                },
+              ],
+            },
+            include: {
+              course: true,
+            },
+          });
 
         //return result.recordset;
-        return new Response(JSON.stringify({ catalog: result.recordset }), { status: 200 })
+        return new Response(JSON.stringify({ catalog: result }), { status: 200 })
     } catch (err) {
         console.error('SQL error: ', err);
     }

@@ -5,7 +5,6 @@ export async function GET(request) {
     const prisma = new PrismaClient();
     const searchParams = request.nextUrl.searchParams;
     const email = searchParams.get("email");
-
     const studentCGPA = await prisma.StudentCGPA.findMany({
       where: {
         Student: {
