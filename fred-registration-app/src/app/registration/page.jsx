@@ -6,45 +6,44 @@ import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
 
 const RegSemester = ({ number, data }) => {
-
   const calculateGPA = (data) => {
     let totalCredits = 0;
     let totalPoints = 0;
     data.forEach((item) => {
-      totalCredits += item.Credits;
+      totalCredits += item.Course.Credits;
       switch (item.Grade) {
         case 'A':
-          totalPoints += 4 * item.Credits;
+          totalPoints += 4 * item.Course.Credits;
           break;
         case 'A-':
-          totalPoints += 3.7 * item.Credits;
+          totalPoints += 3.7 * item.Course.Credits;
           break;
         case 'B+':
-          totalPoints += 3.3 * item.Credits;
+          totalPoints += 3.3 * item.Course.Credits;
           break;
         case 'B':
-          totalPoints += 3 * item.Credits;
+          totalPoints += 3 * item.Course.Credits;
           break;
         case 'B-':
-          totalPoints += 2.7 * item.Credits;
+          totalPoints += 2.7 * item.Course.Credits;
           break;
         case 'C+':
-          totalPoints += 2.3 * item.Credits;
+          totalPoints += 2.3 * item.Course.Credits;
           break;
         case 'C':
-          totalPoints += 2 * item.Credits;
+          totalPoints += 2 * item.Course.Credits;
           break;
         case 'C-':
-          totalPoints += 1.7 * item.Credits;
+          totalPoints += 1.7 * item.Course.Credits;
           break;
         case 'D+':
-          totalPoints += 1.3 * item.Credits;
+          totalPoints += 1.3 * item.Course.Credits;
           break;
         case 'D':
-          totalPoints += 1 * item.Credits;
+          totalPoints += 1 * item.Course.Credits;
           break;
         case 'D-':
-          totalPoints += 0.7 * item.Credits;
+          totalPoints += 0.7 * item.Course.Credits;
           break;
         default:
           totalPoints += 0;
@@ -57,7 +56,7 @@ const RegSemester = ({ number, data }) => {
   return (
     <>
     <div className="">
-      <h1 className="tooltip py-2 pl-1 text-lg" data-tip={calculateGPA(data)}>Semester {number}</h1>
+      <h1 className="tooltip py-2 pl-1 text-lg" data-tip={calculateGPA(data)}>{data[number].Term.TermName}</h1>
       <div className="border rounded">
         <table className="table">
           <thead>
@@ -102,11 +101,19 @@ const Registration = () => {
       try {
         const res = await fetch("/api/student/studentCourses?email=camronwalsh@gmail.com");
         const studentData = await res.json();
+
+        console.log('studentData to be ORGANIZED: ', studentData);
+        const terms = studentData.map(item => item.Term.TermName).filter((value, index, self) => self.indexOf(value) === index);
+        console.log('Extracted terms: ', terms); 
+
         const organized_data = []
-      for(let i = 1; i < 7; i++) {
-        const semData = studentData.filter((item) => item.TermID === i);
+      for(let i = 1; i < terms.length; i++) {
+        const termToCompareTo = terms[i];
+        const semData = studentData.filter((item) => item.Term.TermName === termToCompareTo);
         organized_data.push(semData)
       }
+
+
       console.log('organized_data STUDENT', organized_data);
       setStudentData(organized_data);
       } catch (err) {
@@ -123,7 +130,7 @@ const Registration = () => {
     <h1 className="p-3 py-5 text-2xl">Current Registration</h1>
     <div className="m-3 grid grid-cols-1 gap-8 h-full md:grid-cols-2">
     {studentData.map((item, index) => (
-            <RegSemester key={index+1} number={index+1} data={item}/>
+            <RegSemester key={index+1} number={index} data={item}/>
           ))}
     </div>
   </>
