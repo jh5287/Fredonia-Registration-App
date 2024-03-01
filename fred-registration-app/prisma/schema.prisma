@@ -213,14 +213,12 @@ model GradePoints {
   GradePoint  Decimal @db.Decimal(3, 2)
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view StudentGPA {
   StudentID Int      @unique
   termid    Int
   GPA       Decimal? @db.Decimal(38, 6)
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view StudentCGPA {
   StudentID Int      @unique
   CGPA      Decimal? @db.Decimal(38, 6)

@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import Semester from "@/components/Semester";
-import { GetStudentData } from "../api/sqlserver/queries";
 import { cn } from "@/lib/utils";
 import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
@@ -72,10 +71,9 @@ const RegSemester = ({ number, data }) => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index} className={cn({" bg-red-200" : item.Grade === 'F', 'bg-green-200': item.Grade === 'A'}, )}>
-                <td>{item.CourseCode}</td>
-                <td>{item.Title}</td>
-                <td>{item.Credits}</td>
-
+                <td>{item.Course.CourseCode}</td>
+                <td>{item.Course.Title}</td>
+                <td>{item.Course.Credits}</td>
                 {/* If the grade is null, display a progress icon, else display the grade */}
                 <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
                 >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
@@ -102,7 +100,8 @@ const Registration = () => {
     //The array is mapped onto the RegSemester component
     const fetchStudentData = async () => {
       try {
-        const studentData = await GetStudentData(5);
+        const res = await fetch("/api/student/studentCourses?email=camronwalsh@gmail.com");
+        const studentData = await res.json();
         const organized_data = []
       for(let i = 1; i < 7; i++) {
         const semData = studentData.filter((item) => item.TermID === i);
@@ -114,7 +113,6 @@ const Registration = () => {
         console.error("Failed to fetch student data:", err);
       }
     };
-
     fetchStudentData();
   }, []);
 
