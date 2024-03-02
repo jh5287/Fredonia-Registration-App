@@ -49,14 +49,19 @@ const RegSemester = ({ number, data }) => {
           totalPoints += 0;
       }
     });
-    return "GPA: "+ (totalPoints / totalCredits).toFixed(2);
+    return (totalPoints / totalCredits).toFixed(2);
   }
 
 
   return (
     <>
     <div className="">
-      <h1 className="tooltip py-2 pl-1 text-lg" data-tip={calculateGPA(data)}>{data[number].Term.TermName}</h1>
+
+      <div className="flex justify-between items-center">
+        <h1 className="py-2 pl-1 text-lg">{data[number].Term.TermName}</h1>
+        <span className="text-base">GPA: {calculateGPA(data)}</span>
+      </div>
+      
       <div className="border rounded">
         <table className="table">
           <thead>
@@ -92,29 +97,25 @@ const Registration = () => {
   
 
   useEffect(() => {
-    //fetchStudentData gets all of the courses the student has taken
-    //this includes S.FirstName, SR.Grade, C.CourseCode, C.Title, C.Credits, SR.TermID
-    //It is then filtered by TermID in order to separate which courses were taken during which semester
-    //The data is then organized into an array of arrays, where each array is a semester
-    //The array is mapped onto the RegSemester component
+    /*
+    fetchStudentData gets all of the courses the student has taken
+    this includes S.FirstName, SR.Grade, C.CourseCode, C.Title, C.Credits, SR.TermID
+    It is then filtered by TermID in order to separate which courses were taken during which semester
+    The data is then organized into an array of arrays, where each array is a semester
+    The array is mapped onto the RegSemester component
+    */
     const fetchStudentData = async () => {
       try {
         const res = await fetch("/api/student/studentCourses?email=camronwalsh@gmail.com");
         const studentData = await res.json();
-
-        console.log('studentData to be ORGANIZED: ', studentData);
-        const terms = studentData.map(item => item.Term.TermName).filter((value, index, self) => self.indexOf(value) === index);
-        console.log('Extracted terms: ', terms); 
-
+        const terms = studentData.map(item => item.Term.TermName).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
         const organized_data = []
       for(let i = 1; i < terms.length; i++) {
-        const termToCompareTo = terms[i];
-        const semData = studentData.filter((item) => item.Term.TermName === termToCompareTo);
+        const termToCompareTo = terms[i]; //get the term to compare to
+        const semData = studentData.filter((item) => item.Term.TermName === termToCompareTo);//filter the data to only include the target term
         organized_data.push(semData)
       }
 
-
-      console.log('organized_data STUDENT', organized_data);
       setStudentData(organized_data);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
