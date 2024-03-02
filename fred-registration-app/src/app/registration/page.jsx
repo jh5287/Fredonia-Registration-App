@@ -58,8 +58,11 @@ const RegSemester = ({ number, data }) => {
     <div className="">
 
       <div className="flex justify-between items-center">
-        <h1 className="py-2 pl-1 text-lg">{data[number].Term.TermName}</h1>
-        <span className="text-base">GPA: {calculateGPA(data)}</span>
+        <h1 className="py-2 pl-1 text-lg font-medium">{data[number].Term.TermName}</h1>
+        {/* An idea...
+        {calculateGPA(data) >= 3.0 ? <span className="text-green-600">Good Standing</span> : <span className="text-red-600">Academic Warning</span>}
+        */}
+        {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
       </div>
       
       <div className="border rounded">
