@@ -1,29 +1,52 @@
-CREATE TABLE
-  Department (
+CREATE TABLE 
+Role (
+    RoleID INT IDENTITY (1, 1) PRIMARY KEY,
+    RoleName VARCHAR(64) NOT NULL,
+    Description VARCHAR(255)
+);
+
+CREATE TABLE 
+Department (
     DepartmentID INT IDENTITY (1, 1) PRIMARY KEY,
     Name VARCHAR(64) NOT NULL UNIQUE
+);
+
+CREATE TABLE [User] (
+    UserID INT IDENTITY (1, 1) PRIMARY KEY,
+    FirstName VARCHAR(64) NOT NULL,
+    LastName VARCHAR(64) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Phone VARCHAR(20),
+    RoleID INT,
+    CONSTRAINT FK_User_Role FOREIGN KEY (RoleID) REFERENCES Role (RoleID)
+);
+
+CREATE TABLE
+  Student (
+    StudentID INT IDENTITY (1, 1) PRIMARY KEY,
+    UserID INT NOT NULL UNIQUE,
+    Level VARCHAR(64) NOT NULL CHECK (Level IN ('Undergraduate', 'Graduate')),
+    CONSTRAINT FK_Student_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
 CREATE TABLE
   Instructor (
     InstructorID INT IDENTITY (1, 1) PRIMARY KEY,
-    FirstName VARCHAR(64) NOT NULL,
-    LastName VARCHAR(64) NOT NULL,
+    UserID INT NOT NULL UNIQUE,
     DepartmentID INT NOT NULL,
-    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID)
+    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
+    CONSTRAINT FK_Instructor_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
-CREATE TABLE
-  Student (
-    StudentID INT IDENTITY (1, 1) PRIMARY KEY,
-    FirstName VARCHAR(64) NOT NULL,
-    LastName VARCHAR(64) NOT NULL,
-    Level VARCHAR(64) NOT NULL CHECK (Level IN ('Undergraduate', 'Graduate')),
+  CREATE TABLE 
+  StudentDepartment (
+    StudentDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
+    StudentID INT NOT NULL,
     DepartmentID INT NOT NULL,
-    Email varchar(100) NOT NULL, 
-    Phone varchar(20), 
-    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
-  );
+    CONSTRAINT FK_StudentDepartment_Student FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+    CONSTRAINT FK_StudentDepartment_Department FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID),
+    UNIQUE (StudentID, DepartmentID)
+);
 
 CREATE TABLE
   Restriction (
