@@ -85,10 +85,14 @@ CREATE TABLE
 CREATE TABLE
   Term (
     TermID INT IDENTITY (1, 1) PRIMARY KEY,
-    TermName VARCHAR(64) NOT NULL UNIQUE,
+    Semester VARCHAR(32) NOT NULL,
+    Year INT NOT NULL,
     StartDate DATE NOT NULL,
     EndDate DATE NOT NULL,
-    CONSTRAINT CHK_Term_Dates CHECK (StartDate < EndDate)
+    CONSTRAINT CHK_Term_Dates CHECK (StartDate < EndDate),
+    CONSTRAINT CHK_Semester CHECK (
+      Semester IN ('Fall', 'Spring', 'Summer', 'J-Term')
+    )
   );
 
 CREATE TABLE
