@@ -38,16 +38,6 @@ CREATE TABLE
     CONSTRAINT FK_Instructor_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
-  CREATE TABLE 
-  StudentDepartment (
-    StudentDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
-    StudentID INT NOT NULL,
-    DepartmentID INT NOT NULL,
-    CONSTRAINT FK_StudentDepartment_Student FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
-    CONSTRAINT FK_StudentDepartment_Department FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID),
-    UNIQUE (StudentID, DepartmentID)
-);
-
 CREATE TABLE
   Restriction (
     RestrictionID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -212,20 +202,22 @@ CREATE TABLE
 
 CREATE TABLE
   InstructorDepartment (
+    InstructorDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
     DepartmentID INT,
     InstructorID INT,
-    PRIMARY KEY (DepartmentID, InstructorID),
     FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
-    FOREIGN KEY (InstructorID) REFERENCES Instructor (InstructorID)
+    FOREIGN KEY (InstructorID) REFERENCES Instructor (InstructorID),
+    UNIQUE (InstructorID, DepartmentID)
   );
 
 CREATE TABLE
   StudentDepartment (
+    StudentDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
     DepartmentID INT,
     StudentID INT,
-    PRIMARY KEY (DepartmentID, StudentID),
     FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
-    FOREIGN KEY (StudentID) REFERENCES Student (StudentID)
+    FOREIGN KEY (StudentID) REFERENCES Student (StudentID),
+    UNIQUE (StudentID, DepartmentID)
   );
 
 CREATE TABLE
