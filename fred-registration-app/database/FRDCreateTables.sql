@@ -2,7 +2,7 @@ CREATE TABLE
 Role (
     RoleID INT IDENTITY (1, 1) PRIMARY KEY,
     RoleName VARCHAR(64) NOT NULL,
-    Description VARCHAR(255)
+    Description text
 );
 
 CREATE TABLE 
@@ -59,11 +59,11 @@ CREATE TABLE
 
 CREATE TABLE
   Course (
-    CRN INT IDENTITY (1, 1) PRIMARY KEY,
-    CourseCode VARCHAR(64) NOT NULL UNIQUE,
+    CRN INT PRIMARY KEY NOT NULL,
+    CourseCode VARCHAR(64) NOT NULL,
     Title VARCHAR(256) NOT NULL,
     Credits INT NOT NULL CHECK (Credits BETWEEN 0 and 5),
-    Level VARCHAR(64) NOT NULL CHECK (Level IN ('100', '200', '300', '400')),
+    Level VARCHAR(64) NOT NULL CHECK (Level IN ('Undergraduate', 'Graduate')),
     DepartmentID INT NOT NULL,
     FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID)
   );
@@ -71,7 +71,7 @@ CREATE TABLE
 CREATE TABLE
   CourseFee (
     CRN INT,
-    FeeID INT,
+    FeeID INT, 
     PRIMARY KEY (CRN, FeeID),
     FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
     FOREIGN KEY (FeeID) REFERENCES Fee (FeeID) ON DELETE CASCADE
@@ -143,7 +143,8 @@ CREATE TABLE
         'I',
         'P',
         'NP',
-        'S'
+        'S',
+        'WC'
       )
       OR Grade IS NULL
     ),
