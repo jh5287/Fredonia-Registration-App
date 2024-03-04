@@ -17,8 +17,16 @@ CREATE TABLE [User] (
     LastName VARCHAR(64) NOT NULL,
     Email VARCHAR(100) NOT NULL UNIQUE,
     Phone VARCHAR(20),
+);
+
+CREATE TABLE 
+UserRole (
+    UserRoleID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT,
     RoleID INT,
-    CONSTRAINT FK_User_Role FOREIGN KEY (RoleID) REFERENCES Role (RoleID)
+    CONSTRAINT FK_UserRole_User FOREIGN KEY (UserID) REFERENCES [User] (UserID),
+    CONSTRAINT FK_UserRole_Role FOREIGN KEY (RoleID) REFERENCES Role (RoleID),
+    UNIQUE (UserID, RoleID)
 );
 
 CREATE TABLE

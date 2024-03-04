@@ -25,7 +25,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (21, 'CSIT 425', 'Software Engineering', 3, 'Undergraduate', 1);
 
 
-INSERT INTO Course (CourseCode, Title, Credits, Level, DepartmentID) VALUES
+INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (22, 'FF101', 'Fredonia Foundation Elective 1', 3, 'Undergraduate', 1),
 (23, 'FF102', 'Fredonia Foundation Elective 2', 3, 'Undergraduate', 1),
 (24, 'FF103', 'Fredonia Foundation Elective 3', 3, 'Undergraduate', 1),
