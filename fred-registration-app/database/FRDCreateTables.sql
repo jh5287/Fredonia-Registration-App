@@ -12,7 +12,7 @@ Department (
 );
 
 CREATE TABLE [User] (
-    UserID INT IDENTITY (1, 1) PRIMARY KEY,
+    UserID INT PRIMARY KEY,
     FirstName VARCHAR(64) NOT NULL,
     LastName VARCHAR(64) NOT NULL,
     Email VARCHAR(100) NOT NULL UNIQUE,
