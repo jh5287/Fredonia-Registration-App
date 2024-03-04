@@ -8,7 +8,9 @@ export async function GET(request) {
     const studentCGPA = await prisma.StudentCGPA.findMany({
       where: {
         Student: {
-          Email: email,
+          User: {
+            Email: email,
+          },
         },
       },
       select: {

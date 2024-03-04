@@ -100,8 +100,9 @@ const Registration = () => {
     //The array is mapped onto the RegSemester component
     const fetchStudentData = async () => {
       try {
-        const res = await fetch("/api/student/studentCourses?email=camronwalsh@gmail.com");
+        const res = await fetch("/api/student/studentCourses?email=wals9256@fredonia.edu");
         const studentData = await res.json();
+        console.log(studentData); 
         const organized_data = []
       for(let i = 1; i < 7; i++) {
         const semData = studentData.filter((item) => item.TermID === i);
