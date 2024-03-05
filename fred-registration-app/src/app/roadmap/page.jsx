@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Semester from "@/components/Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummary";
 import { useSession } from "next-auth/react";
+import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 
 const RoadMap = () => {
   const [catalog, setCatalog] = useState([]);
@@ -98,7 +99,27 @@ const RoadMap = () => {
     <>
       <div className="p-3">
         <AcademicSummaryBanner cgpa={userCGPA} />
-        <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
+        <div className="flex flex-col items-center">
+          <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
+          <div className="flex flex-row">
+            <div className="flex flex-row items-center mx-2">
+              <FaCheckCircle color="green" />
+              <p>=Completed</p>
+            </div>
+            <div className="flex flex-row items-center mx-2">
+              <FaTimesCircle color="red" />
+              <p>=Incomplete</p>
+            </div>
+            <div className="flex flex-row items-center mx-2">
+              <FaUserCheck color="blue" />
+              <p>=Enrolled</p>
+            </div>
+            <div className="flex flex-row items-center mx-2">
+              <FaRegCircle />
+              <p>=Not Taken</p>
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-5 h-full md:grid-cols-2">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
