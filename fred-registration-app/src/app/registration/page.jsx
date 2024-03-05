@@ -109,7 +109,7 @@ const Registration = () => {
     */
     const fetchStudentData = async () => {
       try {
-        const res = await fetch("/api/student/studentCourses?email=camronwalsh@gmail.com");
+        const res = await fetch("/api/student/studentCourses?email=wals9256@fredonia.edu");
         const studentData = await res.json();
         const terms = studentData.map(item => item.Term.TermName).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
         const organized_data = []
