@@ -42,7 +42,7 @@ CREATE TABLE
     InstructorID INT IDENTITY (1, 1) PRIMARY KEY,
     UserID INT NOT NULL UNIQUE,
     DepartmentID INT NOT NULL,
-    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
+    CONSTRAINT FK_Instructor_Dept FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
     CONSTRAINT FK_Instructor_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
@@ -73,7 +73,7 @@ CREATE TABLE
     Credits INT NOT NULL CHECK (Credits BETWEEN 0 and 5),
     Level VARCHAR(64) NOT NULL CHECK (Level IN ('Undergraduate', 'Graduate')),
     DepartmentID INT NOT NULL,
-    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID)
+    CONSTRAINT FK_Course_Dept FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID)
   );
 
 CREATE TABLE
@@ -81,8 +81,8 @@ CREATE TABLE
     CRN INT,
     FeeID INT, 
     PRIMARY KEY (CRN, FeeID),
-    FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
-    FOREIGN KEY (FeeID) REFERENCES Fee (FeeID) ON DELETE CASCADE
+    CONSTRAINT FK_CourseFee_Course FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
+    CONSTRAINT FK_CourseFee_Fee FOREIGN KEY (FeeID) REFERENCES Fee (FeeID) ON DELETE CASCADE
   );
 
 CREATE TABLE
@@ -90,8 +90,8 @@ CREATE TABLE
     CRN INT,
     RestrictionID INT,
     PRIMARY KEY (CRN, RestrictionID),
-    FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
-    FOREIGN KEY (RestrictionID) REFERENCES Restriction (RestrictionID) ON DELETE CASCADE
+    CONSTRAINT FK_CourseRest_Course FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
+    CONSTRAINT FK_CourseRest_Restriction FOREIGN KEY (RestrictionID) REFERENCES Restriction (RestrictionID) ON DELETE CASCADE
   );
 
 CREATE TABLE
@@ -99,8 +99,8 @@ CREATE TABLE
     CRN INT,
     AttributeID INT,
     PRIMARY KEY (CRN, AttributeID),
-    FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
-    FOREIGN KEY (AttributeID) REFERENCES Attribute (AttributeID) ON DELETE CASCADE
+    CONSTRAINT FK_CourseAtt_Course FOREIGN KEY (CRN) REFERENCES Course (CRN) ON DELETE CASCADE,
+    CONSTRAINT FK_CourseAtt_Attribute FOREIGN KEY (AttributeID) REFERENCES Attribute (AttributeID) ON DELETE CASCADE
   );
 
 CREATE TABLE
@@ -157,9 +157,9 @@ CREATE TABLE
       OR Grade IS NULL
     ),
     RegisteredOn DATE NOT NULL,
-    FOREIGN KEY (StudentID) REFERENCES Student (StudentID),
-    FOREIGN KEY (CRN) REFERENCES Course (CRN),
-    FOREIGN KEY (TermID) REFERENCES Term (TermID)
+    CONSTRAINT FK_StudentReg_StudentID FOREIGN KEY (StudentID) REFERENCES Student (StudentID),
+    CONSTRAINT FK_StudentReg_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
+    CONSTRAINT FK_StudentReg_Term FOREIGN KEY (TermID) REFERENCES Term (TermID)
   );
 
 CREATE TABLE
@@ -167,8 +167,8 @@ CREATE TABLE
     CourseCRN INT,
     PrerequisiteCRN INT,
     PRIMARY KEY (CourseCRN, PrerequisiteCRN),
-    FOREIGN KEY (CourseCRN) REFERENCES Course (CRN),
-    FOREIGN KEY (PrerequisiteCRN) REFERENCES Course (CRN)
+    CONSTRAINT FK_CoursePrereq_Course FOREIGN KEY (CourseCRN) REFERENCES Course (CRN),
+    CONSTRAINT FK_Courseprereq_Course2 FOREIGN KEY (PrerequisiteCRN) REFERENCES Course (CRN)
   );
 
 CREATE TABLE
@@ -176,8 +176,8 @@ CREATE TABLE
     CourseCRN INT,
     CorequisiteCRN INT,
     PRIMARY KEY (CourseCRN, CorequisiteCRN),
-    FOREIGN KEY (CourseCRN) REFERENCES Course (CRN),
-    FOREIGN KEY (CorequisiteCRN) REFERENCES Course (CRN)
+    CONSTRAINT FK_CourseCoreq_Course FOREIGN KEY (CourseCRN) REFERENCES Course (CRN),
+    CONSTRAINT FK_CourseCoreq_Course2 FOREIGN KEY (CorequisiteCRN) REFERENCES Course (CRN)
   );
 
 CREATE TABLE
@@ -206,7 +206,7 @@ CREATE TABLE
     Status VARCHAR(32) NOT NULL CHECK (Status IN ('Active', 'Cancelled', 'Completed')),
     InstructionMode VARCHAR(32) NOT NULL CHECK (
       InstructionMode IN ('In-Person', 'Online', 'Hybrid')
-    ), -- Example values
+    ),
   );
 
 CREATE TABLE
@@ -214,8 +214,8 @@ CREATE TABLE
     InstructorDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
     DepartmentID INT,
     InstructorID INT,
-    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
-    FOREIGN KEY (InstructorID) REFERENCES Instructor (InstructorID),
+    CONSTRAINT FK_InstructorDept_Department FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
+    CONSTRAINT FK_InstructorDept_Instructor FOREIGN KEY (InstructorID) REFERENCES Instructor (InstructorID),
     UNIQUE (InstructorID, DepartmentID)
   );
 
@@ -224,8 +224,8 @@ CREATE TABLE
     StudentDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
     DepartmentID INT,
     StudentID INT,
-    FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
-    FOREIGN KEY (StudentID) REFERENCES Student (StudentID),
+    CONSTRAINT FK_StudentDept_Department FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID),
+    CONSTRAINT FK_StudentDept_Student FOREIGN KEY (StudentID) REFERENCES Student (StudentID),
     UNIQUE (StudentID, DepartmentID)
   );
 
@@ -243,8 +243,8 @@ CREATE TABLE
     CatalogID INT IDENTITY (1, 1) PRIMARY KEY,
     TermID INT NOT NULL,
     ProgramID INT NOT NULL,
-    FOREIGN KEY (TermID) REFERENCES Term (TermID),
-    FOREIGN KEY (ProgramID) REFERENCES Program (ProgramID),
+    CONSTRAINT FK_Catalog_Term FOREIGN KEY (TermID) REFERENCES Term (TermID),
+    CONSTRAINT FK_Catalog_Program FOREIGN KEY (ProgramID) REFERENCES Program (ProgramID),
     CONSTRAINT UC_Catalog_TermProgram UNIQUE (TermID, ProgramID)
   );
 
@@ -257,8 +257,8 @@ CREATE TABLE
     ),
     RecommendedYear INT CHECK (RecommendedYear IN (1, 2, 3, 4, 5)),
     PRIMARY KEY (CRN, CatalogID),
-    FOREIGN KEY (CRN) REFERENCES Course (CRN),
-    FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID)
+    CONSTRAINT FK_CourseCatalog_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
+    CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID)
   );
 
 CREATE TABLE
