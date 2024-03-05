@@ -24,7 +24,7 @@ const RoadMap = () => {
   // Fetch user course data
   const fetchUserCourses = async () => {
     try {
-      const userEmail = "camronwalsh@gmail.com";
+      const userEmail = "wals9256@fredonia.edu";
       const response = await fetch(
         `/api/student/studentCourses?email=${userEmail}`
       );
@@ -38,7 +38,7 @@ const RoadMap = () => {
   // Fetch user CGPA data
   const fetchUserCGPA = async () => {
     try {
-      const userEmail = "camronwalsh@gmail.com";
+      const userEmail = "wals9256@fredonia.edu";
       const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
       const data = await response.json();
   

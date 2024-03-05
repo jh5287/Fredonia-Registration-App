@@ -4,10 +4,17 @@ import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-ic
 const Semester = ({ number, catalogData, userCourses }) => {
 
   const getCourseStatusIcon = (crn) => {
-    const courseExists = userCourses.find((course) => course.CRN === crn);
-
-    if (courseExists !== undefined) {
-      switch (courseExists.Status) {
+    // Find all courses with the given CRN
+    const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+  
+    // If there are courses with the given CRN, find the most recent one
+    if (coursesWithCRN.length > 0) {
+      const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
+        return (mostRecent.TermID > course.TermID) ? mostRecent : course;
+      });
+  
+      // Now switch on the status of the most recent course
+      switch (mostRecentCourse.Status) {
         case "Completed":
           return <FaCheckCircle color="green" />;
         case "Enrolled":
@@ -18,7 +25,8 @@ const Semester = ({ number, catalogData, userCourses }) => {
           return null;
       }
     } else {
-      return <FaRegCircle/>;
+      // If there is no course with the given CRN
+      return <FaRegCircle />;
     }
   };
 
