@@ -7,7 +7,7 @@ import { mdiProgressHelper } from '@mdi/js';
 
 const WhatIfSemester = ({ number, data, catalog }) => {
   const [currentCourses, setCurrentCourses] = useState(Array(data.length).fill(''));//state to hold the current course
-  
+
   const handleCourseChange = (e, index) => {
     const course = e.target.value;
     setCurrentCourses(prevCourses => {
@@ -88,15 +88,15 @@ const WhatIfSemester = ({ number, data, catalog }) => {
                 <td>{currentCourses[index] === '' ? item.Course.CourseCode : currentCourses[index]}</td>
                 <td>
                     <select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
-                        <option selected>{item.Course.Title}</option>
+                        <option selected disabled>{item.Course.Title}</option>
                         {catalog.map((course, index) => (
                             <option key={index} value={course.CourseCode}>{course.Title}</option>
                         ))}
                     </select>
                 </td>
                 <td>{item.Course.Credits}</td>
+                
                 {/* If the grade is null, display a progress icon, else display the grade */}
-
                 <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}>
                     { item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
                     item.Grade}</td>
