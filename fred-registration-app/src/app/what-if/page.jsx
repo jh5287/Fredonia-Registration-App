@@ -5,7 +5,17 @@ import { cn } from "@/lib/utils";
 import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
 
-const RegSemester = ({ number, data }) => {
+const WhatIfSemester = ({ number, data, catalog }) => {
+  const [currentCourses, setCurrentCourses] = useState(Array(data.length).fill(''));//state to hold the current course
+
+  const handleCourseChange = (e, index) => {
+    const course = e.target.value;
+    setCurrentCourses(prevCourses => {
+      const newCourses = [...prevCourses];
+      newCourses[index] = course;
+      return newCourses;
+    });
+  };
   const calculateGPA = (data) => {
     let totalCredits = 0;
     let totalPoints = 0;
@@ -58,7 +68,6 @@ const RegSemester = ({ number, data }) => {
     return (totalPoints / totalCredits).toFixed(2);
   }
 
-  console.log("Data in RegSemester", data)
 
   return (
     <>
@@ -66,9 +75,6 @@ const RegSemester = ({ number, data }) => {
 
       <div className="flex justify-between items-center">
         <h1 className="py-2 pl-1 text-lg font-medium">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
-        {/* An idea...
-        {calculateGPA(data) >= 3.0 ? <span className="text-green-600">Good Standing</span> : <span className="text-red-600">Academic Warning</span>}
-        */}
         {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
       </div>
       
@@ -85,13 +91,21 @@ const RegSemester = ({ number, data }) => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index} className={cn({" bg-red-200" : item.Grade === 'F', 'bg-green-200': item.Grade === 'A'}, )}>
-                <td>{item.Course.CourseCode}</td>
-                <td>{item.Course.Title}</td>
+                <td>{currentCourses[index] === '' ? item.Course.CourseCode : currentCourses[index]}</td>
+                <td>
+                    <select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
+                        <option selected disabled>{item.Course.Title}</option>
+                        {catalog.map((course, index) => (
+                            <option key={index} value={course.CourseCode}>{course.Title}</option>
+                        ))}
+                    </select>
+                </td>
                 <td>{item.Course.Credits}</td>
+
                 {/* If the grade is null, display a progress icon, else display the grade */}
-                <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
-                >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
-                item.Grade}</td>
+                <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}>
+                    { item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
+                    item.Grade}</td>
               </tr>
             ))}
           </tbody>
@@ -102,38 +116,53 @@ const RegSemester = ({ number, data }) => {
   );
 };
 
-const Registration = () => {
+const WhatIf = () => {
   const [studentData, setStudentData] = useState([]);
+  const [catalog, setCatalog] = useState([]);
   
 
   useEffect(() => {
-    /*
-    fetchStudentData gets all of the courses the student has taken
-    this includes S.FirstName, SR.Grade, C.CourseCode, C.Title, C.Credits, SR.TermID
-    It is then filtered by TermID in order to separate which courses were taken during which semester
-    The data is then organized into an array of arrays, where each array is a semester
-    The array is mapped onto the RegSemester component
-    */
     const fetchStudentData = async () => {
       try {
-        let email = "russ9214@fredonia.edu"
-        const res = await fetch(`/api/student/studentCourses?email=${email}`);
+        const res = await fetch("/api/student/studentCourses?email=russ9214@fredonia.edu");
         const studentData = await res.json();
-        console.log("Student data in new db call", studentData)
         const terms = studentData.map(item => (item.Term.Semester + " "+ item.Term.Year)).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
-        console.log("Terms", terms)
         const organized_data = []
+        console.log("Terms: ", terms);
+        console.log("Student data: ", studentData);
       for(let i = 1; i < terms.length; i++) {
         const termToCompareTo = terms[i]; //get the term to compare to
         const semData = studentData.filter((item) => (item.Term.Semester + " " + item.Term.Year) === termToCompareTo);//filter the data to only include the target term
         organized_data.push(semData)
       }
-      console.log("Organized data", organized_data)
+      console.log("Organized data for current reg: ", organized_data);
       setStudentData(organized_data);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
       }
     };
+    const fetchCatalog = async () => {
+        try {
+          const res = await fetch("/api/catalog?catID=1");
+          const data = await res.json();
+          console.log("fetched catalog data: ", data);
+          const catalog = [];
+          for (let i = 0; i < data.length; i++) {
+            let temp_data = {
+                CourseCode: data[i].Course.CourseCode,
+                Title: data[i].Course.Title,
+                Credits: data[i].Course.Credits
+            }
+            catalog.push(temp_data);
+          }
+          console.log("Organized catalog: ", catalog);
+          setCatalog(catalog);
+        } catch (err) {
+          console.error("Failed to fetch catalog:", err);
+        }
+      };
+
+    fetchCatalog();
     fetchStudentData();
   }, []);
 
@@ -141,14 +170,14 @@ const Registration = () => {
 
   return (
     <>
-    <h1 className="p-3 py-5 text-2xl">Current Registration</h1>
+    <h1 className="p-3 py-5 text-2xl">What If View</h1>
     <div className="m-3 grid grid-cols-1 gap-8 h-full md:grid-cols-2">
     {studentData.map((item, index) => (
-            <RegSemester key={index+1} number={index} data={item}/>
+            <WhatIfSemester key={index+1} number={index} data={item} catalog={catalog}/>
           ))}
     </div>
   </>
   )
 }
 
-export default Registration
+export default WhatIf

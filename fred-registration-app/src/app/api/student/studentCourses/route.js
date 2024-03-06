@@ -9,7 +9,9 @@ export async function GET(request) {
     const res = await prisma.StudentRegistration.findMany({
       where: {
         Student: {
-          Email: email,
+          User: {
+            Email: email,
+          },
         },
       },
       select: {
@@ -19,7 +21,8 @@ export async function GET(request) {
         Grade: true,
         Term: {
           select: {
-            TermName: true,
+            Semester: true,
+            Year: true
           },
         },
         Course: {
@@ -31,7 +34,6 @@ export async function GET(request) {
         },
       },
     });
-
     return Response.json(res);
   } 
   catch (err) {
