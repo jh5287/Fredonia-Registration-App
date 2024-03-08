@@ -96,8 +96,28 @@ const RoadMap = () => {
     );
   };
 
-  const toggleSemester = () => {
-    const newOpen = open.map((isOpen) => !isOpen);
+  const toggleAllSemester = () => {
+    const checkSameValue = () => {
+      if (!Array.isArray(open) || open.length === 0) {
+        return false;
+      }
+
+      const firstValue = open[0];
+      return open.every((value) => value === firstValue);
+    };
+    let allSame = checkSameValue();
+    if (allSame) {
+      setOpen(open.map((isOpen) => !isOpen));
+    } else {
+      const changeOpen = open.map((isOpen) => isOpen === false ? true : true);
+      setOpen(changeOpen);
+    }
+  }
+
+  const toggleSemester = (index) => {
+    console.log("open", open, index)
+    const newOpen = [...open];
+    newOpen[index] = !newOpen[index];
     setOpen(newOpen);
   }
 
@@ -132,7 +152,7 @@ const RoadMap = () => {
                 <input 
                 type="checkbox" 
                 className="toggle toggle-primary"
-                onChange={() => {toggleSemester()}}
+                onChange={() => {toggleAllSemester()}}
                 checked={open[0]}
                  />
               </label>
@@ -157,6 +177,7 @@ const RoadMap = () => {
                 catalogData={semesterCatalogCourses}
                 userCourses={semesterUserCourses}
                 open={open[i]}
+                toggleSemester={toggleSemester}
               />
             );
           })}
