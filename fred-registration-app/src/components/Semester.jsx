@@ -1,7 +1,8 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 
-const Semester = ({ number, catalogData, userCourses }) => {
+const Semester = ({ number, catalogData, userCourses, open }) => {
 
   const getCourseStatusIcon = (crn) => {
     // Find all courses with the given CRN
@@ -32,9 +33,9 @@ const Semester = ({ number, catalogData, userCourses }) => {
 
   return (
     <>
-      <div className="">
-        <h1 className="py-2 pl-1 text-lg">Semester {number}</h1>
-        <div className="border rounded">
+      <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse")}>
+        <h1 className="collapse-title py-2 pl-1 text-lg">Semester {number}</h1>
+        <div className="collapse-content border rounded">
           <table className="table">
             <thead>
               <tr>

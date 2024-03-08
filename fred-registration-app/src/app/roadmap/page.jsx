@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 
 const RoadMap = () => {
+  const [open, setOpen] = useState(Array(8).fill(true));
   const [catalog, setCatalog] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
@@ -95,11 +96,16 @@ const RoadMap = () => {
     );
   };
 
+  const toggleSemester = () => {
+    const newOpen = open.map((isOpen) => !isOpen);
+    setOpen(newOpen);
+  }
+
   return (
     <>
       <div className="p-3">
         <AcademicSummaryBanner cgpa={userCGPA} />
-        <div className="flex flex-col items-center">
+        <div className="relative flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
             <div className="flex flex-row items-center mx-2">
@@ -119,6 +125,18 @@ const RoadMap = () => {
               <p>=Not Taken</p>
             </div>
           </div>
+
+            <div className="md:absolute md:right-2 md:top-3 form-control">
+              <label className="label cursor-pointer">
+                <span className="p-2 label-text">Toggle Semester</span> 
+                <input 
+                type="checkbox" 
+                className="toggle toggle-primary"
+                onChange={() => {toggleSemester()}}
+                checked={open[0]}
+                 />
+              </label>
+            </div>
         </div>
         <div className="grid grid-cols-1 gap-5 h-full md:grid-cols-2">
           {Array.from({ length: 8 }, (_, i) => {
@@ -138,6 +156,7 @@ const RoadMap = () => {
                 number={i + 1}
                 catalogData={semesterCatalogCourses}
                 userCourses={semesterUserCourses}
+                open={open[i]}
               />
             );
           })}
