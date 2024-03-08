@@ -45,6 +45,12 @@ const RegSemester = ({ number, data }) => {
         case 'D-':
           totalPoints += 0.7 * item.Course.Credits;
           break;
+        case 'S':
+          totalCredits -= item.Course.Credits;
+          break;
+        case 'WC':
+          totalCredits -= item.Course.Credits;
+          break;
         default:
           totalPoints += 0;
       }
@@ -52,13 +58,14 @@ const RegSemester = ({ number, data }) => {
     return (totalPoints / totalCredits).toFixed(2);
   }
 
+  console.log("Data in RegSemester", data)
 
   return (
     <>
     <div className="">
 
       <div className="flex justify-between items-center">
-        <h1 className="py-2 pl-1 text-lg font-medium">{data[number].Term.TermName}</h1>
+        <h1 className="py-2 pl-1 text-lg font-medium">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
         {/* An idea...
         {calculateGPA(data) >= 3.0 ? <span className="text-green-600">Good Standing</span> : <span className="text-red-600">Academic Warning</span>}
         */}
@@ -109,16 +116,19 @@ const Registration = () => {
     */
     const fetchStudentData = async () => {
       try {
-        const res = await fetch("/api/student/studentCourses?email=wals9256@fredonia.edu");
+        let email = "russ9214@fredonia.edu"
+        const res = await fetch(`/api/student/studentCourses?email=${email}`);
         const studentData = await res.json();
-        const terms = studentData.map(item => item.Term.TermName).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
+        console.log("Student data in new db call", studentData)
+        const terms = studentData.map(item => (item.Term.Semester + " "+ item.Term.Year)).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
+        console.log("Terms", terms)
         const organized_data = []
       for(let i = 1; i < terms.length; i++) {
         const termToCompareTo = terms[i]; //get the term to compare to
-        const semData = studentData.filter((item) => item.Term.TermName === termToCompareTo);//filter the data to only include the target term
+        const semData = studentData.filter((item) => (item.Term.Semester + " " + item.Term.Year) === termToCompareTo);//filter the data to only include the target term
         organized_data.push(semData)
       }
-
+      console.log("Organized data", organized_data)
       setStudentData(organized_data);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
@@ -131,7 +141,7 @@ const Registration = () => {
 
   return (
     <>
-    <h1 className="p-3 py-5 text-2xl">Current Registration</h1>
+    <h1 className="p-3 py-5 text-2xl">Actual Registration</h1>
     <div className="m-3 grid grid-cols-1 gap-8 h-full md:grid-cols-2">
     {studentData.map((item, index) => (
             <RegSemester key={index+1} number={index} data={item}/>
