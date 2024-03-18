@@ -5,7 +5,7 @@ import {GoDash} from "react-icons/go";
 
 const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) => {
 
-  
+  console.log("User courses in Semester", userCourses);
 
   const getCourseStatusIcon = (crn) => {
     // Find all courses with the given CRN
@@ -34,6 +34,18 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
     }
   };
 
+  const getRecentGrade = (crn) => {
+    const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+    if (coursesWithCRN.length > 0) {
+      const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
+        return (mostRecent.TermID > course.TermID) ? mostRecent : course;
+      });
+      return mostRecentCourse.Grade;
+    } else {
+      return null;
+    }
+  }
+
   return (
       <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse collapse-arrow")}>
         <h1 className="collapse-title w-full py-2 pl-1 text-lg">
@@ -41,8 +53,8 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
           className="text-left w-full"
           onClick={() => toggleSemester(number - 1)}>Semester {number}</button>
         </h1>
-        <div className="collapse-content border rounded overflow-hidden shadow-md">
-          <table className="table m-2 shadow-md">
+        <div className="collapse-content overflow-hidden">
+          <table className="table m-2 border rounded shadow-md">
             <thead>
               <tr>
                 <th className="whitespace-nowrap">Course Code</th>
@@ -56,13 +68,16 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
               {catalogData.map((item, index) => {
                 const statusIcon = getCourseStatusIcon(item.Course.CRN);
                 const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
+                //const grade = userCourses.find((course) => course.CRN === item.Course.CRN)?.Grade;
+                const grade = getRecentGrade(item.Course.CRN);
+                //console.log("The issue...", grade);
                 return (
                   <tr key={index}>
                     <td>{item.Course.CourseCode}</td>
                     <td className="w-[60%]">{item.Course.Title}</td>
-                    <td>{item.Course.Credits}</td>
-                    <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
-                    <td>{courseStatus ? item.Course.Grade : <GoDash />}</td>
+                    <td className="pl-7">{item.Course.Credits}</td>
+                    <td className="tooltip pl-7" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
+                    <td className="pl-7">{(courseStatus && grade !== null) ? grade : <GoDash />}</td>
                   </tr>
                 );
               })}

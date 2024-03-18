@@ -31,7 +31,6 @@ const RoadMap = () => {
         `/api/student/studentCourses?email=${userEmail}`
       );
       const data = await response.json();
-      console.log("User courses hopefully we get grades:", data);
       setUserCourses(data);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
@@ -96,6 +95,8 @@ const RoadMap = () => {
       )
     );
   };
+
+  //const getUserGrades = 
 
   const toggleAllSemester = () => {
     const checkSameValue = () => {
@@ -169,7 +170,7 @@ const RoadMap = () => {
             const semesterUserCourses = filterUserCoursesForSemester(
               semesterCatalogCourses
             );
-
+              //console.log("Semester user courses", semesterUserCourses);
             return (
               <Semester
                 key={i + 1}
