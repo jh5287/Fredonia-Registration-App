@@ -31,6 +31,7 @@ const RoadMap = () => {
         `/api/student/studentCourses?email=${userEmail}`
       );
       const data = await response.json();
+      console.log("User courses hopefully we get grades:", data);
       setUserCourses(data);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
@@ -115,7 +116,6 @@ const RoadMap = () => {
   }
 
   const toggleSemester = (index) => {
-    console.log("open", open, index)
     const newOpen = [...open];
     newOpen[index] = !newOpen[index];
     setOpen(newOpen);
@@ -145,8 +145,8 @@ const RoadMap = () => {
               <p>=Not Taken</p>
             </div>
           </div>
-
-            <div className="md:absolute md:right-2 md:top-3 form-control">
+          {/* md:absolute md:right-2 md:top-3*/}
+            <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
               <label className="label cursor-pointer">
                 <span className="p-2 label-text">Toggle Semester</span> 
                 <input 
@@ -158,7 +158,7 @@ const RoadMap = () => {
               </label>
             </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 h-full md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 h-full">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
             const semesterStr = i % 2 === 0 ? "Fall" : "Spring";

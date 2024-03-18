@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
+import {GoDash} from "react-icons/go";
 
 const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) => {
 
@@ -34,17 +35,21 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
   };
 
   return (
-    <>
-      <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse")}>
-        <h1 className="collapse-title py-2 pl-1 text-lg"><button onClick={() => toggleSemester(number - 1)}>Semester {number}</button></h1>
-        <div className="collapse-content border rounded">
-          <table className="table">
+      <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse collapse-arrow")}>
+        <h1 className="collapse-title w-full py-2 pl-1 text-lg">
+          <button 
+          className="text-left w-full"
+          onClick={() => toggleSemester(number - 1)}>Semester {number}</button>
+        </h1>
+        <div className="collapse-content border rounded overflow-hidden shadow-md">
+          <table className="table m-2 shadow-md">
             <thead>
               <tr>
                 <th className="whitespace-nowrap">Course Code</th>
                 <th>Course Title</th>
                 <th>Credits</th>
                 <th>Status</th>
+                <th>Grade</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +62,7 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
                     <td className="w-[60%]">{item.Course.Title}</td>
                     <td>{item.Course.Credits}</td>
                     <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
+                    <td>{courseStatus ? item.Course.Grade : <GoDash />}</td>
                   </tr>
                 );
               })}
@@ -64,7 +70,6 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
           </table>
         </div>
       </div>
-    </>
   );
 };
 
