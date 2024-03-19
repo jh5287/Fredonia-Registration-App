@@ -5,7 +5,7 @@ import WhatIf from "./what-if/page";
 const Page = () => {
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center m-3">
       <div role="tablist" className="tabs tabs-bordered justify-center">
         <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Registration" defaultChecked/>
         <div role="tabpanel" className="tab-content p-10">
