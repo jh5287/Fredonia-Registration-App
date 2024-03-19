@@ -30,6 +30,11 @@ const Semester = ({ number, catalogData, userCourses }) => {
     }
   };
 
+  const getCourseGrade = (crn) => {
+    const course = userCourses.find(course => course.CRN === crn);
+    return course ? course.Grade : null;
+  }
+
   return (
     <>
       <div className="">
@@ -42,11 +47,13 @@ const Semester = ({ number, catalogData, userCourses }) => {
                 <th>Course Title</th>
                 <th>Credits</th>
                 <th>Status</th>
+                <th>Grade</th>
               </tr>
             </thead>
             <tbody>
               {catalogData.map((item, index) => {
                 const statusIcon = getCourseStatusIcon(item.Course.CRN);
+                const grade = getCourseGrade(item.Course.CRN);
                 const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
                 return (
                   <tr key={index}>
@@ -54,6 +61,7 @@ const Semester = ({ number, catalogData, userCourses }) => {
                     <td className="w-[60%]">{item.Course.Title}</td>
                     <td>{item.Course.Credits}</td>
                     <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
+                    <td>{grade ? grade : "N/A"}</td>
                   </tr>
                 );
               })}
