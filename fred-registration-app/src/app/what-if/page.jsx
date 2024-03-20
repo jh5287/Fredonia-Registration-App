@@ -6,7 +6,8 @@ import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 import { Combo } from "next/font/google";
 
-const ComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
+const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
+    console.log("In course combobox");
     if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
         return (
             <select className="select select-primary w-full" onChange={handleCourseChange} disabled>
@@ -29,9 +30,115 @@ const ComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index
             }
 };
 
+const GradeComboBox = ({ handleGradeChange, index }) => {
+    console.log("In grade combobox");
+    return (
+        <select className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
+            <option selected disabled>Select a grade...</option>
+            <option value="A">A</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B">B</option>
+            <option value="B-">B-</option>
+            <option value="C+">C+</option>
+            <option value="C">C</option>
+            <option value="C-">C-</option>
+            <option value="D+">D+</option>
+            <option value="D">D</option>
+            <option value="D-">D-</option>
+            <option value="F">F</option>
+            <option value="S">S</option>
+            <option value="WC">WC</option>
+        </select>
+    );
+};
+
+const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { //the point of this compoenent is so when you render one of the semetser
+                                                         //you determine if the semester is completed or not
+                                                         //which will decide if you can edit grades or not
+                                                         //plus the completed semesters will retain the status column
+                                                         //and the editable semesters will have a dropdown to select the grades
+    console.log("Semester Catalog Data in SEM BODY");
+    const getCourseStatusIcon = (crn) => {
+        // Find all courses with the given CRN
+        const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+      
+        // If there are courses with the given CRN, find the most recent one
+        if (coursesWithCRN.length > 0) {
+          const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
+            return (mostRecent.TermID > course.TermID) ? mostRecent : course;
+          });
+      
+          // Now switch on the status of the most recent course
+          switch (mostRecentCourse.Status) {
+            case "Completed":
+              return <FaCheckCircle color="green" />;
+            case "Enrolled":
+              return <FaUserCheck color="blue" />;
+            case "Failed":
+              return <FaTimesCircle color="red"/>;
+            default:
+              return null;
+          }
+        } else {
+          // If there is no course with the given CRN
+          return <FaRegCircle />;
+        }
+      };
+      
+        return (
+            <tbody>
+                {semesterCatalogData.map((item, index) => {
+                  const statusIcon = getCourseStatusIcon(item.Course.CRN);
+                  const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
+                  console.log("Course Status", courseStatus);
+                  if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
+                    console.log('in return statement')
+                  return (
+                    <tr key={index}>
+                      <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
+                      <td>
+                        {item.Course.Title}
+                      </td>
+                      <td>{item.Course.Credits}</td>
+                      <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
+                    </tr>
+                  );
+                }
+                else{
+                    return (
+                        <tr key={index}>
+                          <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
+                          <td>
+                            <CourseComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
+                          </td>
+                          <td>{item.Course.Credits}</td>
+                          <td>
+                            <GradeComboBox handleGradeChange={handleGradeChange} index={index} />
+                          </td>
+                        </tr>
+                      );
+                }
+            })}
+
+        </tbody>
+        );
+    
+      
+    }
+
+
 const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData }) => {
     const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
+    const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
     
+    const handleGradeChange = (e, index) => {
+        const grade = e.target.value;
+        setCurrentGrades(prevGrades => {
+            const newGrades = [...prevGrades];
+            newGrades[index] = grade;
+            return newGrades;
+        });
     const handleCourseChange = (e, index) => {
       const course = e.target.value;
       setCurrentCourses(prevCourses => {
@@ -82,6 +189,7 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
                   <th>Status</th>
                 </tr>
               </thead>
+              {/* 
               <tbody>
                 {semesterCatalogData.map((item, index) => {
                   const statusIcon = getCourseStatusIcon(item.Course.CRN);
@@ -91,26 +199,22 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
                     <tr key={index}>
                       <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
                       <td>
-                        {/*<select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
-                            <option selected disabled>{item.Course.Title}</option>
-                            {catalogData.map((item, index) => (
-                                <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
-                            ))}
-                            </select>*/}
-                        <ComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
+                        <CourseComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
                       </td>
                       <td>{item.Course.Credits}</td>
                       <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
                     </tr>
                   );
                 })}
-              </tbody>
+              </tbody>*/}
+              <SemesterBody semesterCatalogData={semesterCatalogData} catalogData={catalogData} userCourses={userCourses} currentCourses={currentCourses} handleCourseChange={handleCourseChange} handleGradeChange={handleGradeChange} />
             </table>
           </div>
         </div>
       </>
     );
   };
+};
 
 const RoadMap = () => {
   const [catalog, setCatalog] = useState([]);
