@@ -58,18 +58,22 @@ const RegSemester = ({ number, data }) => {
     });
     return (totalPoints / totalCredits).toFixed(2);
   }
-
+  
+  const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
 
   return (
     <>
     <div className="">
 
       <div className="flex justify-between items-center">
-        <h1 className="py-2 pl-1 text-lg font-medium">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
+        <h1 className="py-2 pl-1 text-lg font-semibold">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
         {/* An idea...
         {calculateGPA(data) >= 3.0 ? <span className="text-green-600">Good Standing</span> : <span className="text-red-600">Academic Warning</span>}
         */}
-        {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
+        <div>
+          {totalCredits > 0 ? <span className="text-base">Total Credits: {totalCredits}</span> : null} {/*if there is no applicable grade do not display it */}
+          {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
+        </div>
       </div>
       
       <div className="border rounded">
