@@ -70,7 +70,6 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
                 const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
                 //const grade = userCourses.find((course) => course.CRN === item.Course.CRN)?.Grade;
                 const grade = getRecentGrade(item.Course.CRN);
-                //console.log("The issue...", grade);
                 return (
                   <tr key={index}>
                     <td>{item.Course.CourseCode}</td>

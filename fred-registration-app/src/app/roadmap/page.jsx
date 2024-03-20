@@ -124,7 +124,7 @@ const RoadMap = () => {
 
   return (
     <>
-      <div className="p-3">
+      <div className="p-3 mb-10">
         <AcademicSummaryBanner cgpa={userCGPA} />
         <div className="relative flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
