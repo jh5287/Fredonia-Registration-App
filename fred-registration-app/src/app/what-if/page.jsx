@@ -4,6 +4,30 @@ import Semester from "@/components/Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummary";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
+import { Combo } from "next/font/google";
+
+const ComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
+    if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
+        return (
+            <select className="select select-primary w-full" onChange={handleCourseChange} disabled>
+                <option selected disabled>{currentCourse}</option>
+                {data.map((item, index) => (
+                    <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
+                ))}
+            </select>
+        );
+    }
+    else{
+    return (
+        <select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
+            <option selected disabled>{currentCourse}</option>
+            {data.map((item, index) => (
+                <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
+            ))}
+        </select>
+    );
+            }
+};
 
 const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData }) => {
     const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
@@ -62,16 +86,18 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
                 {semesterCatalogData.map((item, index) => {
                   const statusIcon = getCourseStatusIcon(item.Course.CRN);
                   const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
+                  console.log("Course Status", courseStatus);
                   return (
                     <tr key={index}>
                       <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
                       <td>
-                        <select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
+                        {/*<select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
                             <option selected disabled>{item.Course.Title}</option>
                             {catalogData.map((item, index) => (
                                 <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
                             ))}
-                        </select>
+                            </select>*/}
+                        <ComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
                       </td>
                       <td>{item.Course.Credits}</td>
                       <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
