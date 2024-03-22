@@ -7,7 +7,6 @@ import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-ic
 import { Combo } from "next/font/google";
 
 const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
-    console.log("In course combobox");
     if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
         return (
             <select className="select select-primary w-full" onChange={handleCourseChange} disabled>
@@ -26,12 +25,10 @@ const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange,
                 <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
             ))}
         </select>
-    );
-            }
+    );}
 };
 
 const GradeComboBox = ({ handleGradeChange, index }) => {
-    console.log("In grade combobox");
     return (
         <select className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
             <option selected disabled>Select a grade...</option>
@@ -53,12 +50,12 @@ const GradeComboBox = ({ handleGradeChange, index }) => {
     );
 };
 
-const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { //the point of this compoenent is so when you render one of the semetser
-                                                         //you determine if the semester is completed or not
-                                                         //which will decide if you can edit grades or not
-                                                         //plus the completed semesters will retain the status column
-                                                         //and the editable semesters will have a dropdown to select the grades
-    console.log("Semester Catalog Data in SEM BODY");
+const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { 
+  //the point of this compoenent is so when you render one of the semetser
+  //you determine if the semester is completed or not
+  //which will decide if you can edit grades or not
+  //plus the completed semesters will retain the status column
+  //and the editable semesters will have a dropdown to select the grades
     const getCourseStatusIcon = (crn) => {
         // Find all courses with the given CRN
         const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
@@ -85,7 +82,6 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
           return <FaRegCircle />;
         }
       };
-      
         return (
             <tbody>
                 {semesterCatalogData.map((item, index) => {
@@ -106,26 +102,23 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                   );
                 }
                 else{
-                    return (
-                        <tr key={index}>
-                          <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
-                          <td>
-                            <CourseComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
-                          </td>
-                          <td>{item.Course.Credits}</td>
-                          <td>
-                            <GradeComboBox handleGradeChange={handleGradeChange} index={index} />
-                          </td>
-                        </tr>
-                      );
+                  return (
+                      <tr key={index}>
+                        <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
+                        <td>
+                          <CourseComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
+                        </td>
+                        <td>{item.Course.Credits}</td>
+                        <td>
+                          <GradeComboBox handleGradeChange={handleGradeChange} index={index} />
+                        </td>
+                      </tr>);
                 }
             })}
-
         </tbody>
         );
-    
-      
     }
+
 
 
 const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData }) => {
@@ -139,6 +132,7 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
             newGrades[index] = grade;
             return newGrades;
         });
+      };
     const handleCourseChange = (e, index) => {
       const course = e.target.value;
       setCurrentCourses(prevCourses => {
@@ -147,7 +141,7 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
         return newCourses;
       });
     };
-
+    
     const getCourseStatusIcon = (crn) => {
       // Find all courses with the given CRN
       const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
@@ -177,7 +171,7 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
   
     return (
       <>
-        <div className="">
+        <div>
           <h1 className="py-2 pl-1 text-lg">Semester {number}</h1>
           <div className="border rounded">
             <table className="table">
@@ -189,32 +183,21 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
                   <th>Status</th>
                 </tr>
               </thead>
-              {/* 
-              <tbody>
-                {semesterCatalogData.map((item, index) => {
-                  const statusIcon = getCourseStatusIcon(item.Course.CRN);
-                  const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
-                  console.log("Course Status", courseStatus);
-                  return (
-                    <tr key={index}>
-                      <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
-                      <td>
-                        <CourseComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
-                      </td>
-                      <td>{item.Course.Credits}</td>
-                      <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>*/}
-              <SemesterBody semesterCatalogData={semesterCatalogData} catalogData={catalogData} userCourses={userCourses} currentCourses={currentCourses} handleCourseChange={handleCourseChange} handleGradeChange={handleGradeChange} />
+             
+              <SemesterBody 
+              semesterCatalogData={semesterCatalogData} 
+              catalogData={catalogData} 
+              userCourses={userCourses} 
+              currentCourses={currentCourses} 
+              handleCourseChange={handleCourseChange} 
+              handleGradeChange={handleGradeChange} />
             </table>
           </div>
         </div>
       </>
     );
   };
-};
+
 
 const RoadMap = () => {
   const [catalog, setCatalog] = useState([]);
@@ -305,7 +288,6 @@ const RoadMap = () => {
       )
     );
   };
-
   return (
     <>
       <div className="p-3">
@@ -342,7 +324,6 @@ const RoadMap = () => {
             const semesterUserCourses = filterUserCoursesForSemester(
               semesterCatalogCourses
             );
-
             return (
               <WhatIfSemester
                 key={i + 1}
