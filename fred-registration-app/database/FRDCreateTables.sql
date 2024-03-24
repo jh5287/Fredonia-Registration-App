@@ -1,3 +1,5 @@
+-- Role Table
+  -- Normalization: BCNF
 CREATE TABLE 
 Role (
     RoleID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -5,12 +7,16 @@ Role (
     Description text
 );
 
+-- Department
+  -- Normalization: BCNF
 CREATE TABLE 
 Department (
     DepartmentID INT IDENTITY (1, 1) PRIMARY KEY,
     Name VARCHAR(64) NOT NULL UNIQUE
 );
 
+-- User
+  -- Normalization: BCNF
 CREATE TABLE [User] (
     UserID INT PRIMARY KEY,
     FirstName VARCHAR(64) NOT NULL,
@@ -19,6 +25,8 @@ CREATE TABLE [User] (
     Phone VARCHAR(20),
 );
 
+-- UserRole
+  -- Normalization: BCNF
 CREATE TABLE 
 UserRole (
     UserRoleID INT IDENTITY(1,1) PRIMARY KEY,
@@ -29,6 +37,8 @@ UserRole (
     UNIQUE (UserID, RoleID)
 );
 
+-- Student
+  -- Normalization: BCNF
 CREATE TABLE
   Student (
     StudentID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -37,6 +47,9 @@ CREATE TABLE
     CONSTRAINT FK_Student_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
+
+-- Instructor
+  -- Normalization: BCNF
 CREATE TABLE
   Instructor (
     InstructorID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -46,12 +59,17 @@ CREATE TABLE
     CONSTRAINT FK_Instructor_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
+
+-- Restriction
+  -- Normalization: BCNF
 CREATE TABLE
   Restriction (
     RestrictionID INT IDENTITY (1, 1) PRIMARY KEY,
     Description VARCHAR(255) NOT NULL UNIQUE
   );
 
+-- Fee
+  -- Normalization: BCNF
 CREATE TABLE
   Fee (
     FeeID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -59,12 +77,16 @@ CREATE TABLE
     Amount DECIMAL(10, 2) NOT NULL
   );
 
+-- Attribute
+  -- Normalization: BCNF
 CREATE TABLE
   Attribute (
     AttributeID INT IDENTITY (1, 1) PRIMARY KEY,
     Description VARCHAR(255) NOT NULL UNIQUE
   );
 
+-- Course
+  -- Normalization: BCNF
 CREATE TABLE
   Course (
     CRN INT PRIMARY KEY NOT NULL,
@@ -76,6 +98,8 @@ CREATE TABLE
     CONSTRAINT FK_Course_Dept FOREIGN KEY (DepartmentID) REFERENCES Department (DepartmentID)
   );
 
+-- CourseFee
+  -- Normalization: BCNF
 CREATE TABLE
   CourseFee (
     CRN INT,
@@ -85,6 +109,8 @@ CREATE TABLE
     CONSTRAINT FK_CourseFee_Fee FOREIGN KEY (FeeID) REFERENCES Fee (FeeID) ON DELETE CASCADE
   );
 
+-- CourseRestriction
+  -- Normalization: BCNF
 CREATE TABLE
   CourseRestriction (
     CRN INT,
@@ -94,6 +120,8 @@ CREATE TABLE
     CONSTRAINT FK_CourseRest_Restriction FOREIGN KEY (RestrictionID) REFERENCES Restriction (RestrictionID) ON DELETE CASCADE
   );
 
+-- CourseAttribute
+  -- Normalization: BCNF
 CREATE TABLE
   CourseAttribute (
     CRN INT,
@@ -103,6 +131,8 @@ CREATE TABLE
     CONSTRAINT FK_CourseAtt_Attribute FOREIGN KEY (AttributeID) REFERENCES Attribute (AttributeID) ON DELETE CASCADE
   );
 
+-- Term
+  -- Normalization: BCNF
 CREATE TABLE
   Term (
     TermID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -116,6 +146,8 @@ CREATE TABLE
     )
   );
 
+-- StudentRegistration
+  -- Normalization: BCNF
 CREATE TABLE
   StudentRegistration (
     RegistrationID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -162,6 +194,8 @@ CREATE TABLE
     CONSTRAINT FK_StudentReg_Term FOREIGN KEY (TermID) REFERENCES Term (TermID)
   );
 
+-- CoursePrerequisite
+  -- Normalization: BCNF
 CREATE TABLE
   CoursePrerequisite (
     CourseCRN INT,
@@ -171,6 +205,8 @@ CREATE TABLE
     CONSTRAINT FK_Courseprereq_Course2 FOREIGN KEY (PrerequisiteCRN) REFERENCES Course (CRN)
   );
 
+-- CourseCorequisite
+  -- Normalization: BCNF
 CREATE TABLE
   CourseCorequisite (
     CourseCRN INT,
@@ -180,6 +216,8 @@ CREATE TABLE
     CONSTRAINT FK_CourseCoreq_Course2 FOREIGN KEY (CorequisiteCRN) REFERENCES Course (CRN)
   );
 
+-- CourseSchedule
+  -- Normalization: BCNF
 CREATE TABLE
   CourseSchedule (
     ScheduleID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -209,6 +247,8 @@ CREATE TABLE
     ),
   );
 
+-- InstructorDepartment
+  -- Normalization: BCNF
 CREATE TABLE
   InstructorDepartment (
     InstructorDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -219,6 +259,8 @@ CREATE TABLE
     UNIQUE (InstructorID, DepartmentID)
   );
 
+-- StudentDepartment
+  -- Normalization: BCNF
 CREATE TABLE
   StudentDepartment (
     StudentDepartmentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -229,15 +271,20 @@ CREATE TABLE
     UNIQUE (StudentID, DepartmentID)
   );
 
-CREATE TABLE
-  Program (
+-- Program
+  -- Normalization: BCNF
+CREATE TABLE 
+Program (
     ProgramID INT IDENTITY (1, 1) PRIMARY KEY,
     Name VARCHAR(255) NOT NULL UNIQUE,
-    DegreeType VARCHAR(50) NOT NULL CHECK (
-      DegreeType IN ('Bachelor', 'Master', 'Doctorate', 'Certificate')
-    )
-  );
+    DegreeType VARCHAR(50) CHECK (
+      DegreeType IN ('Bachelor', 'Master', 'Doctorate', 'Certificate', 'Undergraduate') OR DegreeType IS NULL
+    ),
+    ProgramType VARCHAR(50) NOT NULL CHECK (ProgramType IN ('Major', 'Minor'))
+);
 
+-- Catalog
+  -- Normalization: BCNF
 CREATE TABLE
   Catalog (
     CatalogID INT IDENTITY (1, 1) PRIMARY KEY,
@@ -248,6 +295,8 @@ CREATE TABLE
     CONSTRAINT UC_Catalog_TermProgram UNIQUE (TermID, ProgramID)
   );
 
+-- CourseCatalog
+  -- Normalization: BCNF
 CREATE TABLE
   CourseCatalog (
     CRN INT NOT NULL,
@@ -261,6 +310,8 @@ CREATE TABLE
     CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID)
   );
 
+-- GradePoints
+  -- Normalization: BCNF
 CREATE TABLE
   GradePoints (
     LetterGrade VARCHAR(2),
