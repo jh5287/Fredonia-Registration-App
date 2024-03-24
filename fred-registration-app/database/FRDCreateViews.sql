@@ -15,11 +15,7 @@ GROUP BY
   sr.StudentID,
   sr.termid;
 
-
-
--- GO command allows multiple batch statements
 GO
-
 CREATE VIEW
   StudentCGPA AS
 SELECT
