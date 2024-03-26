@@ -159,7 +159,7 @@ const RoadMap = () => {
               </label>
             </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 h-full">
+        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 ">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
             const semesterStr = i % 2 === 0 ? "Fall" : "Spring";

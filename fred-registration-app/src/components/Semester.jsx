@@ -48,10 +48,8 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
 
   return (
       <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse collapse-arrow")}>
-        <h1 className="collapse-title w-full py-2 pl-1 text-lg">
-          <button 
-          className="text-left w-full"
-          onClick={() => toggleSemester(number - 1)}>Semester {number}</button>
+        <h1 className="collapse-title w-full py-2 pl-1 text-lg hover:cursor-pointer" onClick={() => toggleSemester(number - 1)}>
+          Semester {number}
         </h1>
         <div className="collapse-content overflow-hidden">
           <table className="table m-2 border rounded shadow-md">
