@@ -274,14 +274,26 @@ CREATE TABLE
 -- Program
   -- Normalization: BCNF
 CREATE TABLE 
-Program (
+  Program (
     ProgramID INT IDENTITY (1, 1) PRIMARY KEY,
-    Name VARCHAR(255) NOT NULL UNIQUE,
+    ProgramName VARCHAR(255) NOT NULL UNIQUE,
     DegreeType VARCHAR(50) CHECK (
-      DegreeType IN ('Bachelor', 'Master', 'Doctorate', 'Certificate', 'Undergraduate') OR DegreeType IS NULL
+      DegreeType IN ('Bachelor', 'Master', 'Doctorate', 'Certificate', 'Undergraduate', 'N/A') OR DegreeType IS NULL
     ),
     ProgramType VARCHAR(50) NOT NULL CHECK (ProgramType IN ('Major', 'Minor'))
 );
+
+-- StudentProgam
+  -- Normalization: BCNF
+CREATE TABLE 
+  StudentProgram (
+    StudentID INT NOT NULL,
+    ProgramID INT NOT NULL,
+    CONSTRAINT PK_StudentProgram PRIMARY KEY (StudentID, ProgramID),
+    CONSTRAINT FK_StudentProgram_Student FOREIGN KEY (StudentID) REFERENCES Student (StudentID),
+    CONSTRAINT FK_StudentProgram_Program FOREIGN KEY (ProgramID) REFERENCES Program (ProgramID)
+);
+
 
 -- Catalog
   -- Normalization: BCNF

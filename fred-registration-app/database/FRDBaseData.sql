@@ -39,9 +39,19 @@ INSERT INTO Department (Name) VALUES
 ('Biology');
 
 -- Insert into Program
-INSERT INTO Program (Name, DegreeType) VALUES ('Computer Science B.Sc', 'Bachelor');
-INSERT INTO Program (Name, DegreeType) VALUES ('Applied Mathematics M.Sc', 'Master');
-INSERT INTO Program (Name, DegreeType) VALUES ('Biology B.Sc', 'Bachelor');
+INSERT INTO Program (Name, DegreeType, programType) VALUES ('Computer Science B.Sc', 'Bachelor', 'Major');
+INSERT INTO Program (Name, DegreeType, programType) VALUES ('Applied Mathematics M.Sc', 'Master', 'Major');
+INSERT INTO Program (Name, DegreeType, programType) VALUES ('Biology B.Sc', 'Bachelor', 'Major');
+INSERT INTO Program (Name, DegreeType, programType) VALUES ('Biology Minor', 'N/A', 'Minor');
+INSERT INTO Program (Name, DegreeType, programType) VALUES ('Computer Science Minor', 'N/A', 'Minor');
+
+-- Insert into StudentProgram
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (1, 1)
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (1, 4)
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (2, 1)
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (2, 4)
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (3, 1)
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (3, 4)
 
 -- Insert into Term
 INSERT INTO Term (Semester, Year, StartDate, EndDate) VALUES 
