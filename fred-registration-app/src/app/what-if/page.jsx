@@ -287,7 +287,6 @@ const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogDa
           <h1 className="tooltip py-2 pl-1 text-lg" 
           data-tip={(calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') ? calculateGPA(userCourses) : "No grade"}>
             Semester {number}</h1>
-            <button value="A" onClick={handleGradeChange}>Christ on a stick</button>
           <div className="border rounded">
             <table className="table">
               <thead>
@@ -320,14 +319,6 @@ const RoadMap = () => {
   const [userCGPA, setUserCGPA] = useState(null);
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
-  const [sem1GPA, setSem1GPA] = useState(0.00);
-  const [sem2GPA, setSem2GPA] = useState(0.00);
-  const [sem3GPA, setSem3GPA] = useState(0.00);
-  const [sem4GPA, setSem4GPA] = useState(0.00);
-  const [sem5GPA, setSem5GPA] = useState(0.00);
-  const [sem6GPA, setSem6GPA] = useState(0.00);
-  const [sem7GPA, setSem7GPA] = useState(0.00);
-  const [sem8GPA, setSem8GPA] = useState(0.00);
   const { data: session, status } = useSession();
   // Fetch catalog data
   const fetchCatalog = async () => {
