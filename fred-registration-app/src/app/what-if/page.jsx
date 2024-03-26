@@ -137,7 +137,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                 {semesterCatalogData.map((item, index) => {
                   const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
-                  if(mostRecentCourse?.Status === "Completed" || mostRecentCourse?.Status === "Enrolled") {
+                  if(mostRecentCourse?.Status === "Completed") {
                   return (
                     <tr key={index}>
                       <td>
@@ -155,6 +155,27 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                     </tr>
                   );
                 }
+                
+                else if (mostRecentCourse?.Status === "Enrolled"){
+                  return (
+                      <tr key={index}>
+                        <td>
+                        {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
+                      </td>
+                      <td>
+                        {item.Course.Title}
+                      </td>
+                      <td>
+                        {item.Course.Credits}
+                      </td>
+                        <td>
+                          <GradeComboBox 
+                          handleGradeChange={handleGradeChange} 
+                          index={index} />
+                        </td>
+                      </tr>);
+                }
+                 
                 else{
                   return (
                       <tr key={index}>
@@ -240,6 +261,7 @@ const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogDa
             totalPoints += 0;
         }
       });
+      console.log(`the dynamic GPA updating function for semester ${number}`,(totalPoints / totalCredits).toFixed(2), "also its type", typeof(totalPoints / totalCredits).toFixed(2));
       return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
       
     };
@@ -281,7 +303,7 @@ const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogDa
       <>
         <div>
           <h1 className="tooltip py-2 pl-1 text-lg" 
-          data-tip={(calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') ? calculateGPA(userCourses) : "No grade"}>
+          data-tip={(currentGPAs[number - 1] !== null && currentGPAs[number - 1] !== 0) ? currentGPAs[number - 1] : "No grade"}>
             Semester {number}</h1>
           <div className="border rounded">
             <table className="table">
@@ -394,6 +416,8 @@ const RoadMap = () => {
        acceptedGPAs++;
       }
     }
+    console.log("All the GPAs lead to", currentGPAs);
+    console.log("The new CGPA is", total / acceptedGPAs);
     return total / acceptedGPAs;
   }
   // Filter catalog by year and semester
