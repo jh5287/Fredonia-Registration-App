@@ -311,13 +311,13 @@ CREATE TABLE
   -- Normalization: BCNF
 CREATE TABLE
   CourseCatalog (
+    ID INT IDENTITY (1, 1) PRIMARY KEY,
     CRN INT NOT NULL,
     CatalogID INT NOT NULL,
     RecommendedSemester VARCHAR(10) CHECK (
       RecommendedSemester IN ('Fall', 'Spring', 'Summer')
     ),
     RecommendedYear INT CHECK (RecommendedYear IN (1, 2, 3, 4, 5)),
-    PRIMARY KEY (CRN, CatalogID),
     CONSTRAINT FK_CourseCatalog_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
     CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID)
   );
