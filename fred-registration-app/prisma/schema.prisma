@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Attribute {
-  AttributeID     Int               @id(map: "PK__Attribut__C189298A291CF3CA") @default(autoincrement())
-  Description     String            @unique(map: "UQ__Attribut__4EBBBAC98B05AC90") @db.VarChar(255)
+  AttributeID     Int               @id(map: "PK__Attribut__C189298AF01BF7F0") @default(autoincrement())
+  Description     String            @unique(map: "UQ__Attribut__4EBBBAC980706764") @db.VarChar(255)
   CourseAttribute CourseAttribute[]
 }
 
 model Catalog {
-  CatalogID     Int             @id(map: "PK__Catalog__C2513B48BF3B8BD4") @default(autoincrement())
+  CatalogID     Int             @id(map: "PK__Catalog__C2513B48F7D1632C") @default(autoincrement())
   TermID        Int
   ProgramID     Int
   Program       Program         @relation(fields: [ProgramID], references: [ProgramID], onUpdate: NoAction, map: "FK__Catalog__Program__160F4887")
@@ -26,7 +26,7 @@ model Catalog {
 }
 
 model Course {
-  CRN                                                           Int                   @id(map: "PK__Course__C1F887FF8330DB39")
+  CRN                                                           Int                   @id(map: "PK__Course__C1F887FFA101B2F7")
   CourseCode                                                    String                @db.VarChar(64)
   Title                                                         String                @db.VarChar(256)
   Credits                                                       Int
@@ -50,7 +50,7 @@ model CourseAttribute {
   Attribute   Attribute @relation(fields: [AttributeID], references: [AttributeID], onDelete: Cascade, onUpdate: NoAction, map: "FK__CourseAtt__Attri__75A278F5")
   Course      Course    @relation(fields: [CRN], references: [CRN], onDelete: Cascade, onUpdate: NoAction, map: "FK__CourseAttri__CRN__74AE54BC")
 
-  @@id([CRN, AttributeID], map: "PK__CourseAt__7DE01567CC92353A")
+  @@id([CRN, AttributeID], map: "PK__CourseAt__7DE015677606CDF5")
 }
 
 model CourseCatalog {
@@ -61,7 +61,7 @@ model CourseCatalog {
   Catalog             Catalog @relation(fields: [CatalogID], references: [CatalogID], onUpdate: NoAction, map: "FK__CourseCat__Catal__19DFD96B")
   Course              Course  @relation(fields: [CRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseCatal__CRN__18EBB532")
 
-  @@id([CRN, CatalogID], map: "PK__CourseCa__5DDD944B0211CB36")
+  @@id([CRN, CatalogID], map: "PK__CourseCa__5DDD944BAD57DB05")
 }
 
 model CourseCorequisite {
@@ -70,7 +70,7 @@ model CourseCorequisite {
   Course_CourseCorequisite_CourseCRNToCourse      Course @relation("CourseCorequisite_CourseCRNToCourse", fields: [CourseCRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseCor__Cours__02FC7413")
   Course_CourseCorequisite_CorequisiteCRNToCourse Course @relation("CourseCorequisite_CorequisiteCRNToCourse", fields: [CorequisiteCRN], references: [CRN], onUpdate: NoAction, map: "FK__CourseCor__Coreq__03F0984C")
 
-  @@id([CourseCRN, CorequisiteCRN], map: "PK__CourseCo__875F77899A8C6A51")
+  @@id([CourseCRN, CorequisiteCRN], map: "PK__CourseCo__875F77894FA89763")
 }
 
 model CourseFee {
@@ -79,7 +79,7 @@ model CourseFee {
   Course Course @relation(fields: [CRN], references: [CRN], onDelete: Cascade, onUpdate: NoAction, map: "FK__CourseFee__CRN__6D0D32F4")
   Fee    Fee    @relation(fields: [FeeID], references: [FeeID], onDelete: Cascade, onUpdate: NoAction, map: "FK__CourseFee__FeeID__6E01572D")
 
-  @@id([CRN, FeeID], map: "PK__CourseFe__4AC0FCDFDC8EDBE6")
+  @@id([CRN, FeeID], map: "PK__CourseFe__4AC0FCDF72CBC3B8")
 }
 
 model CoursePrerequisite {
@@ -88,7 +88,7 @@ model CoursePrerequisite {
   Course_CoursePrerequisite_CourseCRNToCourse       Course @relation("CoursePrerequisite_CourseCRNToCourse", fields: [CourseCRN], references: [CRN], onUpdate: NoAction, map: "FK__CoursePre__Cours__7F2BE32F")
   Course_CoursePrerequisite_PrerequisiteCRNToCourse Course @relation("CoursePrerequisite_PrerequisiteCRNToCourse", fields: [PrerequisiteCRN], references: [CRN], onUpdate: NoAction, map: "FK__CoursePre__Prere__00200768")
 
-  @@id([CourseCRN, PrerequisiteCRN], map: "PK__CoursePr__5438AF5F197DD286")
+  @@id([CourseCRN, PrerequisiteCRN], map: "PK__CoursePr__5438AF5F612F743F")
 }
 
 model CourseRestriction {
@@ -97,11 +97,11 @@ model CourseRestriction {
   Course        Course      @relation(fields: [CRN], references: [CRN], onDelete: Cascade, onUpdate: NoAction, map: "FK__CourseRestr__CRN__70DDC3D8")
   Restriction   Restriction @relation(fields: [RestrictionID], references: [RestrictionID], onDelete: Cascade, onUpdate: NoAction, map: "FK__CourseRes__Restr__71D1E811")
 
-  @@id([CRN, RestrictionID], map: "PK__CourseRe__74D15F966E637592")
+  @@id([CRN, RestrictionID], map: "PK__CourseRe__74D15F96D815BACD")
 }
 
 model CourseSchedule {
-  ScheduleID      Int      @id(map: "PK__CourseSc__9C8A5B69E6FAD59A") @default(autoincrement())
+  ScheduleID      Int      @id(map: "PK__CourseSc__9C8A5B694364308B") @default(autoincrement())
   CRN             Int
   StartDate       DateTime @db.Date
   EndDate         DateTime @db.Date
@@ -115,8 +115,8 @@ model CourseSchedule {
 }
 
 model Department {
-  DepartmentID         Int                    @id(map: "PK__Departme__B2079BCDD760FD39") @default(autoincrement())
-  Name                 String                 @unique(map: "UQ__Departme__737584F6E573F476") @db.VarChar(64)
+  DepartmentID         Int                    @id(map: "PK__Departme__B2079BCD93CD27D7") @default(autoincrement())
+  Name                 String                 @unique(map: "UQ__Departme__737584F6DDCA03CB") @db.VarChar(64)
   Course               Course[]
   Instructor           Instructor[]
   InstructorDepartment InstructorDepartment[]
@@ -124,15 +124,15 @@ model Department {
 }
 
 model Fee {
-  FeeID       Int         @id(map: "PK__Fee__B387B209384B463B") @default(autoincrement())
-  Description String      @unique(map: "UQ__Fee__4EBBBAC93D2A633A") @db.VarChar(255)
+  FeeID       Int         @id(map: "PK__Fee__B387B2098EB73908") @default(autoincrement())
+  Description String      @unique(map: "UQ__Fee__4EBBBAC9E590DF8B") @db.VarChar(255)
   Amount      Decimal     @db.Decimal(10, 2)
   CourseFee   CourseFee[]
 }
 
 model Instructor {
-  InstructorID         Int                    @id(map: "PK__Instruct__9D010B7BA54876A9") @default(autoincrement())
-  UserID               Int                    @unique(map: "UQ__Instruct__1788CCADECAB7C56")
+  InstructorID         Int                    @id(map: "PK__Instruct__9D010B7BDD806659") @default(autoincrement())
+  UserID               Int                    @unique(map: "UQ__Instruct__1788CCAD02207176")
   DepartmentID         Int
   Department           Department             @relation(fields: [DepartmentID], references: [DepartmentID], onUpdate: NoAction, map: "FK__Instructo__Depar__5EBF139D")
   User                 User                   @relation(fields: [UserID], references: [UserID], onUpdate: NoAction, map: "FK_Instructor_User")
@@ -140,55 +140,58 @@ model Instructor {
 }
 
 model InstructorDepartment {
-  InstructorDepartmentID Int         @id(map: "PK__Instruct__C26B8DCCFCBD1011") @default(autoincrement())
+  InstructorDepartmentID Int         @id(map: "PK__Instruct__C26B8DCC69600586") @default(autoincrement())
   DepartmentID           Int?
   InstructorID           Int?
   Department             Department? @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Instructo__Depar__0B91BA14")
   Instructor             Instructor? @relation(fields: [InstructorID], references: [InstructorID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Instructo__Instr__0C85DE4D")
 
-  @@unique([InstructorID, DepartmentID], map: "UQ__Instruct__562172C664DDEE81")
+  @@unique([InstructorID, DepartmentID], map: "UQ__Instruct__562172C64CB83DB0")
 }
 
 model Program {
-  ProgramID  Int       @id(map: "PK__Program__75256038D68C4C44") @default(autoincrement())
-  Name       String    @unique(map: "UQ__Program__737584F68A93AE5E") @db.VarChar(255)
-  DegreeType String    @db.VarChar(50)
-  Catalog    Catalog[]
+  ProgramID      Int              @id(map: "PK__Program__75256038DFC8F1CA") @default(autoincrement())
+  Name           String           @unique(map: "UQ__Program__737584F6F452C35E") @db.VarChar(255)
+  DegreeType     String?          @db.VarChar(50)
+  ProgramType    String           @db.VarChar(50)
+  Catalog        Catalog[]
+  StudentProgram StudentProgram[]
 }
 
 model Restriction {
-  RestrictionID     Int                 @id(map: "PK__Restrict__529D869A8139C1D5") @default(autoincrement())
-  Description       String              @unique(map: "UQ__Restrict__4EBBBAC9DCCE0656") @db.VarChar(255)
+  RestrictionID     Int                 @id(map: "PK__Restrict__529D869A254B2D9F") @default(autoincrement())
+  Description       String              @unique(map: "UQ__Restrict__4EBBBAC970476DF2") @db.VarChar(255)
   CourseRestriction CourseRestriction[]
 }
 
 model Student {
-  StudentID           Int                   @id(map: "PK__Student__32C52A79B17E68B2") @default(autoincrement())
-  UserID              Int                   @unique(map: "UQ__Student__1788CCAD68B2E0B6")
+  StudentID           Int                   @id(map: "PK__Student__32C52A7948151F44") @default(autoincrement())
+  UserID              Int                   @unique(map: "UQ__Student__1788CCAD2E1ABD57")
   Level               String                @db.VarChar(64)
   User                User                  @relation(fields: [UserID], references: [UserID], onUpdate: NoAction, map: "FK_Student_User")
   StudentDepartment   StudentDepartment[]
+  StudentProgram      StudentProgram[]
   StudentRegistration StudentRegistration[]
   StudentCGPA         StudentCGPA?
 }
 
 model StudentDepartment {
-  StudentDepartmentID Int         @id(map: "PK__StudentD__9A6DB1BA42445636") @default(autoincrement())
+  StudentDepartmentID Int         @id(map: "PK__StudentD__9A6DB1BA12D4DF35") @default(autoincrement())
   DepartmentID        Int?
   StudentID           Int?
   Department          Department? @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__StudentDe__Depar__0F624AF8")
   Student             Student?    @relation(fields: [StudentID], references: [StudentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__StudentDe__Stude__10566F31")
 
-  @@unique([StudentID, DepartmentID], map: "UQ__StudentD__F9E553C448668321")
+  @@unique([StudentID, DepartmentID], map: "UQ__StudentD__F9E553C470DF61D0")
 }
 
 model StudentRegistration {
-  RegistrationID Int      @id(map: "PK__StudentR__6EF5883075861869") @default(autoincrement())
+  RegistrationID Int      @id(map: "PK__StudentR__6EF5883044FA92B6") @default(autoincrement())
   StudentID      Int
   CRN            Int
   TermID         Int
   GradeMode      String   @db.VarChar(32)
-  Status         String   @default("Registered", map: "DF__StudentRe__Statu__6DB73E6A") @db.VarChar(32)
+  Status         String   @default("Registered", map: "DF__StudentRe__Statu__6B24EA82") @db.VarChar(32)
   Grade          String?  @db.VarChar(32)
   RegisteredOn   DateTime @db.Date
   Course         Course   @relation(fields: [CRN], references: [CRN], onUpdate: NoAction, map: "FK__StudentRegi__CRN__7B5B524B")
@@ -197,7 +200,7 @@ model StudentRegistration {
 }
 
 model Term {
-  TermID              Int                   @id(map: "PK__Term__410A2E4504975D7D") @default(autoincrement())
+  TermID              Int                   @id(map: "PK__Term__410A2E45F30BB67C") @default(autoincrement())
   Semester            String                @db.VarChar(32)
   Year                Int
   StartDate           DateTime              @db.Date
@@ -207,22 +210,22 @@ model Term {
 }
 
 model GradePoints {
-  LetterGrade String  @id(map: "PK__GradePoi__BC0CE0587E1F69F0") @db.VarChar(2)
+  LetterGrade String  @id(map: "PK__GradePoi__BC0CE058DE0F9B0D") @db.VarChar(2)
   GradePoint  Decimal @db.Decimal(3, 2)
 }
 
 model Role {
-  RoleID      Int        @id(map: "PK__Role__8AFACE3ACCF8593A") @default(autoincrement())
+  RoleID      Int        @id(map: "PK__Role__8AFACE3AD6755DD5") @default(autoincrement())
   RoleName    String     @db.VarChar(64)
   Description String?    @db.Text
   UserRole    UserRole[]
 }
 
 model User {
-  UserID     Int         @id(map: "PK__User__1788CCACE38482D6")
+  UserID     Int         @id(map: "PK__User__1788CCAC171BD04B")
   FirstName  String      @db.VarChar(64)
   LastName   String      @db.VarChar(64)
-  Email      String      @unique(map: "UQ__User__A9D10534E5992FCE") @db.VarChar(100)
+  Email      String      @unique(map: "UQ__User__A9D105349DDA0CC7") @db.VarChar(100)
   Phone      String?     @db.VarChar(20)
   Instructor Instructor?
   Student    Student?
@@ -230,13 +233,22 @@ model User {
 }
 
 model UserRole {
-  UserRoleID Int   @id(map: "PK__UserRole__3D978A555025ABA2") @default(autoincrement())
+  UserRoleID Int   @id(map: "PK__UserRole__3D978A55258DF834") @default(autoincrement())
   UserID     Int?
   RoleID     Int?
   Role       Role? @relation(fields: [RoleID], references: [RoleID], onDelete: NoAction, onUpdate: NoAction, map: "FK_UserRole_Role")
   User       User? @relation(fields: [UserID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "FK_UserRole_User")
 
-  @@unique([UserID, RoleID], map: "UQ__UserRole__AF27604E6EB83F13")
+  @@unique([UserID, RoleID], map: "UQ__UserRole__AF27604EB33FCA10")
+}
+
+model StudentProgram {
+  StudentID Int
+  ProgramID Int
+  Program   Program @relation(fields: [ProgramID], references: [ProgramID], onUpdate: NoAction, map: "FK_StudentProgram_Program")
+  Student   Student @relation(fields: [StudentID], references: [StudentID], onUpdate: NoAction, map: "FK_StudentProgram_Student")
+
+  @@id([StudentID, ProgramID], map: "PK_StudentProgram")
 }
 
 view StudentGPA {
