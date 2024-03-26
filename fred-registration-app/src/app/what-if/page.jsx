@@ -194,13 +194,65 @@ const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogDa
     const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
     const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
     
+
+    const updateSemesterGPAs = () => {
+      let totalCredits = 0;
+      let totalPoints = 0;
+      currentGrades.forEach((item) => {
+        totalCredits += 3;
+        switch (item) {
+          case 'A':
+            totalPoints += 4 * 3;
+            break;
+          case 'A-':
+            totalPoints += 3.7 * 3;
+            break;
+          case 'B+':
+            totalPoints += 3.3 * 3;
+            break;
+          case 'B':
+            totalPoints += 3 * 3;
+            break;
+          case 'B-':
+            totalPoints += 2.7 * 3;
+            break;
+          case 'C+':
+            totalPoints += 2.3 * 3;
+            break;
+          case 'C':
+            totalPoints += 2 * 3;
+            break;
+          case 'C-':
+            totalPoints += 1.7 * 3;
+            break;
+          case 'D+':
+            totalPoints += 1.3 * 3;
+            break;
+          case 'D':
+            totalPoints += 1 * 3;
+            break;
+          case 'D-':
+            totalPoints += 0.7 * 3;
+            break;
+          case 'S':
+            totalCredits -= 3;
+            break;
+          case 'WC':
+            totalCredits -= 3;
+            break;
+          default:
+            totalPoints += 0;
+        }
+      });
+      return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
+      
+    };
+
     const handleGradeChange = (e, index) => {
         const grade = e.target.value;
         setCurrentGrades(prevGrades => {
             const newGrades = [...prevGrades];
             newGrades[index] = grade;
-            console.log("prevGrades", prevGrades);
-            console.log("newGrades", newGrades);
             return newGrades;
         });
       };
@@ -213,26 +265,21 @@ const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogDa
       });
     };
     
-  //  const handleSetCurrentGPAs = async (newGPAs) => {
-  //     setCurrentGPAs(newGPAs);
-  //   };
-    
     useEffect(() => {
       setCurrentGPAs(prevGPAs => {
-        console.log("Calculating GPA for semester", prevGPAs, number);
-        console.log("userCourses before GPA calculation", userCourses);
-        console.log("GPA ", calculateGPA(userCourses));
         const newGPAs = [...prevGPAs];
         if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
-          console.log("CONDITION userCourses before GPA calculation", userCourses);
-         console.log("CONDITION GPA ", calculateGPA(userCourses));
           newGPAs[number - 1] = calculateGPA(userCourses);
+          return newGPAs;
+        }
+        else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
+          newGPAs[number - 1] = updateSemesterGPAs();
           return newGPAs;
         }
         return prevGPAs;
       });
       
-    }, [currentGrades, currentCourses]);
+    }, [currentGrades, currentCourses, calculateGPA(userCourses), updateSemesterGPAs()]);
     
     return (
       <>
@@ -273,6 +320,14 @@ const RoadMap = () => {
   const [userCGPA, setUserCGPA] = useState(null);
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
+  const [sem1GPA, setSem1GPA] = useState(0.00);
+  const [sem2GPA, setSem2GPA] = useState(0.00);
+  const [sem3GPA, setSem3GPA] = useState(0.00);
+  const [sem4GPA, setSem4GPA] = useState(0.00);
+  const [sem5GPA, setSem5GPA] = useState(0.00);
+  const [sem6GPA, setSem6GPA] = useState(0.00);
+  const [sem7GPA, setSem7GPA] = useState(0.00);
+  const [sem8GPA, setSem8GPA] = useState(0.00);
   const { data: session, status } = useSession();
   // Fetch catalog data
   const fetchCatalog = async () => {
@@ -334,8 +389,11 @@ const RoadMap = () => {
     fetchCatalog();
     fetchUserCourses();
     fetchUserCGPA();
-    setNewCGPA(updateNewCGPA());
   }, []);
+
+  useEffect(() => {
+    setNewCGPA(updateNewCGPA());
+  }, [currentGPAs]);
 
 
   const updateNewCGPA = () => {
