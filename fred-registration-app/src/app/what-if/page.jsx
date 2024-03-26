@@ -4,13 +4,86 @@ import Semester from "@/components/Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummary";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
-import { Combo } from "next/font/google";
+import {GoDash} from "react-icons/go";
+
+
+const NewAcademicSummaryBanner = ({ cgpa, newCGPA }) => {
+  return (
+    <div className="flex justify-between p-4 bg-neutral-50 rounded-lg shadow-md">
+      <div>
+        <h1 className="text-xl font-bold">Academic Summary</h1>
+        <p className="text-lg">CGPA: {cgpa ? cgpa.toFixed(2) : 'Unknown'}</p>
+      </div>
+      <div>
+        <h1 className="text-xl font-bold">GPA</h1>
+        <p className="text-lg">GPA: {newCGPA ? newCGPA.toFixed(2) : 'Unknown'}</p>
+      </div>
+    </div>
+  );
+};
+
+//I think this is bad practice to have the same function in two different files
+//I think it would be better to have a utils file that has the function and import it in both files
+//I think this is bad practice because if you want to change the function you have to change it in two different files
+//and if you forget to change it in one of the files it could cause bugs
+//And it could be more dynamic to not have the item hard coded in the function
+const calculateGPA = (data) => {
+  let totalCredits = 0;
+  let totalPoints = 0;
+  data.forEach((item) => {
+    totalCredits += item.Course.Credits;
+    switch (item.Grade) {
+      case 'A':
+        totalPoints += 4 * item.Course.Credits;
+        break;
+      case 'A-':
+        totalPoints += 3.7 * item.Course.Credits;
+        break;
+      case 'B+':
+        totalPoints += 3.3 * item.Course.Credits;
+        break;
+      case 'B':
+        totalPoints += 3 * item.Course.Credits;
+        break;
+      case 'B-':
+        totalPoints += 2.7 * item.Course.Credits;
+        break;
+      case 'C+':
+        totalPoints += 2.3 * item.Course.Credits;
+        break;
+      case 'C':
+        totalPoints += 2 * item.Course.Credits;
+        break;
+      case 'C-':
+        totalPoints += 1.7 * item.Course.Credits;
+        break;
+      case 'D+':
+        totalPoints += 1.3 * item.Course.Credits;
+        break;
+      case 'D':
+        totalPoints += 1 * item.Course.Credits;
+        break;
+      case 'D-':
+        totalPoints += 0.7 * item.Course.Credits;
+        break;
+      case 'S':
+        totalCredits -= item.Course.Credits;
+        break;
+      case 'WC':
+        totalCredits -= item.Course.Credits;
+        break;
+      default:
+        totalPoints += 0;
+    }
+  });
+  return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
+}
 
 const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
     if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
         return (
-            <select className="select select-primary w-full" onChange={handleCourseChange} disabled>
-                <option selected disabled>{currentCourse}</option>
+            <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={handleCourseChange} disabled>
+                <option value="DEFAULT" disabled>{currentCourse}</option>
                 {data.map((item, index) => (
                     <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
                 ))}
@@ -19,8 +92,8 @@ const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange,
     }
     else{
     return (
-        <select className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
-            <option selected disabled>{currentCourse}</option>
+        <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
+            <option value="DEFAULT" disabled>{currentCourse}</option>
             {data.map((item, index) => (
                 <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
             ))}
@@ -30,8 +103,8 @@ const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange,
 
 const GradeComboBox = ({ handleGradeChange, index }) => {
     return (
-        <select className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
-            <option selected disabled>Select a grade...</option>
+        <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
+            <option value="DEFAULT" disabled>Select a grade</option>
             <option value="A">A</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -51,66 +124,62 @@ const GradeComboBox = ({ handleGradeChange, index }) => {
 };
 
 const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { 
-  //the point of this compoenent is so when you render one of the semetser
-  //you determine if the semester is completed or not
-  //which will decide if you can edit grades or not
-  //plus the completed semesters will retain the status column
-  //and the editable semesters will have a dropdown to select the grades
-    const getCourseStatusIcon = (crn) => {
-        // Find all courses with the given CRN
-        const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
-      
-        // If there are courses with the given CRN, find the most recent one
-        if (coursesWithCRN.length > 0) {
-          const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
-            return (mostRecent.TermID > course.TermID) ? mostRecent : course;
-          });
-      
-          // Now switch on the status of the most recent course
-          switch (mostRecentCourse.Status) {
-            case "Completed":
-              return <FaCheckCircle color="green" />;
-            case "Enrolled":
-              return <FaUserCheck color="blue" />;
-            case "Failed":
-              return <FaTimesCircle color="red"/>;
-            default:
-              return null;
-          }
-        } else {
-          // If there is no course with the given CRN
-          return <FaRegCircle />;
-        }
-      };
+  const getRecentGradeAndStatus = (crn) => {
+    const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+    if (coursesWithCRN.length > 0) {
+      const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
+        return (mostRecent.TermID > course.TermID) ? mostRecent : course;
+      });
+      return mostRecentCourse;
+    } else {
+      return null;
+    }
+  }
+  
         return (
             <tbody>
                 {semesterCatalogData.map((item, index) => {
-                  const statusIcon = getCourseStatusIcon(item.Course.CRN);
                   const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
-                  console.log("Course Status", courseStatus);
-                  if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
-                    console.log('in return statement')
+                  const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
+                  if(mostRecentCourse?.Status === "Completed" || mostRecentCourse?.Status === "Enrolled") {
                   return (
                     <tr key={index}>
-                      <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
+                      <td>
+                        {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
+                      </td>
                       <td>
                         {item.Course.Title}
                       </td>
-                      <td>{item.Course.Credits}</td>
-                      <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
+                      <td>
+                        {item.Course.Credits}
+                      </td>
+                      <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>
+                        {(courseStatus && mostRecentCourse.Grade !== null) ? mostRecentCourse.Grade : <GoDash />}
+                      </td>
                     </tr>
                   );
                 }
                 else{
                   return (
                       <tr key={index}>
-                        <td>{currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}</td>
                         <td>
-                          <CourseComboBox data={catalogData} currentCourse={item.Course.Title} courseStatus={courseStatus} handleCourseChange={handleCourseChange} index={index} />
+                          {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
                         </td>
-                        <td>{item.Course.Credits}</td>
                         <td>
-                          <GradeComboBox handleGradeChange={handleGradeChange} index={index} />
+                          <CourseComboBox 
+                          data={catalogData} 
+                          currentCourse={item.Course.Title} 
+                          courseStatus={courseStatus} 
+                          handleCourseChange={handleCourseChange} 
+                          index={index} />
+                        </td>
+                        <td>
+                          {item.Course.Credits}
+                        </td>
+                        <td>
+                          <GradeComboBox 
+                          handleGradeChange={handleGradeChange} 
+                          index={index} />
                         </td>
                       </tr>);
                 }
@@ -121,7 +190,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
 
 
 
-const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData }) => {
+const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
     const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
     const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
     
@@ -130,6 +199,8 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
         setCurrentGrades(prevGrades => {
             const newGrades = [...prevGrades];
             newGrades[index] = grade;
+            console.log("prevGrades", prevGrades);
+            console.log("newGrades", newGrades);
             return newGrades;
         });
       };
@@ -142,37 +213,34 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
       });
     };
     
-    const getCourseStatusIcon = (crn) => {
-      // Find all courses with the given CRN
-      const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+  //  const handleSetCurrentGPAs = async (newGPAs) => {
+  //     setCurrentGPAs(newGPAs);
+  //   };
     
-      // If there are courses with the given CRN, find the most recent one
-      if (coursesWithCRN.length > 0) {
-        const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
-          return (mostRecent.TermID > course.TermID) ? mostRecent : course;
-        });
-    
-        // Now switch on the status of the most recent course
-        switch (mostRecentCourse.Status) {
-          case "Completed":
-            return <FaCheckCircle color="green" />;
-          case "Enrolled":
-            return <FaUserCheck color="blue" />;
-          case "Failed":
-            return <FaTimesCircle color="red"/>;
-          default:
-            return null;
+    useEffect(() => {
+      setCurrentGPAs(prevGPAs => {
+        console.log("Calculating GPA for semester", prevGPAs, number);
+        console.log("userCourses before GPA calculation", userCourses);
+        console.log("GPA ", calculateGPA(userCourses));
+        const newGPAs = [...prevGPAs];
+        if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
+          console.log("CONDITION userCourses before GPA calculation", userCourses);
+         console.log("CONDITION GPA ", calculateGPA(userCourses));
+          newGPAs[number - 1] = calculateGPA(userCourses);
+          return newGPAs;
         }
-      } else {
-        // If there is no course with the given CRN
-        return <FaRegCircle />;
-      }
-    };
-  
+        return prevGPAs;
+      });
+      
+    }, [currentGrades, currentCourses]);
+    
     return (
       <>
         <div>
-          <h1 className="py-2 pl-1 text-lg">Semester {number}</h1>
+          <h1 className="tooltip py-2 pl-1 text-lg" 
+          data-tip={(calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') ? calculateGPA(userCourses) : "No grade"}>
+            Semester {number}</h1>
+            <button value="A" onClick={handleGradeChange}>Christ on a stick</button>
           <div className="border rounded">
             <table className="table">
               <thead>
@@ -180,7 +248,7 @@ const WhatIfSemester = ({ number, semesterCatalogData, userCourses, catalogData 
                   <th className="whitespace-nowrap">Course Code</th>
                   <th>Course Title</th>
                   <th>Credits</th>
-                  <th>Status</th>
+                  <th>Grade</th>
                 </tr>
               </thead>
              
@@ -203,8 +271,9 @@ const RoadMap = () => {
   const [catalog, setCatalog] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
+  const [newCGPA, setNewCGPA] = useState(null);
+  const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
   const { data: session, status } = useSession();
-
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -265,8 +334,23 @@ const RoadMap = () => {
     fetchCatalog();
     fetchUserCourses();
     fetchUserCGPA();
+    setNewCGPA(updateNewCGPA());
   }, []);
 
+
+  const updateNewCGPA = () => {
+    console.log("Updating new CGPA");
+    let total = 0;
+    let acceptedGPAs = 0;
+    for (let i = 0; i < 8; i++) {
+      let currNum = parseFloat(currentGPAs[i]);
+      if (currNum !== 0.00) {
+       total = total + currNum;
+       acceptedGPAs++;
+      }
+    }
+    return total / acceptedGPAs;
+  }
   // Filter catalog by year and semester
   const filterCatalogCourses = (year, semester) => {
     return catalog.filter(
@@ -291,7 +375,7 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3">
-        <AcademicSummaryBanner cgpa={userCGPA} />
+        <NewAcademicSummaryBanner cgpa={userCGPA} newCGPA={newCGPA}/>
         <div className="flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
@@ -313,7 +397,7 @@ const RoadMap = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 h-full md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
             const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
@@ -328,9 +412,11 @@ const RoadMap = () => {
               <WhatIfSemester
                 key={i + 1}
                 number={i + 1}
-                semesterCatalogData={semesterCatalogCourses}
-                userCourses={semesterUserCourses}
-                catalogData={catalog}
+                currentGPAs={currentGPAs}
+                setCurrentGPAs={setCurrentGPAs}
+                semesterCatalogData={semesterCatalogCourses} //data related to the roadmap suggested semester and year
+                userCourses={semesterUserCourses} //data related to the courses the user has taken
+                catalogData={catalog} //the whole catalog
               />
             );
           })}
