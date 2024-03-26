@@ -22,7 +22,7 @@ export async function GET(request) {
         Term: {
           select: {
             Semester: true,
-            Year: true
+            Year: true,
           },
         },
         Course: {
@@ -30,13 +30,21 @@ export async function GET(request) {
             Title: true,
             CourseCode: true,
             Credits: true,
+            CourseAttribute: {
+              select: {
+                Attribute: {
+                  select: {
+                    Description: true, 
+                  }
+                }
+              }
+            }
           },
         },
       },
     });
     return Response.json(res);
-  } 
-  catch (err) {
+  } catch (err) {
     console.error("Prisma error: ", err);
     return new Response("Error fetching data", { status: 500 });
   }
