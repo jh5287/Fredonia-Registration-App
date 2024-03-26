@@ -7,15 +7,11 @@ import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-ic
 import {GoDash} from "react-icons/go";
 
 
-const NewAcademicSummaryBanner = ({ cgpa, newCGPA }) => {
+const DynamicCGPA = ({ newCGPA }) => {
   return (
-    <div className="flex justify-between p-4 bg-neutral-50 rounded-lg shadow-md">
+    <div className="flex justify-end p-4 bg-neutral-50 rounded-lg shadow-md">
       <div>
-        <h1 className="text-xl font-bold">Academic Summary</h1>
-        <p className="text-lg">CGPA: {cgpa ? cgpa.toFixed(2) : 'Unknown'}</p>
-      </div>
-      <div>
-        <h1 className="text-xl font-bold">GPA</h1>
+        <h1 className="text-xl font-bold">Dynamic GPA</h1>
         <p className="text-lg">GPA: {newCGPA ? newCGPA.toFixed(2) : 'Unknown'}</p>
       </div>
     </div>
@@ -423,8 +419,13 @@ const RoadMap = () => {
   };
   return (
     <>
-      <div className="p-3">
-        <NewAcademicSummaryBanner cgpa={userCGPA} newCGPA={newCGPA}/>
+      <div className="p-3 relative">
+        <AcademicSummaryBanner cgpa={userCGPA}/>
+
+        <div className="flex fixed right-3 top-[11%]">
+          <DynamicCGPA newCGPA={newCGPA} />
+        </div>
+        
         <div className="flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
