@@ -33,7 +33,6 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
       return <FaRegCircle />;
     }
   };
-
   const getRecentGrade = (crn) => {
     const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
     if (coursesWithCRN.length > 0) {
@@ -44,6 +43,7 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
     } else {
       return null;
     }
+
   }
 
   return (
@@ -65,6 +65,7 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
             <tbody>
               {catalogData.map((item, index) => {
                 const statusIcon = getCourseStatusIcon(item.Course.CRN);
+                const grade = getCourseGrade(item.Course.CRN);
                 const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
                 //const grade = userCourses.find((course) => course.CRN === item.Course.CRN)?.Grade;
                 const grade = getRecentGrade(item.Course.CRN);
@@ -75,6 +76,7 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
                     <td className="pl-7">{item.Course.Credits}</td>
                     <td className="tooltip pl-7" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>{statusIcon}</td>
                     <td className="pl-7">{(courseStatus && grade !== null) ? grade : <GoDash />}</td>
+
                   </tr>
                 );
               })}
