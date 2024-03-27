@@ -15,7 +15,6 @@ export async function GET(request) {
         },
       },
       select: {
-        CRN: true,
         TermID: true,
         Status: true,
         Grade: true,
@@ -27,6 +26,7 @@ export async function GET(request) {
         },
         Course: {
           select: {
+            CRN: true, 
             Title: true,
             CourseCode: true,
             Credits: true,
