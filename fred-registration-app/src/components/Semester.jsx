@@ -65,7 +65,6 @@ const Semester = ({ number, catalogData, userCourses, open, toggleSemester }) =>
             <tbody>
               {catalogData.map((item, index) => {
                 const statusIcon = getCourseStatusIcon(item.Course.CRN);
-                const grade = getCourseGrade(item.Course.CRN);
                 const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
                 //const grade = userCourses.find((course) => course.CRN === item.Course.CRN)?.Grade;
                 const grade = getRecentGrade(item.Course.CRN);
