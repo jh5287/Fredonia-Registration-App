@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 
 const RoadMap = () => {
+  const [open, setOpen] = useState(Array(8).fill(true));
   const [catalog, setCatalog] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
@@ -95,11 +96,37 @@ const RoadMap = () => {
     );
   };
 
+  //const getUserGrades = 
+
+  const toggleAllSemester = () => {
+    const checkSameValue = () => {
+      if (!Array.isArray(open) || open.length === 0) {
+        return false;
+      }
+
+      const firstValue = open[0];
+      return open.every((value) => value === firstValue);
+    };
+    let allSame = checkSameValue();
+    if (allSame) {
+      setOpen(open.map((isOpen) => !isOpen));
+    } else {
+      const changeOpen = open.map((isOpen) => isOpen === false ? true : true);
+      setOpen(changeOpen);
+    }
+  }
+
+  const toggleSemester = (index) => {
+    const newOpen = [...open];
+    newOpen[index] = !newOpen[index];
+    setOpen(newOpen);
+  }
+
   return (
     <>
-      <div className="p-3">
+      <div className="p-3 mb-10">
         <AcademicSummaryBanner cgpa={userCGPA} />
-        <div className="flex flex-col items-center">
+        <div className="relative flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
             <div className="flex flex-row items-center mx-2">
@@ -119,8 +146,20 @@ const RoadMap = () => {
               <p>=Not Taken</p>
             </div>
           </div>
+          {/* md:absolute md:right-2 md:top-3*/}
+            <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
+              <label className="label cursor-pointer">
+                <span className="p-2 label-text">Toggle Semester</span> 
+                <input 
+                type="checkbox" 
+                className="toggle toggle-primary"
+                onChange={() => {toggleAllSemester()}}
+                checked={open[0]}
+                 />
+              </label>
+            </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 h-full md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 ">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
             const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
@@ -131,13 +170,15 @@ const RoadMap = () => {
             const semesterUserCourses = filterUserCoursesForSemester(
               semesterCatalogCourses
             );
-
+              //console.log("Semester user courses", semesterUserCourses);
             return (
               <Semester
                 key={i + 1}
                 number={i + 1}
                 catalogData={semesterCatalogCourses}
                 userCourses={semesterUserCourses}
+                open={open[i]}
+                toggleSemester={toggleSemester}
               />
             );
           })}
