@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Semester from "./Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummary";
-import { fetchCatalog, fetchUserCourses, fetchUserCGPA } from './apiCalls'; 
+import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA } from './apiCalls'; 
 import { useSession } from "next-auth/react";
 import {
   FaCheckCircle,
@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 
 const RoadMap = () => {
-  const [catalog, setCatalog] = useState([]);
+  const [catalogCourses, setCatalogCourses] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
   const { data: session, status } = useSession();
@@ -20,16 +20,15 @@ const RoadMap = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const catalogData = await fetchCatalog();
-        setCatalog(catalogData);
+        const catalogData = await fetchCatalogCourses();
+        setCatalogCourses(catalogData);
         
-        const coursesData = await fetchUserCourses();
-        setUserCourses(coursesData);
+        const userCourseData = await fetchUserCourses();
+        setUserCourses(userCourseData);
         
         const cgpaData = await fetchUserCGPA();
-        setUserCGPA(cgpaData); // Assuming you process or extract the CGPA from the data as needed
+        setUserCGPA(cgpaData); 
       } catch (error) {
-        // Handle or log the error as needed
         console.error("Error fetching data:", error);
       }
     };
@@ -37,9 +36,9 @@ const RoadMap = () => {
     loadData();
   }, []);
 
-  // Filter catalog by year and semester
-  const filterCoursesByTerm = (year, semester, catUserCoursemap) => {
-    return catUserCoursemap.filter(
+
+  const filterCoursesByTerm = (year, semester, courses) => {
+    return courses.filter(
       (course) =>
         course.RecommendedYear === year &&
         course.RecommendedSemester === semester
@@ -56,11 +55,11 @@ const RoadMap = () => {
     var foundationCourses = [];
 
     if (Array.isArray(userCourses) && userCourses.length > 0) {
-      userCourses.forEach(function (courseInfo) {
-        const isFoundation = isFoundationCourse(courseInfo);
+      userCourses.forEach(function (course) {
+        const isFoundation = isFoundationCourse(course);
 
         if (isFoundation) {
-          foundationCourses.push(courseInfo);
+          foundationCourses.push(course);
         }
       });
     }
@@ -68,10 +67,12 @@ const RoadMap = () => {
     return foundationCourses;
   };
 
+  // Filter courses to only include latest attemps
   const filterToLatestAttempts = (userCourses) => {
     if(!userCourses){
       return [];
     }
+
     const courseMap = new Map();
     userCourses.forEach((course) => {
       // Check if this course (by CRN) has been encountered before
@@ -84,7 +85,6 @@ const RoadMap = () => {
       }
     });
 
-    // Convert the Map values back to an array
     return Array.from(courseMap.values());
   };
 
@@ -116,10 +116,10 @@ const RoadMap = () => {
     });
   };
 
-  const latestAttemptUserCourses = filterToLatestAttempts(userCourses);
+  const latestCourseAttempts = filterToLatestAttempts(userCourses);
   const catalogUserCourseMap = createCatalogToUserCourseMap(
-    catalog,
-    latestAttemptUserCourses || []
+    catalogCourses,
+    latestCourseAttempt|| []
   );
 
   return (

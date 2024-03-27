@@ -1,5 +1,5 @@
 // Fetch catalog data
-const fetchCatalog = async () => {
+const fetchCatalogCourses = async () => {
   try {
     const res = await fetch("/api/catalog?catID=1");
     const data = await res.json();
@@ -54,4 +54,4 @@ const fetchUserCGPA = async () => {
   }
 };
 
-export { fetchCatalog, fetchUserCourses, fetchUserCGPA };
+export { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA };

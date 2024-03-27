@@ -21,7 +21,7 @@ const Semester = ({ number, courses }) => {
   };
 
   const getCourseGrade = (course) => {
-    const grade = course.course.Grade;
+    const grade = course.StudentCourseRecord.Grade;
     if (grade !== undefined) {
       return grade;
     } else {
@@ -47,9 +47,10 @@ const Semester = ({ number, courses }) => {
             <tbody>
               {courses.map((course, index) => {
                 const statusIcon = getCourseStatusIcon(
-                  course.StudentCourseRecord?.Status);
+                  course.StudentCourseRecord?.Status
+                );
 
-                const grade = course.StudentCourseRecord.Grade;
+                const grade = getCourseGrade(course);
                 const courseCode = course.StudentCourseRecord.Course.CourseCode;
                 const courseTitle = course.StudentCourseRecord.Course.Title;
                 const courseCredits = course.StudentCourseRecord.Course.Credits;
@@ -58,9 +59,7 @@ const Semester = ({ number, courses }) => {
                     <td>{courseCode}</td>
                     <td className="w-[60%]">{courseTitle}</td>
                     <td>{courseCredits}</td>
-                    <td>
-                      {statusIcon}
-                    </td>
+                    <td>{statusIcon}</td>
                     <td>{grade ? grade : "N/A"}</td>
                   </tr>
                 );
