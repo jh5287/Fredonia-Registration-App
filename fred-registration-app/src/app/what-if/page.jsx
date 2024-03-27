@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Semester from "@/components/Semester";
+import Semester from "@/app/roadmap/Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummary";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
