@@ -64,12 +64,12 @@ INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grad
 (3, 1, 8, 'Letter', 'Completed', 'A', '2023-08-15'),
 (3, 2, 8, 'Letter', 'Completed', 'B', '2023-08-15'),
 (3, 3, 8, 'Letter', 'Failed', 'F', '2023-08-15'); 
-
+(3, 33769, 8, 'Letter', 'Completed', 'A', '2023-08-15'); 
+(3, 33992, 8, 'Letter', 'Completed', 'A', '2023-08-15'); 
 
 INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
 (3, 5, 9, 'Letter', 'Completed', 'A', '2024-01-20'),
 (3, 6, 9, 'Letter', 'Completed', 'B', '2024-01-20'),
-(3, 24, 9, 'Letter', 'Completed', 'C', '2024-01-20');
 
 --Retaking failed class from first semester
 INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
