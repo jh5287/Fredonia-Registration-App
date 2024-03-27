@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Semester from "@/components/Semester";
+import AcademicSummaryBanner from "@/components/AcademicSummary";
 import { cn } from "@/lib/utils";
 import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
@@ -57,19 +58,22 @@ const RegSemester = ({ number, data }) => {
     });
     return (totalPoints / totalCredits).toFixed(2);
   }
-
-  console.log("Data in RegSemester", data)
+  
+  const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
 
   return (
     <>
     <div className="">
 
       <div className="flex justify-between items-center">
-        <h1 className="py-2 pl-1 text-lg font-medium">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
+        <h1 className="py-2 pl-1 text-lg font-semibold">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
         {/* An idea...
         {calculateGPA(data) >= 3.0 ? <span className="text-green-600">Good Standing</span> : <span className="text-red-600">Academic Warning</span>}
         */}
-        {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
+        <div>
+          {totalCredits > 0 ? <span className="text-base">Total Credits: {totalCredits}</span> : null} {/*if there is no applicable grade do not display it */}
+          {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
+        </div>
       </div>
       
       <div className="border rounded">
@@ -249,6 +253,8 @@ const AdvisorRec = ({ data }) => {
 
 const Registration = () => {
   const [studentData, setStudentData] = useState([]);
+  const [userCGPA, setUserCGPA] = useState(null);
+
   
 
   useEffect(() => {
@@ -264,21 +270,49 @@ const Registration = () => {
         let email = "russ9214@fredonia.edu"
         const res = await fetch(`/api/student/studentCourses?email=${email}`);
         const studentData = await res.json();
-        console.log("Student data in new db call", studentData)
         const terms = studentData.map(item => (item.Term.Semester + " "+ item.Term.Year)).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
-        console.log("Terms", terms)
         const organized_data = []
       for(let i = 1; i < terms.length; i++) {
         const termToCompareTo = terms[i]; //get the term to compare to
         const semData = studentData.filter((item) => (item.Term.Semester + " " + item.Term.Year) === termToCompareTo);//filter the data to only include the target term
         organized_data.push(semData)
       }
-      console.log("Organized data", organized_data)
       setStudentData(organized_data);
       } catch (err) {
         console.error("Failed to fetch student data:", err);
       }
     };
+
+    const fetchUserCGPA = async () => {
+      try {
+        const userEmail = "wals9256@fredonia.edu";
+        const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+        const data = await response.json();
+    
+        if (Array.isArray(data) && data.length > 0) {
+          const userCGPAData = data[0];
+          
+          // Try and convert CGPA to a number
+          const cgpa = parseFloat(userCGPAData.CGPA);
+    
+          if (!isNaN(cgpa)) { // Check if conversion was successful
+            setUserCGPA(cgpa);
+          } else {
+            // Handle case where CGPA is not a valid number
+            console.log("CGPA is not a valid number.");
+            setUserCGPA(null);
+          }
+        } else {
+          console.log("No CGPA data found for the user.");
+          setUserCGPA(null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        setUserCGPA(null); // Ensure user CGPA is set to null in case of error
+      }
+    };
+
+    fetchUserCGPA();
     fetchStudentData();
   }, []);
 
