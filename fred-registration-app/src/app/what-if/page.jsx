@@ -18,11 +18,7 @@ const DynamicCGPA = ({ newCGPA }) => {
   );
 };
 
-//I think this is bad practice to have the same function in two different files
-//I think it would be better to have a utils file that has the function and import it in both files
-//I think this is bad practice because if you want to change the function you have to change it in two different files
-//and if you forget to change it in one of the files it could cause bugs
-//And it could be more dynamic to not have the item hard coded in the function
+
 const calculateGPA = (data) => {
   let totalCredits = 0;
   let totalPoints = 0;
