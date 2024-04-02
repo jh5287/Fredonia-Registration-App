@@ -319,8 +319,24 @@ CREATE TABLE
     ),
     RecommendedYear INT CHECK (RecommendedYear IN (1, 2, 3, 4, 5)),
     CONSTRAINT FK_CourseCatalog_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
-    CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID)
+    CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID),
+    CONSTRAINT UC_CourseCatalog_CRN_CatalogID UNIQUE (CRN, CatalogID)
   );
+
+--CourseCatalogAttribute
+  --Normalization: BCNF
+CREATE TABLE 
+CourseCatalogAttribute (
+    CatalogID INT NOT NULL,
+    CRN INT NOT NULL,
+    AttributeID INT NOT NULL,
+    CONSTRAINT PK_CourseCatalogAttribute PRIMARY KEY (CatalogID, CRN, AttributeID),
+    CONSTRAINT FK_CourseCatalogAttribute_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID),
+    CONSTRAINT FK_CourseCatalogAttribute_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
+    CONSTRAINT FK_CourseCatalogAttribute_Attribute FOREIGN KEY (AttributeID) REFERENCES Attribute (AttributeID),
+    CONSTRAINT FK_CourseCatalogAttribute_CourseInCatalog FOREIGN KEY (CRN, CatalogID) REFERENCES CourseCatalog (CRN, CatalogID)
+);
+
 
 -- GradePoints
   -- Normalization: BCNF
