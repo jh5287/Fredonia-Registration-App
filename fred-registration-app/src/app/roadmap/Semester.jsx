@@ -54,9 +54,11 @@ const Semester = ({ number, courses }) => {
                 const courseCode = course.StudentCourseRecord.Course.CourseCode;
                 const courseTitle = course.StudentCourseRecord.Course.Title;
                 const courseCredits = course.StudentCourseRecord.Course.Credits;
+                const semesterTaken = course.StudentCourseRecord.Term?.Semester; 
+                const yearTaken = course.StudentCourseRecord.Term?.Year; 
                 return (
-                  <tr key={index}>
-                    <td>{courseCode}</td>
+                  <tr key={index} >
+                    <td className="tooltip" data-tip={semesterTaken ? `Term Taken: ${semesterTaken} ${yearTaken}` : 'Not taken yet'}>{courseCode}</td>
                     <td className="w-[60%]">{courseTitle}</td>
                     <td>{courseCredits}</td>
                     <td>{statusIcon}</td>
