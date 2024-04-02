@@ -119,7 +119,7 @@ const RoadMap = () => {
   const latestCourseAttempts = filterToLatestAttempts(userCourses);
   const catalogUserCourseMap = createCatalogToUserCourseMap(
     catalogCourses,
-    latestCourseAttempt|| []
+    latestCourseAttempts|| []
   );
 
   return (
