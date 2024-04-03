@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Semester from "./Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummary";
-import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA } from './apiCalls'; 
+import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
 import { useSession } from "next-auth/react";
 import {
   FaCheckCircle,
@@ -10,11 +10,13 @@ import {
   FaUserCheck,
   FaRegCircle,
 } from "react-icons/fa";
+import StudentInfoBanner from "@/components/StudentInfo";
 
 const RoadMap = () => {
   const [catalogCourses, setCatalogCourses] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
+  const [studentInfo, setStudentInfo] = useState(null); 
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -28,6 +30,10 @@ const RoadMap = () => {
         
         const cgpaData = await fetchUserCGPA();
         setUserCGPA(cgpaData); 
+
+        const studentInfoData = await fetchStudentInfo();
+        setStudentInfo(studentInfoData); 
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -125,6 +131,8 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3">
+        <StudentInfoBanner studentInfo={studentInfo}/>
+        <div className="py-3"></div>
         <AcademicSummaryBanner cgpa={userCGPA} />
         <div className="flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>

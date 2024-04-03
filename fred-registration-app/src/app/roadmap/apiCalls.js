@@ -54,4 +54,22 @@ const fetchUserCGPA = async () => {
   }
 };
 
-export { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA };
+// Fetch user course data
+const fetchStudentInfo = async () => {
+  try {
+    const userEmail = "wals9256@fredonia.edu";
+    const response = await fetch(`/api/student/studentInfo?email=${userEmail}`);
+    const data = await response.json();
+    const studentInfo = Array.isArray(data) && data.length > 0 ? data[0] : null;
+    return studentInfo;
+  } catch (error) {
+    console.error("Failed to fetch user profile:", error);
+  }
+};
+
+export {
+  fetchCatalogCourses,
+  fetchUserCourses,
+  fetchUserCGPA,
+  fetchStudentInfo,
+};

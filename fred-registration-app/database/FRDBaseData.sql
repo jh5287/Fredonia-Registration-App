@@ -26,10 +26,10 @@ INSERT INTO UserRole (UserID, RoleID) VALUES
 (3,1); 
 
 -- Insert into Student
-INSERT INTO Student  (UserID, Level) VALUES 
-(1, 'Undergraduate'),
-(2, 'Undergraduate'),
-(3, 'Undergraduate'); 
+INSERT INTO Student  (StudentID, UserID, Level, classification) VALUES 
+(1,1, 'Undergraduate', 'Sophomore'),
+(2,2, 'Undergraduate', 'Senior'),
+(03702574,3, 'Undergraduate', 'Senior'); 
 
 -- Insert into Department
 INSERT INTO Department (Name) VALUES 
@@ -40,11 +40,11 @@ INSERT INTO Department (Name) VALUES
 
 -- Insert into Program
 INSERT INTO Program (ProgramName, DegreeType, programType) VALUES 
-('Computer Science B.Sc', 'Bachelor', 'Major'),
-('Applied Mathematics M.Sc', 'Master', 'Major'),
-('Biology B.Sc', 'Bachelor', 'Major'),
-('Biology Minor', 'N/A', 'Minor'),
-('Computer Science Minor', 'N/A', 'Minor');
+('Computer Science', 'Bachelor', 'Major'),
+('Applied Mathematics', 'Master', 'Major'),
+('Biology', 'Bachelor', 'Major'),
+('Biology', 'N/A', 'Minor'),
+('Computer Science', 'N/A', 'Minor');
 
 -- Insert into StudentProgram
 INSERT INTO StudentProgram(StudentID, ProgramID) VALUES 
@@ -52,8 +52,8 @@ INSERT INTO StudentProgram(StudentID, ProgramID) VALUES
 (1, 4),
 (2, 1),
 (2, 4),
-(3, 1),
-(3, 4);
+(03702574, 1),
+(03702574, 4);
 
 -- Insert into Term
 INSERT INTO Term (Semester, Year, StartDate, EndDate) VALUES 
