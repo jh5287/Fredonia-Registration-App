@@ -1,9 +1,27 @@
+import Registration from "./registration/page";
+import RoadMap from "./roadmap/page";
+import WhatIf from "./what-if/page";
 
 const Page = () => {
 
   return (
-    <div className="grid place-items-center h-screen">
-      <h1 className="text-4xl p-5 ">Fredonia Registration App Home Page</h1>
+    <div className="flex justify-center m-3">
+      <div role="tablist" className="tabs tabs-bordered justify-center">
+        <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Registration" defaultChecked/>
+        <div role="tabpanel" className="tab-content p-10">
+          <Registration />
+        </div>
+
+        <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Roadmap" />
+        <div role="tabpanel" className="tab-content p-10">
+          <RoadMap />
+        </div>
+
+        <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="What If" />
+        <div role="tabpanel" className="tab-content p-10">
+          <WhatIf />
+        </div>
+      </div>
     </div>
   );
 };
