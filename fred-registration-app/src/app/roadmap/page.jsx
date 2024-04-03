@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import Semester from "./Semester";
-import AcademicSummaryBanner from "@/components/AcademicSummary";
+import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
+import TabbedDisplay from "@/components/StudentProfileTabs";
 import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
 import { useSession } from "next-auth/react";
 import {
@@ -10,7 +11,7 @@ import {
   FaUserCheck,
   FaRegCircle,
 } from "react-icons/fa";
-import StudentInfoBanner from "@/components/StudentInfo";
+import StudentInfoBanner from "@/components/StudentInfoBanner";
 
 const RoadMap = () => {
   const [catalogCourses, setCatalogCourses] = useState([]);
@@ -131,9 +132,7 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3">
-        <StudentInfoBanner studentInfo={studentInfo}/>
-        <div className="py-3"></div>
-        <AcademicSummaryBanner cgpa={userCGPA} />
+        <TabbedDisplay studentInfo={studentInfo} userCGPA={userCGPA}/>
         <div className="flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
