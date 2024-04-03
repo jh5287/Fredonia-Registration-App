@@ -148,7 +148,6 @@ const PlannedReg = ({ data }) => {
               <th className="whitespace-nowrap">Course Code</th>
               <th>Course Title</th>
               <th>Credits</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -158,9 +157,6 @@ const PlannedReg = ({ data }) => {
                 <td>{item.CourseCode}</td>
                 <td>{item.Title}</td>
                 <td>{item.Credits}</td>
-                <td>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
-                </td>
               </tr>
               ))
             ))}
@@ -227,7 +223,6 @@ const AdvisorRec = ({ data }) => {
               <th className="whitespace-nowrap">Course Code</th>
               <th>Course Title</th>
               <th>Credits</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -237,9 +232,6 @@ const AdvisorRec = ({ data }) => {
                 <td>{item.CourseCode}</td>
                 <td>{item.Title}</td>
                 <td>{item.Credits}</td>
-                <td>
-                  <button className="bg-green-500 text-white px-2 py-1 rounded">Add to Registration</button>
-                </td>
               </tr>
               ))
             ))}
@@ -251,10 +243,70 @@ const AdvisorRec = ({ data }) => {
   );
 };
 
+const NewSemester = ({ catalog }) => {
+  const [courseList, setCourseList] = useState([]);
+  const [selectedCRN, setSelectedCRN] = useState(null);
+  const addToSem = () => {
+    if (selectedCRN === null) {
+      return;
+    }
+    const courseCRN = selectedCRN;
+    fetch(`/api/courses?CRN=${courseCRN}`).then(res => res.json().then(data => setCourseList([...courseList, data[0]])));
+  }
+
+
+  return (
+    <div className="border rounded">
+      <table className="table">
+        <thead>
+          <tr>
+            <th className="whitespace-nowrap">Course Code</th>
+            <th>Course Title</th>
+            <th>Credits</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          {courseList.map((item, index) => (
+            <tr key={index}>
+              <td>{item.CourseCode}</td>
+              <td>{item.Title}</td>
+              <td>{item.Credits}</td>
+              <td>{item.Grade}</td>
+            </tr>
+          ))}
+          <tr>
+            <td>
+              <select onChange={(e) => setSelectedCRN(e.target.value)} defaultValue="Course Title" className="select select-bordered w-full max-w-xs">
+                <option disabled>Course Title</option>
+                {catalog.map((item, index) => (
+                  <option key={index} value={item.CRN}>{item.Course.Title}</option>
+                ))}
+              </select>
+            </td>
+            <td><button onClick={addToSem(selectedCRN)} className="btn btn-primary">Add Course</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+
+} 
+
 const Registration = () => {
   const [studentData, setStudentData] = useState([]);
   const [userCGPA, setUserCGPA] = useState(null);
+  const [catalog, setCatalog] = useState([]);
 
+  const fetchCatalog = async () => {
+    try {
+      const res = await fetch("/api/catalog?catID=1");
+      const data = await res.json();
+      setCatalog(data);
+    } catch (err) {
+      console.error("Failed to fetch catalog:", err);
+    }
+  };
   
 
   useEffect(() => {
@@ -265,6 +317,7 @@ const Registration = () => {
     The data is then organized into an array of arrays, where each array is a semester
     The array is mapped onto the RegSemester component
     */
+   fetchCatalog();
     const fetchStudentData = async () => {
       try {
         let email = "russ9214@fredonia.edu"
@@ -330,6 +383,10 @@ const Registration = () => {
         <h1 className="text-xl">Advisor Recommendation</h1>
         <AdvisorRec />
       </div>
+      <div className="m-3 grid grid-cols-1 gap-8 h-full">
+        <h1 className="text-xl">Planned</h1>
+        <NewSemester catalog={catalog}/>
+      </div>
     </div>
     <h1 className="p-3 py-5 text-2xl">Actual Registration</h1>
     <div className="m-3 grid grid-cols-1 gap-8 h-full md:grid-cols-2">
@@ -337,7 +394,6 @@ const Registration = () => {
             <RegSemester key={index+1} number={index} data={item}/>
           ))}
     </div>
-    
   </>
   )
 }
