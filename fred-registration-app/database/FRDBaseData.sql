@@ -26,10 +26,10 @@ INSERT INTO UserRole (UserID, RoleID) VALUES
 (3,1); 
 
 -- Insert into Student
-INSERT INTO Student  (UserID, Level) VALUES 
-(1, 'Undergraduate'),
-(2, 'Undergraduate'),
-(3, 'Undergraduate'); 
+INSERT INTO Student  (StudentID, UserID, Level, classification) VALUES 
+(1,1, 'Undergraduate', 'Sophomore'),
+(2,2, 'Undergraduate', 'Senior'),
+(03702574,3, 'Undergraduate', 'Senior'); 
 
 -- Insert into Department
 INSERT INTO Department (Name) VALUES 
@@ -39,19 +39,21 @@ INSERT INTO Department (Name) VALUES
 ('Biology');
 
 -- Insert into Program
-INSERT INTO Program (ProgramName, DegreeType, programType) VALUES ('Computer Science B.Sc', 'Bachelor', 'Major');
-INSERT INTO Program (ProgramName, DegreeType, programType) VALUES ('Applied Mathematics M.Sc', 'Master', 'Major');
-INSERT INTO Program (ProgramName, DegreeType, programType) VALUES ('Biology B.Sc', 'Bachelor', 'Major');
-INSERT INTO Program (ProgramName, DegreeType, programType) VALUES ('Biology Minor', 'N/A', 'Minor');
-INSERT INTO Program (ProgramName, DegreeType, programType) VALUES ('Computer Science Minor', 'N/A', 'Minor');
+INSERT INTO Program (ProgramName, DegreeType, programType) VALUES 
+('Computer Science', 'Bachelor', 'Major'),
+('Applied Mathematics', 'Master', 'Major'),
+('Biology', 'Bachelor', 'Major'),
+('Biology', 'N/A', 'Minor'),
+('Computer Science', 'N/A', 'Minor');
 
 -- Insert into StudentProgram
-INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (1, 1)
-INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (1, 4)
-INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (2, 1)
-INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (2, 4)
-INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (3, 1)
-INSERT INTO StudentProgram(StudentID, ProgramID) VALUES (3, 4)
+INSERT INTO StudentProgram(StudentID, ProgramID) VALUES 
+(1, 1),
+(1, 4),
+(2, 1),
+(2, 4),
+(03702574, 1),
+(03702574, 4);
 
 -- Insert into Term
 INSERT INTO Term (Semester, Year, StartDate, EndDate) VALUES 
@@ -114,29 +116,11 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 
 
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
-(22, 'FF101', 'Fredonia Foundation Elective 1', 3, 'Undergraduate', 1),
-(23, 'FF102', 'Fredonia Foundation Elective 2', 3, 'Undergraduate', 1),
-(24, 'FF103', 'Fredonia Foundation Elective 3', 3, 'Undergraduate', 1),
-(25, 'FF104', 'Fredonia Foundation Elective 4', 3, 'Undergraduate', 1),
-(26, 'FF105', 'Fredonia Foundation Elective 5', 3, 'Undergraduate', 1),
-(27, 'FF106', 'Fredonia Foundation Elective 6', 3, 'Undergraduate', 1),
-(28, 'FF107', 'Fredonia Foundation Elective 7', 3, 'Undergraduate', 1),
-(29, 'FF108', 'Fredonia Foundation Elective 8', 3, 'Undergraduate', 1),
-(30, 'FF109', 'Fredonia Foundation Elective 9', 3, 'Undergraduate', 1),
-(31,'RS306', 'Required Science Course 1', 3, 'Undergraduate', 1),
-(32,'RS307', 'Required Science Course 2', 3, 'Undergraduate', 1),
-(33,'CSITXXX1', 'Computer Science Track Course 1', 3, 'Undergraduate', 1),
-(34,'CSITXXX2', 'Computer Science Track Course 2', 3, 'Undergraduate', 1),
-(35,'CSITXXX3', 'Computer Science Track Course 3', 3, 'Undergraduate', 1),
-(36,'CSITXXX4', 'Computer Science Track Course 4', 3, 'Undergraduate', 1),
-(37,'CSITXXX5', 'Computer Science Track Course 5', 3, 'Undergraduate', 1),
-(38,'ULE101', 'Upper Level Elective 1', 3, 'Undergraduate', 1),
-(39,'ULE102', 'Upper Level Elective 2', 3, 'Undergraduate', 1),
-(40,'ULE103', 'Upper Level Elective 3', 3, 'Undergraduate', 1),
-(41,'GE101', 'General Elective 1', 3, 'Undergraduate', 1),
-(42,'GE102', 'General Elective 2', 3, 'Undergraduate', 1),
-(43,'GE103', 'General Elective 3', 3, 'Undergraduate', 1),
-(44,'GE104', 'General Elective 4', 3, 'Undergraduate', 1);
+(22,'FF', 'Fredonia Foundation Elective', 3, 'Undergraduate', 1),
+(23,'RS', 'Required Science Course', 3, 'Undergraduate', 1),
+(24,'CSTC', 'Computer Science Track Course', 3, 'Undergraduate', 1),
+(25,'ULE', 'Upper Level Elective', 3, 'Undergraduate', 1),
+(26,'GE', 'General Elective', 3, 'Undergraduate', 1); 
 
 -- Insert Jared's Courses into Course
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
@@ -228,12 +212,7 @@ INSERT INTO CourseRestriction (CRN, RestrictionID) VALUES
 
 -- Insert into CourseAttribute
 INSERT INTO CourseAttribute (CRN, AttributeID) VALUES 
-(22, 1),
-(23, 1),
-(24, 1),
-(25, 1),
-(26, 1),
-(27, 1);
+(22, 1);
 
 -- Insert Jared's classes into CourseAttribute
 INSERT INTO CourseAttribute (CRN, AttributeID) VALUES 

@@ -1,15 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
-import Semester from "@/components/Semester";
-import AcademicSummaryBanner from "@/components/AcademicSummary";
+import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 import {GoDash} from "react-icons/go";
 
 
-const DynamicCGPA = ({ newCGPA }) => {
+const DynamicCGPA = ({ cgpa, newCGPA }) => {
   return (
-    <div className="flex justify-end p-4 bg-neutral-50 rounded-lg shadow-md">
+    <div className="w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
+      <div>
+        <h1 className="text-xl font-bold">Academic Summary</h1>
+        <p className="text-lg">CGPA: {cgpa ? cgpa.toFixed(2) : 'Unknown'}</p>
+      </div>
       <div>
         <h1 className="text-xl font-bold">Dynamic GPA</h1>
         <p className="text-lg">GPA: {newCGPA ? newCGPA.toFixed(2) : 'Unknown'}</p>
@@ -257,7 +260,6 @@ const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogDa
             totalPoints += 0;
         }
       });
-      console.log(`the dynamic GPA updating function for semester ${number}`,(totalPoints / totalCredits).toFixed(2), "also its type", typeof(totalPoints / totalCredits).toFixed(2));
       return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
       
     };
@@ -439,12 +441,9 @@ const RoadMap = () => {
   };
   return (
     <>
-      <div className="p-3 relative">
-        <AcademicSummaryBanner cgpa={userCGPA}/>
+      <div className="p-3">
 
-        <div className="flex fixed right-3 top-[11%]">
-          <DynamicCGPA newCGPA={newCGPA} />
-        </div>
+          <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
         
         <div className="flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>

@@ -9,8 +9,26 @@ export async function GET(request) {
           where: {
             CatalogID: query,
           },
-          include: {
-            Course: true,
+          select: {
+            RecommendedSemester: true, 
+            RecommendedYear: true, 
+            Course: {
+              select: {
+                CRN: true,
+                Title: true,
+                CourseCode: true,
+                Credits: true,
+                CourseAttribute: {
+                  select: {
+                    Attribute: {
+                      select: {
+                        Description: true, 
+                      }
+                    }
+                  }
+                }
+              },
+            },
           },
         });
         
