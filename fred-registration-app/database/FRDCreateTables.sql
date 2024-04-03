@@ -41,9 +41,10 @@ UserRole (
   -- Normalization: BCNF
 CREATE TABLE
   Student (
-    StudentID INT IDENTITY (1, 1) PRIMARY KEY,
+    StudentID INT PRIMARY KEY,
     UserID INT NOT NULL UNIQUE,
     Level VARCHAR(64) NOT NULL CHECK (Level IN ('Undergraduate', 'Graduate')),
+    Classification VARCHAR(64) NOT NULL CHECK(Classification IN ('Freshman', 'Sophomore', 'Junior', 'Senior'))
     CONSTRAINT FK_Student_User FOREIGN KEY (UserID) REFERENCES [User] (UserID)
   );
 
@@ -276,7 +277,7 @@ CREATE TABLE
 CREATE TABLE 
   Program (
     ProgramID INT IDENTITY (1, 1) PRIMARY KEY,
-    ProgramName VARCHAR(255) NOT NULL UNIQUE,
+    ProgramName VARCHAR(255) NOT NULL,
     DegreeType VARCHAR(50) CHECK (
       DegreeType IN ('Bachelor', 'Master', 'Doctorate', 'Certificate', 'Undergraduate', 'N/A') OR DegreeType IS NULL
     ),
@@ -311,16 +312,31 @@ CREATE TABLE
   -- Normalization: BCNF
 CREATE TABLE
   CourseCatalog (
+    ID INT IDENTITY (1, 1) PRIMARY KEY,
     CRN INT NOT NULL,
     CatalogID INT NOT NULL,
     RecommendedSemester VARCHAR(10) CHECK (
       RecommendedSemester IN ('Fall', 'Spring', 'Summer')
     ),
     RecommendedYear INT CHECK (RecommendedYear IN (1, 2, 3, 4, 5)),
-    PRIMARY KEY (CRN, CatalogID),
     CONSTRAINT FK_CourseCatalog_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
-    CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID)
+    CONSTRAINT FK_CourseCatalog_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID),
   );
+
+--CourseCatalogAttribute
+  --Normalization: BCNF
+--CREATE TABLE 
+--CourseCatalogAttribute (
+    --CatalogID INT NOT NULL,
+    --CRN INT NOT NULL,
+    --AttributeID INT NOT NULL,
+    --CONSTRAINT PK_CourseCatalogAttribute PRIMARY KEY (CatalogID, CRN, AttributeID),
+    --CONSTRAINT FK_CourseCatalogAttribute_Catalog FOREIGN KEY (CatalogID) REFERENCES Catalog (CatalogID),
+    --CONSTRAINT FK_CourseCatalogAttribute_Course FOREIGN KEY (CRN) REFERENCES Course (CRN),
+    --CONSTRAINT FK_CourseCatalogAttribute_Attribute FOREIGN KEY (AttributeID) REFERENCES Attribute (AttributeID),
+    --CONSTRAINT FK_CourseCatalogAttribute_CourseInCatalog FOREIGN KEY (CRN, CatalogID) REFERENCES CourseCatalog (CRN, CatalogID)
+--);
+
 
 -- GradePoints
   -- Normalization: BCNF

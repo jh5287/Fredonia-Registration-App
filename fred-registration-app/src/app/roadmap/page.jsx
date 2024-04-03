@@ -1,100 +1,134 @@
 "use client";
 import { useState, useEffect } from "react";
-import Semester from "@/components/Semester";
-import AcademicSummaryBanner from "@/components/AcademicSummary";
+import Semester from "./Semester";
+import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
+import TabbedDisplay from "@/components/StudentProfileTabs";
+import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
 import { useSession } from "next-auth/react";
-import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaUserCheck,
+  FaRegCircle,
+} from "react-icons/fa";
+import StudentInfoBanner from "@/components/StudentInfoBanner";
 
 const RoadMap = () => {
   const [open, setOpen] = useState(Array(8).fill(true));
-  const [catalog, setCatalog] = useState([]);
+  const [catalogCourses, setCatalogCourses] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
+  const [studentInfo, setStudentInfo] = useState(null); 
   const { data: session, status } = useSession();
 
-  // Fetch catalog data
-  const fetchCatalog = async () => {
-    try {
-      const res = await fetch("/api/catalog?catID=1");
-      const data = await res.json();
-      setCatalog(data);
-    } catch (err) {
-      console.error("Failed to fetch catalog:", err);
-    }
-  };
-
-  // Fetch user course data
-  const fetchUserCourses = async () => {
-    try {
-      const userEmail = "wals9256@fredonia.edu";
-      const response = await fetch(
-        `/api/student/studentCourses?email=${userEmail}`
-      );
-      const data = await response.json();
-      setUserCourses(data);
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-    }
-  };
-
-  // Fetch user CGPA data
-  const fetchUserCGPA = async () => {
-    try {
-      const userEmail = "wals9256@fredonia.edu";
-      const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
-      const data = await response.json();
-  
-      if (Array.isArray(data) && data.length > 0) {
-        const userCGPAData = data[0];
-        
-        // Try and convert CGPA to a number
-        const cgpa = parseFloat(userCGPAData.CGPA);
-  
-        if (!isNaN(cgpa)) { // Check if conversion was successful
-          setUserCGPA(cgpa);
-        } else {
-          // Handle case where CGPA is not a valid number
-          console.log("CGPA is not a valid number.");
-          setUserCGPA(null);
-        }
-      } else {
-        console.log("No CGPA data found for the user.");
-        setUserCGPA(null);
-      }
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-      setUserCGPA(null); // Ensure user CGPA is set to null in case of error
-    }
-  };
-  
-
   useEffect(() => {
-    fetchCatalog();
-    fetchUserCourses();
-    fetchUserCGPA();
+    const loadData = async () => {
+      try {
+        const catalogData = await fetchCatalogCourses();
+        setCatalogCourses(catalogData);
+        
+        const userCourseData = await fetchUserCourses();
+        setUserCourses(userCourseData);
+        
+        const cgpaData = await fetchUserCGPA();
+        setUserCGPA(cgpaData); 
+
+        const studentInfoData = await fetchStudentInfo();
+        setStudentInfo(studentInfoData); 
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    loadData();
   }, []);
 
-  // Filter catalog by year and semester
-  const filterCatalogCourses = (year, semester) => {
-    return catalog.filter(
+
+  const filterCoursesByTerm = (year, semester, courses) => {
+    return courses.filter(
       (course) =>
         course.RecommendedYear === year &&
         course.RecommendedSemester === semester
     );
   };
 
-  // Filter user courses by a semester catalog
-  const filterUserCoursesForSemester = (filteredCatalogCourses) => {
-    if (!Array.isArray(userCourses) || userCourses.length === 0) {
+  const isFoundationCourse = (course) => {
+    return course.Course.CourseAttribute.some(
+      (attributeObj) => attributeObj.Attribute.Description === "Foundation"
+    );
+  };
+
+  const getFoundationCourses = (userCourses) => {
+    var foundationCourses = [];
+
+    if (Array.isArray(userCourses) && userCourses.length > 0) {
+      userCourses.forEach(function (course) {
+        const isFoundation = isFoundationCourse(course);
+
+        if (isFoundation) {
+          foundationCourses.push(course);
+        }
+      });
+    }
+
+    return foundationCourses;
+  };
+
+  // Filter courses to only include latest attemps
+  const filterToLatestAttempts = (userCourses) => {
+    if(!userCourses){
       return [];
     }
 
-    return userCourses.filter((userCourse) =>
-      filteredCatalogCourses.some(
-        (catalogCourse) => catalogCourse.CRN === userCourse.CRN
-      )
-    );
+    const courseMap = new Map();
+    userCourses.forEach((course) => {
+      // Check if this course (by CRN) has been encountered before
+      // and if the current one is more recent based on TermID.
+      if (
+        !courseMap.has(course.Course.CRN) ||
+        courseMap.get(course.Course.CRN).TermID < course.TermID
+      ) {
+        courseMap.set(course.Course.CRN, course);
+      }
+    });
+
+    return Array.from(courseMap.values());
   };
+
+  const createCatalogToUserCourseMap = (catalog, userCourses) => {
+    const foundationCourses = getFoundationCourses(userCourses);
+
+    return catalog.map((catalogCourse) => {
+      const matchingUserCourse = userCourses.find(
+        (userCourse) => userCourse.Course.CRN === catalogCourse.Course.CRN
+      );
+
+      var studentCourseRecord;
+
+      if (isFoundationCourse(catalogCourse)) {
+        if (foundationCourses.length > 0) {
+          studentCourseRecord = foundationCourses.shift();
+        } else {
+          studentCourseRecord = catalogCourse;
+        }
+      } else {
+        studentCourseRecord = matchingUserCourse || catalogCourse;
+      }
+
+      return {
+        StudentCourseRecord: studentCourseRecord,
+        RecommendedSemester: catalogCourse.RecommendedSemester,
+        RecommendedYear: catalogCourse.RecommendedYear,
+      };
+    });
+  };
+
+  const latestCourseAttempts = filterToLatestAttempts(userCourses);
+  const catalogUserCourseMap = createCatalogToUserCourseMap(
+    catalogCourses,
+    latestCourseAttempts|| []
+  );
 
   //const getUserGrades = 
 
@@ -125,7 +159,7 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3 mb-10">
-        <AcademicSummaryBanner cgpa={userCGPA} />
+        <TabbedDisplay studentInfo={studentInfo} userCGPA={userCGPA}/>
         <div className="relative flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
@@ -162,24 +196,15 @@ const RoadMap = () => {
         <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 ">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
-            const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
-            const semesterCatalogCourses = filterCatalogCourses(
+            const semester = i % 2 === 0 ? "Fall" : "Spring";
+            const semesterCourses = filterCoursesByTerm(
               year,
-              semesterStr
-            );
-            const semesterUserCourses = filterUserCoursesForSemester(
-              semesterCatalogCourses
+              semester,
+              catalogUserCourseMap
             );
               //console.log("Semester user courses", semesterUserCourses);
             return (
-              <Semester
-                key={i + 1}
-                number={i + 1}
-                catalogData={semesterCatalogCourses}
-                userCourses={semesterUserCourses}
-                open={open[i]}
-                toggleSemester={toggleSemester}
-              />
+              <Semester key={i + 1} number={i + 1} courses={semesterCourses} />
             );
           })}
         </div>

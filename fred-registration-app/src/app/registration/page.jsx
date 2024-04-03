@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import Semester from "@/components/Semester";
-import AcademicSummaryBanner from "@/components/AcademicSummary";
+import Semester from "@/app/roadmap/Semester";
+import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import { cn } from "@/lib/utils";
 import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
