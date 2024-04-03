@@ -5,7 +5,7 @@ const path = require('path');
 const prisma = new PrismaClient();
 
 // Paths to SQL scripts
-const sqlFileNames = ['FRDCreateTables.sql', 'FRDBaseData.sql', 'FRDUserTestData.sql' ,'FRDCatalogTestData.sql'];
+const sqlFileNames = ['FRDDropAllTables.sql', 'FRDCreateTables.sql', 'FRDBaseData.sql', 'FRDUserTestData.sql' ,'FRDCatalogTestData.sql'];
 const sqlFilePaths = sqlFileNames.map(fileName => path.join(__dirname, '../database', fileName));
 
 async function main() {
