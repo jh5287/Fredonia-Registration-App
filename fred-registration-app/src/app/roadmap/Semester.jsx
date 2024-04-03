@@ -6,7 +6,9 @@ import {
   FaRegCircle,
 } from "react-icons/fa";
 
-const Semester = ({ number, courses }) => {
+import { cn } from "@/lib/utils";
+
+const Semester = ({ number, courses, toggleSemester, open }) => {
   const getCourseStatusIcon = (status) => {
     switch (status) {
       case "Completed":
@@ -31,9 +33,11 @@ const Semester = ({ number, courses }) => {
 
   return (
     <>
-      <div className="">
-        <h1 className="py-2 pl-1 text-lg">Semester {number}</h1>
-        <div className="border rounded">
+      <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse collapse-arrow")}>
+        <h1 className="collapse-title w-full py-2 pl-1 text-lg hover:cursor-pointer" onClick={() => toggleSemester(number - 1)}>
+          Semester {number}
+        </h1>
+        <div className="collapse-content overflow-hidden">
           <table className="table">
             <thead>
               <tr>

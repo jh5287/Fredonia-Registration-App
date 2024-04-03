@@ -204,7 +204,7 @@ const RoadMap = () => {
             );
               //console.log("Semester user courses", semesterUserCourses);
             return (
-              <Semester key={i + 1} number={i + 1} courses={semesterCourses} />
+              <Semester key={i + 1} number={i + 1} courses={semesterCourses} toggleSemester={toggleSemester} open={open[i]}/>
             );
           })}
         </div>
