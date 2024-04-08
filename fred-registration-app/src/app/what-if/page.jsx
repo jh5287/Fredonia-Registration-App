@@ -4,11 +4,12 @@ import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 import {GoDash} from "react-icons/go";
+import GradeComboBox from "@/components/GradeComboBox";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
   return (
-    <div className="w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
+    <div className=" z-50 w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
       <div>
         <h1 className="text-xl font-bold">Academic Summary</h1>
         <p className="text-lg">CGPA: {cgpa ? cgpa.toFixed(2) : 'Unknown'}</p>
@@ -96,31 +97,11 @@ const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange,
     );}
 };
 
-const GradeComboBox = ({ handleGradeChange, index }) => {
-    return (
-        <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
-            <option value="DEFAULT" disabled>Select a grade</option>
-            <option value="A">A</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B">B</option>
-            <option value="B-">B-</option>
-            <option value="C+">C+</option>
-            <option value="C">C</option>
-            <option value="C-">C-</option>
-            <option value="D+">D+</option>
-            <option value="D">D</option>
-            <option value="D-">D-</option>
-            <option value="F">F</option>
-            <option value="S">S</option>
-            <option value="WC">WC</option>
-        </select>
-    );
-};
+
 
 const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { 
   const getRecentGradeAndStatus = (crn) => {
-    const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+    const coursesWithCRN = userCourses.filter(course => course.Course.CRN === crn);
     if (coursesWithCRN.length > 0) {
       const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
         return (mostRecent.TermID > course.TermID) ? mostRecent : course;
@@ -134,8 +115,10 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
         return (
             <tbody>
                 {semesterCatalogData.map((item, index) => {
-                  const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
+                  const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
+                  console.log("Course status", courseStatus);
                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
+                  console.log("Most recent course", mostRecentCourse);
                   if(mostRecentCourse?.Status === "Completed") {
                   return (
                     <tr key={index}>
@@ -477,6 +460,9 @@ const RoadMap = () => {
             const semesterUserCourses = filterUserCoursesForSemester(
               semesterCatalogCourses
             );
+            console.log(`Semester catalog courses for sem${i + 1}: `, semesterCatalogCourses);
+            console.log(`Semester user courses for sem${i + 1}: `, semesterUserCourses);
+            console.log(`Catalog: `, catalog);
             return (
               <WhatIfSemester
                 key={i + 1}
