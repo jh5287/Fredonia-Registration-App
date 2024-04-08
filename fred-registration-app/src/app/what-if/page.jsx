@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
+import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
 import {GoDash} from "react-icons/go";
 import GradeComboBox from "@/components/GradeComboBox";
+import CourseComboBox from "@/components/CourseComboBox";
+import calculateGPA from "@/components/calculateGPA";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
@@ -23,79 +25,9 @@ const DynamicCGPA = ({ cgpa, newCGPA }) => {
 };
 
 
-const calculateGPA = (data) => {
-  let totalCredits = 0;
-  let totalPoints = 0;
-  data.forEach((item) => {
-    totalCredits += item.Course.Credits;
-    switch (item.Grade) {
-      case 'A':
-        totalPoints += 4 * item.Course.Credits;
-        break;
-      case 'A-':
-        totalPoints += 3.7 * item.Course.Credits;
-        break;
-      case 'B+':
-        totalPoints += 3.3 * item.Course.Credits;
-        break;
-      case 'B':
-        totalPoints += 3 * item.Course.Credits;
-        break;
-      case 'B-':
-        totalPoints += 2.7 * item.Course.Credits;
-        break;
-      case 'C+':
-        totalPoints += 2.3 * item.Course.Credits;
-        break;
-      case 'C':
-        totalPoints += 2 * item.Course.Credits;
-        break;
-      case 'C-':
-        totalPoints += 1.7 * item.Course.Credits;
-        break;
-      case 'D+':
-        totalPoints += 1.3 * item.Course.Credits;
-        break;
-      case 'D':
-        totalPoints += 1 * item.Course.Credits;
-        break;
-      case 'D-':
-        totalPoints += 0.7 * item.Course.Credits;
-        break;
-      case 'S':
-        totalCredits -= item.Course.Credits;
-        break;
-      case 'WC':
-        totalCredits -= item.Course.Credits;
-        break;
-      default:
-        totalPoints += 0;
-    }
-  });
-  return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
-}
 
-const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
-    if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
-        return (
-            <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={handleCourseChange} disabled>
-                <option value="DEFAULT" disabled>{currentCourse}</option>
-                {data.map((item, index) => (
-                    <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
-                ))}
-            </select>
-        );
-    }
-    else{
-    return (
-        <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
-            <option value="DEFAULT" disabled>{currentCourse}</option>
-            {data.map((item, index) => (
-                <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
-            ))}
-        </select>
-    );}
-};
+
+
 
 
 
@@ -116,9 +48,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
             <tbody>
                 {semesterCatalogData.map((item, index) => {
                   const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
-                  console.log("Course status", courseStatus);
                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
-                  console.log("Most recent course", mostRecentCourse);
                   if(mostRecentCourse?.Status === "Completed") {
                   return (
                     <tr key={index}>
@@ -460,9 +390,6 @@ const RoadMap = () => {
             const semesterUserCourses = filterUserCoursesForSemester(
               semesterCatalogCourses
             );
-            console.log(`Semester catalog courses for sem${i + 1}: `, semesterCatalogCourses);
-            console.log(`Semester user courses for sem${i + 1}: `, semesterUserCourses);
-            console.log(`Catalog: `, catalog);
             return (
               <WhatIfSemester
                 key={i + 1}

@@ -5,59 +5,10 @@ import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import { cn } from "@/lib/utils";
 import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
+import calculateGPA from "@/components/calculateGPA";
 
 const RegSemester = ({ number, data }) => {
-  const calculateGPA = (data) => {
-    let totalCredits = 0;
-    let totalPoints = 0;
-    data.forEach((item) => {
-      totalCredits += item.Course.Credits;
-      switch (item.Grade) {
-        case 'A':
-          totalPoints += 4 * item.Course.Credits;
-          break;
-        case 'A-':
-          totalPoints += 3.7 * item.Course.Credits;
-          break;
-        case 'B+':
-          totalPoints += 3.3 * item.Course.Credits;
-          break;
-        case 'B':
-          totalPoints += 3 * item.Course.Credits;
-          break;
-        case 'B-':
-          totalPoints += 2.7 * item.Course.Credits;
-          break;
-        case 'C+':
-          totalPoints += 2.3 * item.Course.Credits;
-          break;
-        case 'C':
-          totalPoints += 2 * item.Course.Credits;
-          break;
-        case 'C-':
-          totalPoints += 1.7 * item.Course.Credits;
-          break;
-        case 'D+':
-          totalPoints += 1.3 * item.Course.Credits;
-          break;
-        case 'D':
-          totalPoints += 1 * item.Course.Credits;
-          break;
-        case 'D-':
-          totalPoints += 0.7 * item.Course.Credits;
-          break;
-        case 'S':
-          totalCredits -= item.Course.Credits;
-          break;
-        case 'WC':
-          totalCredits -= item.Course.Credits;
-          break;
-        default:
-          totalPoints += 0;
-      }
-    });
-    return (totalPoints / totalCredits).toFixed(2);
-  }
+  
   
   const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
 
@@ -67,9 +18,6 @@ const RegSemester = ({ number, data }) => {
 
       <div className="flex justify-between items-center">
         <h1 className="py-2 pl-1 text-lg font-semibold">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
-        {/* An idea...
-        {calculateGPA(data) >= 3.0 ? <span className="text-green-600">Good Standing</span> : <span className="text-red-600">Academic Warning</span>}
-        */}
         <div>
           {totalCredits > 0 ? <span className="text-base">Total Credits: {totalCredits}</span> : null} {/*if there is no applicable grade do not display it */}
           {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
@@ -92,7 +40,6 @@ const RegSemester = ({ number, data }) => {
                 <td>{item.Course.CourseCode}</td>
                 <td>{item.Course.Title}</td>
                 <td>{item.Course.Credits}</td>
-                {/* If the grade is null, display a progress icon, else display the grade */}
                 <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
                 >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
                 item.Grade}</td>
