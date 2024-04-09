@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
+import { FaPlus } from "react-icons/fa";
 
 
 
@@ -16,18 +17,18 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                     return (
                         <tr key={index}>
                           <td>
-                            {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
+                            {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.CourseCode : currentCourses[index]}
                           </td>
                           <td>
                             <CourseComboBox 
                             data={catalogData} 
-                            currentCourse={item.Course.Title} 
+                            currentCourse={item.Title} 
                             courseStatus={courseStatus} 
                             handleCourseChange={handleCourseChange} 
                             index={index} />
                           </td>
                           <td>
-                            {item.Course.Credits}
+                            {item.Credits}
                           </td>
                           <td>
                             <GradeComboBox 
@@ -38,7 +39,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
               })}
               <tr>
                 <td colSpan="4">
-                    <button onClick={handleAddRow}>Add Row</button>
+                    <button className='btn btn-accent w-full'onClick={handleAddRow}><FaPlus/></button>
                 </td>
             </tr>
           </tbody>
@@ -161,7 +162,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                 </thead>
                
                 <SemesterBody 
-                semesterCatalogData={semesterCatalogData}
+                semesterCatalogData={tableData.length > 0 ? tableData : semesterCatalogData}
                 catalogData={catalogData} 
                 userCourses={userCourses} 
                 currentCourses={currentCourses} 

@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
+body, html {
+  font-family: 'Radikal', sans-serif;
+}
