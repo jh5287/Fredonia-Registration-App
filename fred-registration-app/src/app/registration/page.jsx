@@ -246,12 +246,13 @@ const AdvisorRec = ({ data }) => {
 const NewSemester = ({ catalog }) => {
   const [courseList, setCourseList] = useState([]);
   const [selectedCRN, setSelectedCRN] = useState(null);
-  const addToSem = () => {
-    if (selectedCRN === null) {
+  const addNewClass = (e) => {
+    console.log(e);
+    if (e === null) {
+      console.error("No CRN selected");
       return;
     }
-    const courseCRN = selectedCRN;
-    fetch(`/api/courses?CRN=${courseCRN}`).then(res => res.json().then(data => setCourseList([...courseList, data[0]])));
+    fetch(`/api/courses?CRN=${e}`).then(res => res.json().then(data => setCourseList([...courseList, data[0]])));
   }
 
 
@@ -277,14 +278,14 @@ const NewSemester = ({ catalog }) => {
           ))}
           <tr>
             <td>
-              <select onChange={(e) => setSelectedCRN(e.target.value)} defaultValue="Course Title" className="select select-bordered w-full max-w-xs">
+              <select onChange={(e) => console.log(e.target.value)} defaultValue="Course Title" className="select select-bordered w-full max-w-xs">
                 <option disabled>Course Title</option>
                 {catalog.map((item, index) => (
-                  <option key={index} value={item.CRN}>{item.Course.Title}</option>
+                  <option key={index} value={item.Course.CRN}>{item.Course.Title}</option>
                 ))}
               </select>
             </td>
-            <td><button onClick={addToSem(selectedCRN)} className="btn btn-primary">Add Course</button></td>
+            <td><button onClick={addNewClass(selectedCRN)} className="btn btn-primary">Add Course</button></td>
           </tr>
         </tbody>
       </table>
