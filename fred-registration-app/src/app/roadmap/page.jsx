@@ -160,6 +160,7 @@ const RoadMap = () => {
     <>
       <div className="p-3 mb-10">
         <TabbedDisplay studentInfo={studentInfo} userCGPA={userCGPA}/>
+        
         <div className="relative flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">

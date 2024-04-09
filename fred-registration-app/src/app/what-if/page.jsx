@@ -7,6 +7,8 @@ import {GoDash} from "react-icons/go";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
+import TitleCard from "@/components/TitleCard";
+import WhatIfExtra from "@/components/WhatIfExtra";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
@@ -248,7 +250,7 @@ const RoadMap = () => {
   const [userCGPA, setUserCGPA] = useState(null);
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
-  const { data: session, status } = useSession();
+  const [extraSemester, setExtraSemester] = useState([]);
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -304,6 +306,13 @@ const RoadMap = () => {
     }
   };
   
+  const addExtraSemester = () => {
+    setExtraSemester(prevSemesters => {
+      const newSemesters = [...prevSemesters];
+      newSemesters.push([]);
+      return newSemesters;
+    });
+  }
 
   useEffect(() => {
     fetchCatalog();
@@ -356,29 +365,9 @@ const RoadMap = () => {
     <>
       <div className="p-3">
 
-          <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
+        <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
         
-        <div className="flex flex-col items-center">
-          <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
-          <div className="flex flex-row">
-            <div className="flex flex-row items-center mx-2">
-              <FaCheckCircle color="green" />
-              <p>=Completed</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaTimesCircle color="red" />
-              <p>=Incomplete</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaUserCheck color="blue" />
-              <p>=Enrolled</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaRegCircle />
-              <p>=Not Taken</p>
-            </div>
-          </div>
-        </div>
+        <TitleCard />
         <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
@@ -402,6 +391,23 @@ const RoadMap = () => {
               />
             );
           })}
+          <>
+          {extraSemester.map((item, index) => (
+            <WhatIfExtra
+              key={index + 1}
+              number={index + 9}
+              currentGPAs={currentGPAs}
+              setCurrentGPAs={setCurrentGPAs}
+              semesterCatalogData={item}
+              userCourses={[]}
+              catalogData={catalog}
+            />
+          ))}
+          </>
+          <button 
+          className="btn btn-primary"
+          onClick={() => addExtraSemester()}
+          >Add A New Semester...</button>
         </div>
       </div>
     </>
