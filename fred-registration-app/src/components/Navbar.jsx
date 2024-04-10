@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 const Navbar = () => {
   const { data: session, status } = useSession();
   return (
-    <div className="navbar bg-base-100 sticky top-0 z-50 border-b-2">
+    <div className="navbar bg-base-100 sticky top-0 z-50 border-b-2 bg-blue-200">
       <div className="flex-none">
         <div className="dropdown">
           <div tabIndex="0" className="m-1 btn btn-ghost">
