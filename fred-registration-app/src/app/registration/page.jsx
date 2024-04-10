@@ -95,7 +95,6 @@ const PlannedReg = ({ data }) => {
               <th className="whitespace-nowrap">Course Code</th>
               <th>Course Title</th>
               <th>Credits</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -105,9 +104,6 @@ const PlannedReg = ({ data }) => {
                 <td>{item.CourseCode}</td>
                 <td>{item.Title}</td>
                 <td>{item.Credits}</td>
-                <td>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
-                </td>
               </tr>
               ))
             ))}
@@ -174,7 +170,6 @@ const AdvisorRec = ({ data }) => {
               <th className="whitespace-nowrap">Course Code</th>
               <th>Course Title</th>
               <th>Credits</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -184,10 +179,7 @@ const AdvisorRec = ({ data }) => {
                 <td>{item.CourseCode}</td>
                 <td>{item.Title}</td>
                 <td>{item.Credits}</td>
-                <td>
-                  <button className="bg-green-500 text-white px-2 py-1 rounded">Add to Registration</button>
-                </td>
-              </tr>
+            </tr>
               ))
             ))}
           </tbody>
