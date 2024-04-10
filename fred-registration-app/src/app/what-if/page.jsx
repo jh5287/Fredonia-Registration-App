@@ -51,6 +51,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                 {semesterCatalogData.map((item, index) => {
                   const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
+                  console.log("Most recent grade ", mostRecentCourse?.Grade, " For ", mostRecentCourse?.Course.CourseCode, " Status ", mostRecentCourse?.Status);
                   if(mostRecentCourse?.Status === "Completed") {
                   return (
                     <tr key={index}>
@@ -312,6 +313,11 @@ const RoadMap = () => {
       newSemesters.push([]);
       return newSemesters;
     });
+    setCurrentGPAs(prevGPAs => {
+      const newGPAs = [...prevGPAs];
+      newGPAs.push(0.00);
+      return newGPAs;
+    });
   }
 
   useEffect(() => {
@@ -405,7 +411,7 @@ const RoadMap = () => {
           ))}
           </>
           <button 
-          className="btn btn-primary"
+          className="btn btn-primary mt-2"
           onClick={() => addExtraSemester()}
           >Add A New Semester...</button>
         </div>

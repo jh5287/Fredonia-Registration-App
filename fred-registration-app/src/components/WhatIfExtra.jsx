@@ -51,7 +51,6 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
   const WhatIfExtra = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
       const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
       const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
-      
       const [tableData, setTableData] = useState([]);
 
       const handleAddRow = () => {
