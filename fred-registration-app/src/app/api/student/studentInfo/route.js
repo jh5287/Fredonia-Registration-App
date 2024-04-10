@@ -6,7 +6,7 @@ export async function GET(request) {
     const searchParams = request.nextUrl.searchParams;
     const email = searchParams.get("email");
 
-    const res = await prisma.User.findMany({
+    const res = await prisma.user.findMany({
       where: {
         Email: email,
       },

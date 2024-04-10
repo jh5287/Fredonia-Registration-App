@@ -1,14 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
-import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
+import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
 import {GoDash} from "react-icons/go";
+import GradeComboBox from "@/components/GradeComboBox";
+import CourseComboBox from "@/components/CourseComboBox";
+import calculateGPA from "@/components/calculateGPA";
+import TitleCard from "@/components/TitleCard";
+import WhatIfExtra from "@/components/WhatIfExtra";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
   return (
-    <div className="w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
+    <div className=" z-50 w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
       <div>
         <h1 className="text-xl font-bold">Academic Summary</h1>
         <p className="text-lg">CGPA: {cgpa ? cgpa.toFixed(2) : 'Unknown'}</p>
@@ -22,105 +27,15 @@ const DynamicCGPA = ({ cgpa, newCGPA }) => {
 };
 
 
-const calculateGPA = (data) => {
-  let totalCredits = 0;
-  let totalPoints = 0;
-  data.forEach((item) => {
-    totalCredits += item.Course.Credits;
-    switch (item.Grade) {
-      case 'A':
-        totalPoints += 4 * item.Course.Credits;
-        break;
-      case 'A-':
-        totalPoints += 3.7 * item.Course.Credits;
-        break;
-      case 'B+':
-        totalPoints += 3.3 * item.Course.Credits;
-        break;
-      case 'B':
-        totalPoints += 3 * item.Course.Credits;
-        break;
-      case 'B-':
-        totalPoints += 2.7 * item.Course.Credits;
-        break;
-      case 'C+':
-        totalPoints += 2.3 * item.Course.Credits;
-        break;
-      case 'C':
-        totalPoints += 2 * item.Course.Credits;
-        break;
-      case 'C-':
-        totalPoints += 1.7 * item.Course.Credits;
-        break;
-      case 'D+':
-        totalPoints += 1.3 * item.Course.Credits;
-        break;
-      case 'D':
-        totalPoints += 1 * item.Course.Credits;
-        break;
-      case 'D-':
-        totalPoints += 0.7 * item.Course.Credits;
-        break;
-      case 'S':
-        totalCredits -= item.Course.Credits;
-        break;
-      case 'WC':
-        totalCredits -= item.Course.Credits;
-        break;
-      default:
-        totalPoints += 0;
-    }
-  });
-  return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
-}
 
-const CourseComboBox = ({ data, currentCourse, courseStatus, handleCourseChange, index }) => {
-    if(courseStatus?.Status === "Completed" || courseStatus?.Status === "Enrolled") {
-        return (
-            <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={handleCourseChange} disabled>
-                <option value="DEFAULT" disabled>{currentCourse}</option>
-                {data.map((item, index) => (
-                    <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
-                ))}
-            </select>
-        );
-    }
-    else{
-    return (
-        <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleCourseChange(e, index)}>
-            <option value="DEFAULT" disabled>{currentCourse}</option>
-            {data.map((item, index) => (
-                <option key={index} value={item.Course.CourseCode}>{item.Course.Title}</option>
-            ))}
-        </select>
-    );}
-};
 
-const GradeComboBox = ({ handleGradeChange, index }) => {
-    return (
-        <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
-            <option value="DEFAULT" disabled>Select a grade</option>
-            <option value="A">A</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B">B</option>
-            <option value="B-">B-</option>
-            <option value="C+">C+</option>
-            <option value="C">C</option>
-            <option value="C-">C-</option>
-            <option value="D+">D+</option>
-            <option value="D">D</option>
-            <option value="D-">D-</option>
-            <option value="F">F</option>
-            <option value="S">S</option>
-            <option value="WC">WC</option>
-        </select>
-    );
-};
+
+
+
 
 const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { 
   const getRecentGradeAndStatus = (crn) => {
-    const coursesWithCRN = userCourses.filter(course => course.CRN === crn);
+    const coursesWithCRN = userCourses.filter(course => course.Course.CRN === crn);
     if (coursesWithCRN.length > 0) {
       const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
         return (mostRecent.TermID > course.TermID) ? mostRecent : course;
@@ -134,7 +49,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
         return (
             <tbody>
                 {semesterCatalogData.map((item, index) => {
-                  const courseStatus = userCourses.find((course) => course.CRN === item.Course.CRN);
+                  const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
                   if(mostRecentCourse?.Status === "Completed") {
                   return (
@@ -335,7 +250,7 @@ const RoadMap = () => {
   const [userCGPA, setUserCGPA] = useState(null);
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
-  const { data: session, status } = useSession();
+  const [extraSemester, setExtraSemester] = useState([]);
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -391,6 +306,13 @@ const RoadMap = () => {
     }
   };
   
+  const addExtraSemester = () => {
+    setExtraSemester(prevSemesters => {
+      const newSemesters = [...prevSemesters];
+      newSemesters.push([]);
+      return newSemesters;
+    });
+  }
 
   useEffect(() => {
     fetchCatalog();
@@ -443,29 +365,9 @@ const RoadMap = () => {
     <>
       <div className="p-3">
 
-          <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
+        <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
         
-        <div className="flex flex-col items-center">
-          <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
-          <div className="flex flex-row">
-            <div className="flex flex-row items-center mx-2">
-              <FaCheckCircle color="green" />
-              <p>=Completed</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaTimesCircle color="red" />
-              <p>=Incomplete</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaUserCheck color="blue" />
-              <p>=Enrolled</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaRegCircle />
-              <p>=Not Taken</p>
-            </div>
-          </div>
-        </div>
+        <TitleCard />
         <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
@@ -489,6 +391,23 @@ const RoadMap = () => {
               />
             );
           })}
+          <>
+          {extraSemester.map((item, index) => (
+            <WhatIfExtra
+              key={index + 1}
+              number={index + 9}
+              currentGPAs={currentGPAs}
+              setCurrentGPAs={setCurrentGPAs}
+              semesterCatalogData={item}
+              userCourses={[]}
+              catalogData={catalog}
+            />
+          ))}
+          </>
+          <button 
+          className="btn btn-primary"
+          onClick={() => addExtraSemester()}
+          >Add A New Semester...</button>
         </div>
       </div>
     </>
