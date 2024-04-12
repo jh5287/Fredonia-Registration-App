@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import Semester from "./Semester";
 import AcademicSummaryBanner from "@/components/AcademicSummaryBanner";
 import TabbedDisplay from "@/components/StudentProfileTabs";
-import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
+import {
+  fetchCatalogCourses,
+  fetchUserCourses,
+  fetchUserCGPA,
+  fetchStudentInfo,
+} from "./apiCalls";
 import { useSession } from "next-auth/react";
 import {
   FaCheckCircle,
@@ -18,7 +23,7 @@ const RoadMap = () => {
   const [catalogCourses, setCatalogCourses] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
-  const [studentInfo, setStudentInfo] = useState(null); 
+  const [studentInfo, setStudentInfo] = useState(null);
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -26,16 +31,17 @@ const RoadMap = () => {
       try {
         const catalogData = await fetchCatalogCourses();
         setCatalogCourses(catalogData);
-        
+
         const userCourseData = await fetchUserCourses();
         setUserCourses(userCourseData);
-        
+
+        console.log("TEST"); 
         const cgpaData = await fetchUserCGPA();
-        setUserCGPA(cgpaData); 
+        console.log("HERE", cgpaData);  
+        setUserCGPA(cgpaData);
 
         const studentInfoData = await fetchStudentInfo();
-        setStudentInfo(studentInfoData); 
-
+        setStudentInfo(studentInfoData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -43,7 +49,6 @@ const RoadMap = () => {
 
     loadData();
   }, []);
-
 
   const filterCoursesByTerm = (year, semester, courses) => {
     return courses.filter(
@@ -77,7 +82,7 @@ const RoadMap = () => {
 
   // Filter courses to only include latest attemps
   const filterToLatestAttempts = (userCourses) => {
-    if(!userCourses){
+    if (!userCourses) {
       return [];
     }
 
@@ -127,10 +132,10 @@ const RoadMap = () => {
   const latestCourseAttempts = filterToLatestAttempts(userCourses);
   const catalogUserCourseMap = createCatalogToUserCourseMap(
     catalogCourses,
-    latestCourseAttempts|| []
+    latestCourseAttempts || []
   );
 
-  //const getUserGrades = 
+  //const getUserGrades =
 
   const toggleAllSemester = () => {
     const checkSameValue = () => {
@@ -145,22 +150,22 @@ const RoadMap = () => {
     if (allSame) {
       setOpen(open.map((isOpen) => !isOpen));
     } else {
-      const changeOpen = open.map((isOpen) => isOpen === false ? true : true);
+      const changeOpen = open.map((isOpen) => (isOpen === false ? true : true));
       setOpen(changeOpen);
     }
-  }
+  };
 
   const toggleSemester = (index) => {
     const newOpen = [...open];
     newOpen[index] = !newOpen[index];
     setOpen(newOpen);
-  }
+  };
 
   return (
     <>
       <div className="p-3 mb-10">
-        <TabbedDisplay studentInfo={studentInfo} userCGPA={userCGPA}/>
-        
+        <TabbedDisplay studentInfo={studentInfo} userCGPA={userCGPA} />
+
         <div className="relative flex flex-col items-center">
           <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
           <div className="flex flex-row">
@@ -182,19 +187,21 @@ const RoadMap = () => {
             </div>
           </div>
           {/* md:absolute md:right-2 md:top-3*/}
-            <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
-              <label className="label cursor-pointer">
-                <span className="p-2 label-text">Toggle Semester</span> 
-                <input 
-                type="checkbox" 
+          <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
+            <label className="label cursor-pointer">
+              <span className="p-2 label-text">Toggle Semester</span>
+              <input
+                type="checkbox"
                 className="toggle toggle-primary"
-                onChange={() => {toggleAllSemester()}}
+                onChange={() => {
+                  toggleAllSemester();
+                }}
                 checked={open[0]}
-                 />
-              </label>
-            </div>
+              />
+            </label>
+          </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 ">
+        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 py-2">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
             const semester = i % 2 === 0 ? "Fall" : "Spring";
@@ -203,9 +210,17 @@ const RoadMap = () => {
               semester,
               catalogUserCourseMap
             );
-              //console.log("Semester user courses", semesterUserCourses);
+            //console.log("Semester user courses", semesterUserCourses);
             return (
-              <Semester key={i + 1} number={i + 1} courses={semesterCourses} toggleSemester={toggleSemester} open={open[i]}/>
+              <div className="border rounded-lg border-slate-150">
+                <Semester
+                  key={i + 1}
+                  number={i + 1}
+                  courses={semesterCourses}
+                  toggleSemester={toggleSemester}
+                  open={open[i]}
+                />
+              </div>
             );
           })}
         </div>
