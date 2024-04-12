@@ -18,8 +18,29 @@ export async function GET(request) {
       }
     });
 
+    const studentFoundationsCGPA = await prisma.StudentFoundationsCGPA.findMany({
+      where: {
+        Student: {
+          User: {
+            Email: email,
+          },
+        },
+      },
+      select: {
+        CGPA: true 
+      }
+    });
+
+
+    const CGPAS = {
+      CGPA: studentCGPA[0].CGPA, 
+      FoundationsCGPA: studentFoundationsCGPA[0].CGPA 
+    }
+
+
+    console.log(CGPAS); 
     await prisma.$disconnect();
-    return Response.json(studentCGPA);
+    return Response.json(CGPAS);
   } catch (err) {
     console.error("Prisma error: ", err);
     await prisma.$disconnect();
