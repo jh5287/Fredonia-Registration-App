@@ -34,6 +34,9 @@ const Navbar = () => {
             <li>
               <Link href="/roadmap">Road Map</Link>
             </li>
+            <li>
+              <Link href="/customRoadmap">customRoadmap</Link>
+            </li>
           </ul>
         </div>
       </div>
