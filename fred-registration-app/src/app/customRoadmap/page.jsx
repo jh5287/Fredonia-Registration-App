@@ -1,49 +1,11 @@
 "use client";
 import { useState } from "react";
-import CustomSemester from "./customSemester";
+import CustomSemester from "./CustomSemester";
 import CourseSearch from "@/components/courseSearch";
 import {
   BsArrowBarLeft,
   BsArrowBarRight
 } from "react-icons/bs";
-
-export default function customRoadmap() {
-  const createDefaultCourse = () => ({
-    courseCode: "",
-    courseTitle: "",
-    credits: "",
-  });
-
-  const createDefaultSemester = (semesterNum) => ({
-    semesterNum,
-    courses: Array.from({ length: 5 }, (_, index) => createDefaultCourse()),
-  });
-
-  console.log(createDefaultSemester(1));
-
-  const [semestersData, setSemesterData] = useState(
-    Array.from({ length: 8 }, (_, index) => createDefaultSemester(index + 1))
-  );
-
-  return (
-    <>
-      <div className="flex flex-row gap-x-4 h-screen w-full">
-        <div className="relative flex-1 ">
-          <div className="grid grid-cols-2 gap-5 h-full py-2">
-            {semestersData.map((semester) => (
-              <CustomSemester
-                key={semester.semesterNum}
-                semesterNum={semester.semesterNum}
-                courses={semester.courses}
-              />
-            ))}
-          </div>
-        </div>
-        <Sidebar />
-      </div>
-    </>
-  );
-}
 
 function Sidebar({}) {
   const [expanded, setExpanded] = useState(true);
@@ -61,3 +23,40 @@ function Sidebar({}) {
     </aside>
   );
 }
+
+export default function customRoadmap() {
+  const createDefaultCourse = () => ({
+    courseCode: "",
+    courseTitle: "",
+    credits: "",
+  });
+  
+  const createDefaultSemester = (semesterNum) => ({
+    semesterNum,
+    courses: Array.from({ length: 5 }, (_, index) => createDefaultCourse()),
+  });
+  
+  const [semestersData, setSemesterData] = useState(
+    Array.from({ length: 8 }, (_, index) => createDefaultSemester(index + 1))
+  );
+  
+  return (
+    <>
+      <div className="flex flex-row gap-x-4 h-screen w-full">
+        <div className="relative flex-1 ">
+          <div className="grid grid-cols-2 gap-5 h-full py-2">
+            {semestersData.map((semester) => (
+              <CustomSemester
+              key={semester.semesterNum}
+              semesterNum={semester.semesterNum}
+              courses={semester.courses}
+              />
+            ))}
+          </div>
+        </div>
+        <Sidebar />
+      </div>
+    </>
+  );
+}
+
