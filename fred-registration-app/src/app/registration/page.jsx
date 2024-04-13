@@ -217,13 +217,12 @@ const Registration = () => {
         let email = "russ9214@fredonia.edu"
         const res = await fetch(`/api/student/studentCourses?email=${email}`);
         const studentData = await res.json();
-        const terms = studentData.map(item => (item.Term.Semester + " "+ item.Term.Year)).filter((value, index, self) => self.indexOf(value) === index);//get all the unique terms for the selected student
-        const organized_data = []
-      for(let i = 1; i < terms.length; i++) {
-        const termToCompareTo = terms[i]; //get the term to compare to
-        const semData = studentData.filter((item) => (item.Term.Semester + " " + item.Term.Year) === termToCompareTo);//filter the data to only include the target term
-        organized_data.push(semData)
-      }
+
+      // Extracting unique terms
+      const uniqueTerms = Array.from(new Set(studentData.map(item => `${item.Term.Semester} ${item.Term.Year}`)));
+
+      // Organizing data by terms
+      const organized_data = uniqueTerms.map(term => studentData.filter(item => `${item.Term.Semester} ${item.Term.Year}` === term));
       setStudentData(organized_data);
       } catch (err) {
         console.error("Failed to fetch student data:", err);

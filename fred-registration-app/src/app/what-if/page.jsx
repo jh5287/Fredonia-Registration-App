@@ -9,6 +9,7 @@ import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
 import TitleCard from "@/components/TitleCard";
 import WhatIfExtra from "@/components/WhatIfExtra";
+import RegSemester from "@/components/RegSemester";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
@@ -51,7 +52,7 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                 {semesterCatalogData.map((item, index) => {
                   const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
-                  console.log("Most recent grade ", mostRecentCourse?.Grade, " For ", mostRecentCourse?.Course.CourseCode, " Status ", mostRecentCourse?.Status);
+                  //console.log("Most recent grade ", mostRecentCourse?.Grade, " For ", mostRecentCourse?.Course.CourseCode, " Status ", mostRecentCourse?.Status);
                   if(mostRecentCourse?.Status === "Completed") {
                   return (
                     <tr key={index}>
@@ -121,7 +122,29 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
     }
 
 
-
+{/* code used to render WhatIfSemester component....now depracated but not quite yet....
+{Array.from({ length: 8 }, (_, i) => {
+            const year = Math.ceil((i + 1) / 2);
+            const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
+            const semesterCatalogCourses = filterCatalogCourses(
+              year,
+              semesterStr
+            );
+            const semesterUserCourses = filterUserCoursesForSemester(
+              semesterCatalogCourses
+            );
+            return (
+              <WhatIfSemester
+                key={i + 1}
+                number={i + 1}
+                currentGPAs={currentGPAs}
+                setCurrentGPAs={setCurrentGPAs}
+                semesterCatalogData={semesterCatalogCourses} //data related to the roadmap suggested semester and year
+                userCourses={semesterUserCourses} //data related to the courses the user has taken
+                catalogData={catalog} //the whole catalog
+              />
+            );
+          })} */}
 const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
     const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
     const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
@@ -252,6 +275,7 @@ const RoadMap = () => {
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
   const [extraSemester, setExtraSemester] = useState([]);
+  const [realStudentData, setRealStudentData] = useState([]);
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -266,12 +290,19 @@ const RoadMap = () => {
   // Fetch user course data
   const fetchUserCourses = async () => {
     try {
-      const userEmail = "wals9256@fredonia.edu";
+      const userEmail = "russ9214@fredonia.edu";
       const response = await fetch(
         `/api/student/studentCourses?email=${userEmail}`
       );
       const data = await response.json();
       setUserCourses(data);
+      //console.log("User courses", data);
+      const uniqueTerms = Array.from(new Set(data.map(item => `${item.Term.Semester} ${item.Term.Year}`)));
+
+      // Organizing data by terms
+      const organized_data = uniqueTerms.map(term => data.filter(item => `${item.Term.Semester} ${item.Term.Year}` === term));
+      setRealStudentData(organized_data);
+      //console.log("Real student data", organized_data);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
     }
@@ -374,30 +405,9 @@ const RoadMap = () => {
         <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
         
         <TitleCard />
-        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2">
-          {Array.from({ length: 8 }, (_, i) => {
-            const year = Math.ceil((i + 1) / 2);
-            const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
-            const semesterCatalogCourses = filterCatalogCourses(
-              year,
-              semesterStr
-            );
-            const semesterUserCourses = filterUserCoursesForSemester(
-              semesterCatalogCourses
-            );
-            return (
-              <WhatIfSemester
-                key={i + 1}
-                number={i + 1}
-                currentGPAs={currentGPAs}
-                setCurrentGPAs={setCurrentGPAs}
-                semesterCatalogData={semesterCatalogCourses} //data related to the roadmap suggested semester and year
-                userCourses={semesterUserCourses} //data related to the courses the user has taken
-                catalogData={catalog} //the whole catalog
-              />
-            );
-          })}
-          <>
+        <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
+          
+          
           {extraSemester.map((item, index) => (
             <WhatIfExtra
               key={index + 1}
@@ -409,12 +419,18 @@ const RoadMap = () => {
               catalogData={catalog}
             />
           ))}
-          </>
-          <button 
-          className="btn btn-primary mt-2"
-          onClick={() => addExtraSemester()}
-          >Add A New Semester...</button>
+          
+          <button className="btn btn-primary mt-2" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+
+
+          
+           
         </div>
+        <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
+        {realStudentData.map((item, index) => (
+            <RegSemester key={index+1} number={index} data={item}/>
+          ))}
+         </div>
       </div>
     </>
   );
