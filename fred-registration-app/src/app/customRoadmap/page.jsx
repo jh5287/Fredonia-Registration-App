@@ -16,9 +16,9 @@ function Sidebar({}) {
       ) : (
         ""
       )}
-      <aside className={`h-screen  ${expanded ? "w-1/2" : "w-0"}`}>
+      <aside className={`${expanded ? "w-1/2" : "w-0"}`}>
         <nav className={`h-full ${expanded ? " shadow-md px-2" : ""}`}>
-          <div className={`overflow-hidden ${expanded ? "w-full" : "w-0"}`}>
+          <div className={`overflow-hidden h-full ${expanded ? "w-full" : "w-0"}`}>
             <button onClick={() => setExpanded((curr) => !curr)}>
               <BsArrowBarRight className="size-8" />
             </button>
@@ -49,7 +49,7 @@ export default function customRoadmap() {
   return (
     <>
       <div className="flex flex-row gap-x-4 h-screen w-full">
-        <div className="relative flex-1 ">
+        <div className="relative flex-1 overflow-y-auto">
           <div className="grid grid-cols-1 gap-5 h-full py-2">
             {semestersData.map((semester) => (
               <CustomSemester
