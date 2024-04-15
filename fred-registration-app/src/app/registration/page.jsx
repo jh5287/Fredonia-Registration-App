@@ -8,8 +8,6 @@ import { mdiProgressHelper } from '@mdi/js';
 import calculateGPA from "@/components/calculateGPA";
 
 const RegSemester = ({ number, data }) => {
-  
-  
   const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
 
   return (
