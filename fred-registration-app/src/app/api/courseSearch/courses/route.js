@@ -7,20 +7,38 @@ export async function GET(request){
 
     //Get query params
     const searchParams = request.nextUrl.searchParams;
-    console.log(searchParams); 
 
-    const crn = Number(searchParams.get('CRN'));
-    const courseCode = Number(searchParams.get('courseCode'));
-    const courseTitle = Number(searchParams.get('courseTitle'));
-    const credits = Number(searchParams.get('credits'));
-    const department = Number(searchParams.get('department'));
+    const crn = searchParams.get('CRN') ? Number(searchParams.get('CRN')) : null;
+    const courseCode = searchParams.get('courseCode');
+    const courseTitle = searchParams.get('courseTitle');
+    const credits = searchParams.get('credits') ? Number(searchParams.get('credits')) : null;
+    const department = searchParams.get('department');
 
-    console.log(crn); 
+    const query = {};
 
+    if (crn) query.CRN = crn;
+    if (courseCode) query.CourseCode = courseCode;
+    if (courseTitle) query.Title = courseTitle;
+    if (credits) query.Credits = credits;
+    if (department) {
+      query.Department = {
+        Name: department
+      }
+    } 
 
-    //const res = await prisma.Course.findMany();
+    console.log("query", query);  
+
+    const res = await prisma.Course.findMany({
+      where: query,
+      include: {
+        Department: true,
+      }, 
+    });
+
+    console.log(res); 
+    console.log("==============================")
     
-    return NextResponse.json("TEST"); 
+    return NextResponse.json(res); 
   } catch(err){
     console.error("Prisma error: ", err)
     return new NextResponse("Error");  
