@@ -408,19 +408,29 @@ const RoadMap = () => {
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
           
           
-          {extraSemester.map((item, index) => (
+          {extraSemester.map((item, index) => {
+            const year = Math.ceil((index + 1) / 2);
+            const semesterStr = index % 2 === 0 ? "Fall" : "Spring";
+            const semesterCatalogCourses = filterCatalogCourses(
+              year,
+              semesterStr
+            );
+            const semesterUserCourses = filterUserCoursesForSemester(
+              semesterCatalogCourses
+            );
+            return(
             <WhatIfExtra
               key={index + 1}
               number={index + 9}
               currentGPAs={currentGPAs}
               setCurrentGPAs={setCurrentGPAs}
-              semesterCatalogData={item}
+              semesterCatalogData={semesterCatalogCourses}
               userCourses={[]}
               catalogData={catalog}
-            />
-          ))}
+            />)
+          })}
           
-          <button className="btn btn-primary mt-2" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+          <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
 
 
           

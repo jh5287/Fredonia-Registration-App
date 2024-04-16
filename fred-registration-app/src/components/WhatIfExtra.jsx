@@ -3,39 +3,116 @@ import { useState, useEffect } from "react";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
+import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
 
+const SemesterRow = ({ index, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => {
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState({title: '', code: '', credits: '' });
+  const handleSearchInputChange = (e) => {
+    const inputValue = e.target.value;
+    setSearchInput(inputValue);
+    // Filter catalogData based on inputValue and update searchResults
+    const filteredResults = catalogData.filter(course => course.Course.Title.toLowerCase().includes(inputValue.toLowerCase()));
+    console.log("filteredResults", filteredResults);
+    setSearchResults(filteredResults);
+};
 
+const handleCourseSelection = (selectedCourse) => {
+    setSelectedCourse({title : selectedCourse.Course.Title, code: selectedCourse.Course.CourseCode, credits: selectedCourse.Course.Credits });
+    setSearchInput(selectedCourse.Course.Title);
+};
 
-const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange, handleAddRow }) => { 
-    
+          return (
+            <tr key={index}>
+              <td>
+                {selectedCourse.code !== '' ? selectedCourse?.code : 'No Course Selected'}
+              </td>
+              <td>
+
+                <div tabIndex={0} className="dropdown">
+                  <input type="text" value={searchInput} onChange={handleSearchInputChange} 
+                  placeholder="Enter Class Name"
+                  className="input input-bordered input-primary w-full max-w-xs" />
+                  <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                      {searchResults.map((course, index) => (
+                          <li key={index} onClick={() => handleCourseSelection(course)}><a>{course.Course.Title}</a></li>
+                      ))}
+                  </ul>
+                </div>
+              </td>
+              <td>
+              {selectedCourse.credits !== '' ? selectedCourse.credits : ''}
+              </td>
+              <td>
+                <GradeComboBox 
+                handleGradeChange={handleGradeChange} 
+                index={index} />
+              </td>
+            </tr>);
+
+};
+
+const SemesterBody = ({ tableData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange, handleAddRow }) => { 
+//   const [searchInput, setSearchInput] = useState('');
+//   const [searchResults, setSearchResults] = useState([]);
+//   const [selectedCourse, setSelectedCourse] = useState({title: '', code: '', credits: '' });
+
+//   const handleSearchInputChange = (e) => {
+//     const inputValue = e.target.value;
+//     setSearchInput(inputValue);
+//     // Filter catalogData based on inputValue and update searchResults
+//     const filteredResults = catalogData.filter(course => course.Course.Title.toLowerCase().includes(inputValue.toLowerCase()));
+//     console.log("filteredResults", filteredResults);
+//     setSearchResults(filteredResults);
+// };
+
+// const handleCourseSelection = (selectedCourse) => {
+//     setSelectedCourse({title : selectedCourse.Course.Title, code: selectedCourse.Course.CourseCode, credits: selectedCourse.Course.Credits });
+//     setSearchInput(selectedCourse.Course.Title);
+// };
           return (
               <tbody>
-                  {semesterCatalogData.map((item, index) => {
+                  {tableData.map((item, index) => {
                     const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
                     
                     return (
-                        <tr key={index}>
-                          <td>
-                            {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.CourseCode : currentCourses[index]}
-                          </td>
-                          <td>
-                            <CourseComboBox 
-                            data={catalogData} 
-                            currentCourse={item.Title} 
-                            courseStatus={courseStatus} 
-                            handleCourseChange={handleCourseChange} 
-                            index={index} />
-                          </td>
-                          <td>
-                            {item.Credits}
-                          </td>
-                          <td>
-                            <GradeComboBox 
-                            handleGradeChange={handleGradeChange} 
-                            index={index} />
-                          </td>
-                        </tr>);
+                        // <tr key={index}>
+                        //   <td>
+                        //     {selectedCourse.code !== '' ? selectedCourse?.code : 'No Course Selected'}
+                        //   </td>
+                        //   <td>
+                            
+                        //     <div tabIndex={0} className="dropdown">
+                        //       <input type="text" value={searchInput} onChange={handleSearchInputChange} 
+                        //       placeholder="Enter Class Name"
+                        //       className="input input-bordered input-primary w-full max-w-xs" />
+                        //       <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                        //           {searchResults.map((course, index) => (
+                        //               <li key={index} onClick={() => handleCourseSelection(course)}><a>{course.Course.Title}</a></li>
+                        //           ))}
+                        //       </ul>
+                        //     </div>
+                        //   </td>
+                        //   <td>
+                        //   {selectedCourse.credits !== '' ? selectedCourse.credits : ''}
+                        //   </td>
+                        //   <td>
+                        //     <GradeComboBox 
+                        //     handleGradeChange={handleGradeChange} 
+                        //     index={index} />
+                        //   </td>
+                        // </tr>
+                        <SemesterRow 
+                        key={index}
+                        index={index}
+                        catalogData={catalogData}
+                        userCourses={userCourses}
+                        currentCourses={currentCourses}
+                        handleCourseChange={handleCourseChange}
+                        handleGradeChange={handleGradeChange} />
+                      );
               })}
               <tr>
                 <td colSpan="4">
@@ -49,12 +126,13 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
   
   
   const WhatIfExtra = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
-      const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
-      const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
+      const [currentCourses, setCurrentCourses] = useState([]);//state to hold the current course
+      const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
       const [tableData, setTableData] = useState([]);
 
       const handleAddRow = () => {
         setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
+        console.log("tableData", tableData);
         };
   
       const updateSemesterGPAs = () => {
@@ -143,6 +221,9 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
         
       }, [currentGrades, currentCourses, calculateGPA(userCourses), updateSemesterGPAs()]);
       
+
+      console.log("current courses", currentCourses);
+
       return (
         <>
           <div>
@@ -161,8 +242,8 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                 </thead>
                
                 <SemesterBody 
-                semesterCatalogData={tableData.length > 0 ? tableData : semesterCatalogData}
-                catalogData={catalogData} 
+                tableData={tableData}
+                catalogData={catalogData}
                 userCourses={userCourses} 
                 currentCourses={currentCourses} 
                 handleCourseChange={handleCourseChange} 
