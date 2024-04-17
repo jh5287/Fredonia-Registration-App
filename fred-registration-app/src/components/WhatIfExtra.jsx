@@ -5,10 +5,7 @@ import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
 import { FaPlus } from "react-icons/fa";
 
-
-
 const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange, handleAddRow }) => { 
-    
           return (
               <tbody>
                   {semesterCatalogData.map((item, index) => {
