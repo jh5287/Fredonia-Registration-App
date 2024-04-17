@@ -3,36 +3,85 @@ import { useState, useEffect } from "react";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
+import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
+const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState({CourseCode: '', Title: '', Credits: '', Grade: ''});
 
-const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange, handleAddRow }) => { 
+  const handleSearchInputChange = (e) => {
+    const inputValue = e.target.value;
+    setSearchInput(inputValue);
+    const filteredResults = catalogData.filter(course => course.Course.Title.toLowerCase().includes(inputValue.toLowerCase()));
+    setSearchResults(filteredResults);
+};
+
+const handleCourseSelection = (selectedCourse) => {
+    setTableData(prevData => {
+        const newData = [...prevData];
+        newData[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        return newData;
+    });
+    setSelectedCourse({ CourseCode: selectedCourse.Course.CourseCode, Title: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''});
+    setSearchInput(selectedCourse.Course.Title);
+
+  //   setSaveData(prevData => {
+  //     const newData = [...prevData];
+  //     newData[semNumber] = tableData;
+  //     return newData;
+  // });
+};
+
+          return (
+            <tr key={index}>
+              <td>
+                {selectedCourse.CourseCode !== '' ? selectedCourse?.CourseCode : 'No Course Selected'}
+              </td>
+              <td>
+                <div tabIndex={0} className="dropdown">
+                  <input type="text" value={searchInput} onChange={handleSearchInputChange} 
+                  placeholder="Enter Class Name"
+                  className="input input-bordered input-primary w-full max-w-xs" />
+                  <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                      {searchResults.map((course, index) => (
+                          <li key={index} onClick={() => handleCourseSelection(course)}><a>{course.Course.Title}</a></li>
+                      ))}
+                  </ul>
+                </div>
+              </td>
+              <td>
+              {selectedCourse.Credits !== '' ? selectedCourse.Credits : ''}
+              </td>
+              <td>
+                <GradeComboBox 
+                handleGradeChange={handleGradeChange} 
+                index={index} />
+              </td>
+            </tr>);
+
+};
+
+const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleGradeChange, setSaveData}) => { 
+
+  const handleAddRow = () => {
+    setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
+    console.log("tableData", tableData);
+    };
           return (
               <tbody>
-                  {semesterCatalogData.map((item, index) => {
-                    const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
-                    
-                    return (
-                        <tr key={index}>
-                          <td>
-                            {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.CourseCode : currentCourses[index]}
-                          </td>
-                          <td>
-                            <CourseComboBox 
-                            data={catalogData} 
-                            currentCourse={item.Title} 
-                            courseStatus={courseStatus} 
-                            handleCourseChange={handleCourseChange} 
-                            index={index} />
-                          </td>
-                          <td>
-                            {item.Credits}
-                          </td>
-                          <td>
-                            <GradeComboBox 
-                            handleGradeChange={handleGradeChange} 
-                            index={index} />
-                          </td>
-                        </tr>);
+                {tableData.map((item, index) => {
+                  return (
+                    <SemesterRow 
+                    key={index}
+                    index={index}
+                    semNumber={semNumber}
+                    catalogData={catalogData}
+                    handleGradeChange={handleGradeChange}
+                    tableData={tableData}
+                    setTableData={setTableData}
+                    setSaveData={setSaveData} />
+                    );
               })}
               <tr>
                 <td colSpan="4">
@@ -41,19 +90,14 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
             </tr>
           </tbody>
           );
-      }
+};
   
   
   
-  const WhatIfExtra = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
-      const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
-      const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
-      
+  const WhatIfExtra = ({ semNumber, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
+      const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
       const [tableData, setTableData] = useState([]);
-
-      const handleAddRow = () => {
-        setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
-        };
+      
   
       const updateSemesterGPAs = () => {
         let totalCredits = 0;
@@ -116,37 +160,36 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
               return newGrades;
           });
         };
-      const handleCourseChange = (e, index) => {
-        const course = e.target.value;
-        setCurrentCourses(prevCourses => {
-          const newCourses = [...prevCourses];
-          newCourses[index] = course;
-          return newCourses;
-        });
-      };
-      
       useEffect(() => {
         setCurrentGPAs(prevGPAs => {
           const newGPAs = [...prevGPAs];
           if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
-            newGPAs[number - 1] = calculateGPA(userCourses);
+            newGPAs[semNumber - 1] = calculateGPA(userCourses);
             return newGPAs;
           }
           else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
-            newGPAs[number - 1] = updateSemesterGPAs();
+            newGPAs[semNumber - 1] = updateSemesterGPAs();
             return newGPAs;
           }
           return prevGPAs;
         });
         
-      }, [currentGrades, currentCourses, calculateGPA(userCourses), updateSemesterGPAs()]);
+      }, [currentGrades,  calculateGPA(userCourses), updateSemesterGPAs()]);
       
+      useEffect(() => {
+        setSaveData(prevData => {
+          const newData = [...prevData];
+          newData[semNumber] = tableData;
+          return newData;
+      })
+        }, [tableData]);
+
       return (
         <>
           <div>
             <h1 className="tooltip py-2 pl-1 text-lg" 
-            data-tip={(currentGPAs[number - 1] !== null && currentGPAs[number - 1] !== 0) ? currentGPAs[number - 1] : "No grade"}>
-              Semester {number}</h1>
+            data-tip={(currentGPAs[semNumber - 1] !== null && currentGPAs[semNumber - 1] !== 0) ? currentGPAs[semNumber - 1] : "No grade"}>
+              Semester {semNumber}</h1>
             <div className="border rounded">
               <table className="table">
                 <thead>
@@ -159,13 +202,13 @@ const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCo
                 </thead>
                
                 <SemesterBody 
-                semesterCatalogData={tableData.length > 0 ? tableData : semesterCatalogData}
-                catalogData={catalogData} 
-                userCourses={userCourses} 
-                currentCourses={currentCourses} 
-                handleCourseChange={handleCourseChange} 
+                semNumber={semNumber}
+                tableData={tableData}
+                setTableData={setTableData}
+                catalogData={catalogData}
                 handleGradeChange={handleGradeChange}
-                handleAddRow={handleAddRow} />
+                setSaveData={setSaveData}
+                 />
               </table>
             </div>
           </div>
