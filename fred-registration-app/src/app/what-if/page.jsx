@@ -392,7 +392,7 @@ const RoadMap = () => {
       <div className="p-3">
 
         <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
-        
+       
         <TitleCard />
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
           

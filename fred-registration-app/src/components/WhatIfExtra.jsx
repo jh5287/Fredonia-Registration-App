@@ -5,7 +5,6 @@ import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
-
 const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -69,7 +68,6 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
     setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
     console.log("tableData", tableData);
     };
-
           return (
               <tbody>
                 {tableData.map((item, index) => {

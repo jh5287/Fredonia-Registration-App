@@ -173,6 +173,7 @@ model Student {
   StudentProgram      StudentProgram[]
   StudentRegistration StudentRegistration[]
   StudentCGPA         StudentCGPA?
+  StudentFoundationsCGPA StudentFoundationsCGPA?
 }
 
 model StudentDepartment {
@@ -258,6 +259,20 @@ view StudentGPA {
 }
 
 view StudentCGPA {
+  StudentID Int      @unique
+  CGPA      Decimal? @db.Decimal(38, 6)
+  Student   Student  @relation(fields: [StudentID], references: [StudentID])
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view StudentFoundationsGPA {
+  StudentID Int      @unique
+  termid    Int
+  GPA       Decimal? @db.Decimal(38, 6)
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view StudentFoundationsCGPA {
   StudentID Int      @unique
   CGPA      Decimal? @db.Decimal(38, 6)
   Student   Student  @relation(fields: [StudentID], references: [StudentID])
