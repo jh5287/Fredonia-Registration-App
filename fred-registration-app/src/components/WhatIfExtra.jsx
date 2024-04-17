@@ -6,7 +6,7 @@ import calculateGPA from "@/components/calculateGPA";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
 
-const SemesterRow = ({ index, catalogData, handleGradeChange, setTableData }) => {
+const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({CourseCode: '', Title: '', Credits: '', Grade: ''});
@@ -26,6 +26,12 @@ const handleCourseSelection = (selectedCourse) => {
     });
     setSelectedCourse({ CourseCode: selectedCourse.Course.CourseCode, Title: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''});
     setSearchInput(selectedCourse.Course.Title);
+
+  //   setSaveData(prevData => {
+  //     const newData = [...prevData];
+  //     newData[semNumber] = tableData;
+  //     return newData;
+  // });
 };
 
           return (
@@ -57,7 +63,7 @@ const handleCourseSelection = (selectedCourse) => {
 
 };
 
-const SemesterBody = ({ tableData, setTableData, catalogData,   handleGradeChange}) => { 
+const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleGradeChange, setSaveData}) => { 
 
   const handleAddRow = () => {
     setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
@@ -71,9 +77,12 @@ const SemesterBody = ({ tableData, setTableData, catalogData,   handleGradeChang
                     <SemesterRow 
                     key={index}
                     index={index}
+                    semNumber={semNumber}
                     catalogData={catalogData}
                     handleGradeChange={handleGradeChange}
-                    setTableData={setTableData} />
+                    tableData={tableData}
+                    setTableData={setTableData}
+                    setSaveData={setSaveData} />
                     );
               })}
               <tr>
@@ -87,7 +96,7 @@ const SemesterBody = ({ tableData, setTableData, catalogData,   handleGradeChang
   
   
   
-  const WhatIfExtra = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
+  const WhatIfExtra = ({ semNumber, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
       const [tableData, setTableData] = useState([]);
       
@@ -153,16 +162,15 @@ const SemesterBody = ({ tableData, setTableData, catalogData,   handleGradeChang
               return newGrades;
           });
         };
-      
       useEffect(() => {
         setCurrentGPAs(prevGPAs => {
           const newGPAs = [...prevGPAs];
           if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
-            newGPAs[number - 1] = calculateGPA(userCourses);
+            newGPAs[semNumber - 1] = calculateGPA(userCourses);
             return newGPAs;
           }
           else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
-            newGPAs[number - 1] = updateSemesterGPAs();
+            newGPAs[semNumber - 1] = updateSemesterGPAs();
             return newGPAs;
           }
           return prevGPAs;
@@ -170,14 +178,20 @@ const SemesterBody = ({ tableData, setTableData, catalogData,   handleGradeChang
         
       }, [currentGrades,  calculateGPA(userCourses), updateSemesterGPAs()]);
       
-
+      useEffect(() => {
+        setSaveData(prevData => {
+          const newData = [...prevData];
+          newData[semNumber] = tableData;
+          return newData;
+      })
+        }, [tableData]);
 
       return (
         <>
           <div>
             <h1 className="tooltip py-2 pl-1 text-lg" 
-            data-tip={(currentGPAs[number - 1] !== null && currentGPAs[number - 1] !== 0) ? currentGPAs[number - 1] : "No grade"}>
-              Semester {number}</h1>
+            data-tip={(currentGPAs[semNumber - 1] !== null && currentGPAs[semNumber - 1] !== 0) ? currentGPAs[semNumber - 1] : "No grade"}>
+              Semester {semNumber}</h1>
             <div className="border rounded">
               <table className="table">
                 <thead>
@@ -190,11 +204,12 @@ const SemesterBody = ({ tableData, setTableData, catalogData,   handleGradeChang
                 </thead>
                
                 <SemesterBody 
+                semNumber={semNumber}
                 tableData={tableData}
                 setTableData={setTableData}
                 catalogData={catalogData}
-                userCourses={userCourses} 
                 handleGradeChange={handleGradeChange}
+                setSaveData={setSaveData}
                  />
               </table>
             </div>
