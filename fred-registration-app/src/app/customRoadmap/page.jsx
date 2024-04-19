@@ -2,7 +2,11 @@
 import { useState } from "react";
 import CustomSemester from "./CustomSemester";
 import CourseSearch from "@/components/courseSearch";
-import { BsArrowBarLeft, BsArrowBarRight } from "react-icons/bs";
+import { BsArrowBarLeft, BsArrowBarRight, BsXLg } from "react-icons/bs";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
+
 
 function Sidebar({}) {
   const [expanded, setExpanded] = useState(true);
@@ -18,9 +22,9 @@ function Sidebar({}) {
       )}
       <aside className={`${expanded ? "w-1/2" : "w-0"}`}>
         <nav className={`h-full ${expanded ? " shadow-md px-2" : ""}`}>
-          <div className={`overflow-hidden h-full ${expanded ? "w-full" : "w-0"}`}>
-            <button onClick={() => setExpanded((curr) => !curr)}>
-              <BsArrowBarRight className="size-8" />
+          <div className={`relative overflow-hidden h-full ${expanded ? "w-full" : "w-0"}`}>
+            <button onClick={() => setExpanded((curr) => !curr)} className="absolute top-0 right-0 py-2">
+              <BsXLg className="size-5" />
             </button>
             <CourseSearch />
           </div>
@@ -39,7 +43,7 @@ export default function customRoadmap() {
 
   const createDefaultSemester = (semesterNum) => ({
     semesterNum,
-    courses: Array.from({ length: 5 }, (_, index) => createDefaultCourse()),
+    courses: [],
   });
 
   const [semestersData, setSemesterData] = useState(
@@ -48,8 +52,9 @@ export default function customRoadmap() {
 
   return (
     <>
+    <DndProvider backend={HTML5Backend}>
       <div className="flex flex-row gap-x-4 h-screen w-full">
-        <div className="relative flex-1 overflow-y-auto">
+        <div className="relative flex-1 overflow-y-auto p-2">
           <div className="grid grid-cols-1 gap-5 h-full py-2">
             {semestersData.map((semester) => (
               <CustomSemester
@@ -62,6 +67,7 @@ export default function customRoadmap() {
         </div>
         <Sidebar />
       </div>
+    </DndProvider>
     </>
   );
 }
