@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 
-const ItemTypes = {
+export const ItemTypes = {
   COURSE: "dndCourse",
 };
 
@@ -16,7 +16,7 @@ function DraggableCourse({course}) {
   }));
 
   return (
-    <tr ref={drag} style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}>
+    <tr ref={drag} className={`${isDragging ? " cursor-move bg-blue-50 " : ""}`}>
       <td>{course?.CRN}</td>
       <td>{course?.CourseCode}</td>
       <td>{course?.Title}</td>
@@ -97,6 +97,7 @@ export default function CourseSearch() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
+
     const validationRes = validateInputs(data);
 
     if (validationRes.isValid) {
@@ -109,7 +110,7 @@ export default function CourseSearch() {
   return (
     <>
       <h1 className={"text-lg pt-1 pb-4"}>Course Search</h1>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleFormSubmit} className="border-2 rounded-md p-2">
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label
@@ -175,11 +176,12 @@ export default function CourseSearch() {
               Department
             </label>
             <select
-              defaultValue={"DEFAULT"}
+              defaultValue={"Select"}
               className="select select-primary w-full"
               id="department"
               name="department"
             >
+              <option value="">Select</option>
               {departments.map((department) => (
                 <option value={department.Name} key={department.Name}>
                   {department.Name}
@@ -195,11 +197,12 @@ export default function CourseSearch() {
               Credits
             </label>
             <select
-              defaultValue={"DEFAULT"}
+              defaultValue={"Select"}
               className="select select-primary w-full"
               id="credits"
               name="credits"
             >
+              <option value="">Select</option>
               <option value={1}>1</option>
               <option value={2}>2</option>
               <option value={3}>3</option>
@@ -207,8 +210,9 @@ export default function CourseSearch() {
             </select>
           </div>
         </div>
-        <div className="flex justify-start py-4">
-          <button className="btn btn-primary">Search</button>
+        <div className="flex py-4 gap-x-4">
+          <button type="submit" className="btn btn-primary">Search</button>
+          <button type="reset" className="btn">clear</button>
         </div>
       </form>
       <div className="py-4"></div>
