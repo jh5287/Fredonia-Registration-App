@@ -274,9 +274,10 @@ const RoadMap = () => {
   const [userCGPA, setUserCGPA] = useState(null);
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
+
+
   const [extraSemester, setExtraSemester] = useState([]);
   const [realStudentData, setRealStudentData] = useState([]);
-
   const [saveData, setSaveData] = useState([]); //state to hold the data that will be saved to the database
   // Fetch catalog data
   const fetchCatalog = async () => {
@@ -362,6 +363,7 @@ const RoadMap = () => {
     fetchCatalog();
     fetchUserCourses();
     fetchUserCGPA();
+    
   }, []);
 
   useEffect(() => {
@@ -384,16 +386,27 @@ const RoadMap = () => {
     console.log("The new CGPA is", total / acceptedGPAs);
     return total / acceptedGPAs;
   }
-  
 
-  
+
+  const figureOutSemesterGPA = () => {
+    let total = 0;
+    realStudentData?.map((item, index) => {
+      const gpa = calculateGPA(item);
+      total = total + parseFloat(gpa);
+      console.log("GPA for semester", index + 1, "is", gpa);
+    });
+    console.log("Total GPA is", (total/realStudentData.length).toFixed(2));
+    setNewCGPA((total/realStudentData.length).toFixed(2));
+  }
+
   return (
     <>
       <div className="p-3">
 
-        <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
+        <DynamicCGPA cgpa={userCGPA} newCGPA={newCGPA} />
         
         <TitleCard />
+        <button className="btn" onClick={() => figureOutSemesterGPA()}>Work dammit </button>
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
           
           {extraSemester.map((item, index) => {
