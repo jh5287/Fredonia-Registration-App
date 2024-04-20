@@ -34,7 +34,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
   return (
     <>
       <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse collapse-arrow")}>
-        <h1 className="collapse-title w-full py-2 pl-1 text-lg hover:cursor-pointer" onClick={() => toggleSemester(number - 1)}>
+        <h1 className="collapse-title w-full py-2 pl-2 text-lg hover:cursor-pointer" onClick={() => toggleSemester(number - 1)}>
           Semester {number}
         </h1>
         <div className="collapse-content overflow-hidden">
@@ -61,7 +61,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
                 const semesterTaken = course.StudentCourseRecord.Term?.Semester; 
                 const yearTaken = course.StudentCourseRecord.Term?.Year; 
                 return (
-                  <tr key={index} >
+                  <tr key={index} className={course.StudentCourseRecord?.Status == "Completed" ? "bg-green-200" : ""}>
                     <td className="tooltip" data-tip={semesterTaken ? `Term Taken: ${semesterTaken} ${yearTaken}` : 'Not taken yet'}>{courseCode}</td>
                     <td className="w-[60%]">{courseTitle}</td>
                     <td>{courseCredits}</td>
