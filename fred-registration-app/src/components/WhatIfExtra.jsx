@@ -183,7 +183,6 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
           return newData;
       })
         }, [tableData]);
-
       return (
         <>
           <div>

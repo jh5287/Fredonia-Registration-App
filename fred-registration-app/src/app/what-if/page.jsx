@@ -343,7 +343,8 @@ const RoadMap = () => {
   const addExtraSemester = () => {
     setExtraSemester(prevSemesters => {
       const newSemesters = [...prevSemesters];
-      newSemesters.push([]);
+      newSemesters.unshift([extraSemester.length + 1]);
+      console.log("Extra semesters", newSemesters);
       return newSemesters;
     });
     setCurrentGPAs(prevGPAs => {
@@ -390,16 +391,18 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3">
-       
         <h1 className="text-2xl text-center">Future Plan</h1>
-        <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
-          
+
+        <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+        <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
+
+
           {extraSemester.map((item, index) => {
             
             return(
             <WhatIfExtra
-              key={index + 1}
-              semNumber={index}
+              key={item[0]}
+              semNumber={item[0]}
               currentGPAs={currentGPAs}
               setCurrentGPAs={setCurrentGPAs}
               userCourses={[]}
@@ -408,9 +411,6 @@ const RoadMap = () => {
             />)
           })}
           
-          <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
-
-
           
            
         </div>
