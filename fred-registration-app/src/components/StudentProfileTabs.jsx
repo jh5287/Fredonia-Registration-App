@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+"use client"
+
+import React, { useState, useEffect } from 'react';
 import StudentInfoBanner from './StudentInfoBanner'; 
 import AcademicSummaryBanner from './AcademicSummaryBanner'; 
+import { fetchStudentInfo, fetchUserCGPA } from '@/app/roadmap/apiCalls';
 
 const StudentProfileTabs = ({ studentInfo, userCGPA }) => {
   const [activeTab, setActiveTab] = useState('info'); 
+  const [stuinfo, setStuinfo] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const studentInfoData = await fetchStudentInfo();
+        setStuinfo(studentInfoData);
+        const cgpaData = await fetchUserCGPA();
+        setUserCGPA(cgpaData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
-    <div className="">
+    <div className="m-5">
       {/* Tab Bar */}
       <div className="flex py-3">
         <button
@@ -23,7 +42,7 @@ const StudentProfileTabs = ({ studentInfo, userCGPA }) => {
         </button>
       </div>
       
-      {activeTab === 'info' && <StudentInfoBanner studentInfo={studentInfo} />}
+      {activeTab === 'info' && <StudentInfoBanner studentInfo={stuinfo} />}
       {activeTab === 'summary' && <AcademicSummaryBanner cgpa={userCGPA} />}
     </div>
   );

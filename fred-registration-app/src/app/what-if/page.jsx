@@ -390,10 +390,8 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3">
-
-        <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
        
-        <TitleCard />
+        <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
           
           {extraSemester.map((item, index) => {
