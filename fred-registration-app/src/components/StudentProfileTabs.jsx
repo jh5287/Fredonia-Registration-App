@@ -8,7 +8,7 @@ import { fetchStudentInfo, fetchUserCGPA } from '@/app/roadmap/apiCalls';
 const StudentProfileTabs = ({ studentInfo, userCGPA }) => {
   const [activeTab, setActiveTab] = useState('info'); 
   const [stuinfo, setStuinfo] = useState(null);
-
+  
   useEffect(() => {
     const loadData = async () => {
       try {
