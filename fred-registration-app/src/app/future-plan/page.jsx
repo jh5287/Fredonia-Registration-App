@@ -74,10 +74,9 @@ const FuturePlan = () => {
   // Fetch user CGPA data
   const fetchUserCGPA = async () => {
     try {
-      const userEmail = "russ9214@fredonia.edu";
+      const userEmail = "wals9256@fredonia.edu";
       const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
       const data = await response.json();
-      console.log("User CGPA data after fetch from backend: ", data);
       if (Array.isArray(data) && data.length > 0 || data.CGPA) {
         
         // Try and convert CGPA to a number

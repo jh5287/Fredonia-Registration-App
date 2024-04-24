@@ -38,7 +38,6 @@ export async function GET(request) {
     }
 
 
-    console.log("CGPAS FOUND FROM BACKEND:",CGPAS); 
     await prisma.$disconnect();
     return Response.json(CGPAS);
   } catch (err) {
