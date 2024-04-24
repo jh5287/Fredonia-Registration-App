@@ -22,7 +22,7 @@ export async function GET(request) {
         },
       },
     });
-    console.log(res); 
+    console.log("Student Info: ",res); 
     return Response.json(res);
   } catch (err) {
     console.error("Prisma error: ", err);
