@@ -26,7 +26,6 @@ export async function GET(request){
       }
     } 
 
-    console.log("query", query);  
 
     const res = await prisma.Course.findMany({
       where: query,
@@ -35,9 +34,6 @@ export async function GET(request){
       }, 
     });
 
-    console.log(res); 
-    console.log("==============================")
-    
     return NextResponse.json(res); 
   } catch(err){
     console.error("Prisma error: ", err)

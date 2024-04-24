@@ -191,7 +191,7 @@ const RoadMap = () => {
             );
             //console.log("Semester user courses", semesterUserCourses);
             return (
-              <div className="border rounded-lg border-slate-150">
+              <div className="border rounded-lg border-slate-150" key={i}>
                 <Semester
                   key={i + 1}
                   number={i + 1}
