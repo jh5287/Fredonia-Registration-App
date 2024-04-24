@@ -10,6 +10,7 @@ import calculateGPA from "@/components/calculateGPA";
 import TitleCard from "@/components/TitleCard";
 import WhatIfExtra from "@/components/WhatIfExtra";
 import RegSemester from "@/components/RegSemester";
+import { uploadCustomSems } from "@/firebase/firebaseManagement";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
@@ -276,8 +277,10 @@ const RoadMap = () => {
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
   const [extraSemester, setExtraSemester] = useState([]);
   const [realStudentData, setRealStudentData] = useState([]);
+  const { data: session, status } = useSession();
 
   const [saveData, setSaveData] = useState([]); //state to hold the data that will be saved to the database
+  const [saveDataID, setSaveDataID] = useState();
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -362,6 +365,7 @@ const RoadMap = () => {
     fetchCatalog();
     fetchUserCourses();
     fetchUserCGPA();
+    setSaveDataID(crypto.randomUUID())
   }, []);
 
   useEffect(() => {
@@ -407,7 +411,7 @@ const RoadMap = () => {
               setSaveData={setSaveData}
             />)
           })}
-          
+          <button className="btn btn-primary my-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID)}>Save Current Plan</button>
           <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
 
 
