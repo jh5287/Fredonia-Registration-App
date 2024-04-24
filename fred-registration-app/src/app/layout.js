@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import NextAuthProvider from "./nextauthprovider";
+import StudentProfileTabs from "@/components/StudentProfileTabs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <NextAuthProvider>
         <Navbar />
+        <StudentProfileTabs />
         {children}
         </NextAuthProvider>
       </body>

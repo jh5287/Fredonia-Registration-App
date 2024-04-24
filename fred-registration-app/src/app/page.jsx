@@ -19,7 +19,7 @@ const Page = () => {
           <RoadMap />
         </div>
 
-        <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="WhatIf" />
+        <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Future Plan" />
         <div role="tabpanel" className="tab-content p-10">
           <WhatIf />
         </div>

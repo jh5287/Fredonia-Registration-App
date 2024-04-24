@@ -9,6 +9,7 @@ import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
 import TitleCard from "@/components/TitleCard";
 import WhatIfExtra from "@/components/WhatIfExtra";
+import RegSemester from "@/components/RegSemester";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
@@ -33,215 +34,238 @@ const DynamicCGPA = ({ cgpa, newCGPA }) => {
 
 
 
-const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { 
-  const getRecentGradeAndStatus = (crn) => {
-    const coursesWithCRN = userCourses.filter(course => course.Course.CRN === crn);
-    if (coursesWithCRN.length > 0) {
-      const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
-        return (mostRecent.TermID > course.TermID) ? mostRecent : course;
-      });
-      return mostRecentCourse;
-    } else {
-      return null;
-    }
-  }
+// const SemesterBody = ({ semesterCatalogData, catalogData, userCourses, currentCourses, handleCourseChange, handleGradeChange }) => { 
+//   const getRecentGradeAndStatus = (crn) => {
+//     const coursesWithCRN = userCourses.filter(course => course.Course.CRN === crn);
+//     if (coursesWithCRN.length > 0) {
+//       const mostRecentCourse = coursesWithCRN.reduce((mostRecent, course) => {
+//         return (mostRecent.TermID > course.TermID) ? mostRecent : course;
+//       });
+//       return mostRecentCourse;
+//     } else {
+//       return null;
+//     }
+//   }
   
-        return (
-            <tbody>
-                {semesterCatalogData.map((item, index) => {
-                  const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
-                  const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
-                  if(mostRecentCourse?.Status === "Completed") {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
-                      </td>
-                      <td>
-                        {item.Course.Title}
-                      </td>
-                      <td>
-                        {item.Course.Credits}
-                      </td>
-                      <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>
-                        {(courseStatus && mostRecentCourse.Grade !== null) ? mostRecentCourse.Grade : <GoDash />}
-                      </td>
-                    </tr>
-                  );
-                }
+//         return (
+//             <tbody>
+//                 {semesterCatalogData.map((item, index) => {
+//                   const courseStatus = userCourses.find((course) => course.Course.CRN === item.Course.CRN);
+//                   const mostRecentCourse = getRecentGradeAndStatus(item.Course.CRN);
+//                   //console.log("Most recent grade ", mostRecentCourse?.Grade, " For ", mostRecentCourse?.Course.CourseCode, " Status ", mostRecentCourse?.Status);
+//                   if(mostRecentCourse?.Status === "Completed") {
+//                   return (
+//                     <tr key={index}>
+//                       <td>
+//                         {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
+//                       </td>
+//                       <td>
+//                         {item.Course.Title}
+//                       </td>
+//                       <td>
+//                         {item.Course.Credits}
+//                       </td>
+//                       <td className="tooltip" data-tip={courseStatus ? courseStatus.Status : "Not Taken"}>
+//                         {(courseStatus && mostRecentCourse.Grade !== null) ? mostRecentCourse.Grade : <GoDash />}
+//                       </td>
+//                     </tr>
+//                   );
+//                 }
                 
-                else if (mostRecentCourse?.Status === "Enrolled"){
-                  return (
-                      <tr key={index}>
-                        <td>
-                        {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
-                      </td>
-                      <td>
-                        {item.Course.Title}
-                      </td>
-                      <td>
-                        {item.Course.Credits}
-                      </td>
-                        <td>
-                          <GradeComboBox 
-                          handleGradeChange={handleGradeChange} 
-                          index={index} />
-                        </td>
-                      </tr>);
-                }
+//                 else if (mostRecentCourse?.Status === "Enrolled"){
+//                   return (
+//                       <tr key={index}>
+//                         <td>
+//                         {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
+//                       </td>
+//                       <td>
+//                         {item.Course.Title}
+//                       </td>
+//                       <td>
+//                         {item.Course.Credits}
+//                       </td>
+//                         <td>
+//                           <GradeComboBox 
+//                           handleGradeChange={handleGradeChange} 
+//                           index={index} />
+//                         </td>
+//                       </tr>);
+//                 }
                  
-                else{
-                  return (
-                      <tr key={index}>
-                        <td>
-                          {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
-                        </td>
-                        <td>
-                          <CourseComboBox 
-                          data={catalogData} 
-                          currentCourse={item.Course.Title} 
-                          courseStatus={courseStatus} 
-                          handleCourseChange={handleCourseChange} 
-                          index={index} />
-                        </td>
-                        <td>
-                          {item.Course.Credits}
-                        </td>
-                        <td>
-                          <GradeComboBox 
-                          handleGradeChange={handleGradeChange} 
-                          index={index} />
-                        </td>
-                      </tr>);
-                }
-            })}
-        </tbody>
-        );
-    }
+//                 else{
+//                   return (
+//                       <tr key={index}>
+//                         <td>
+//                           {currentCourses[index] === undefined || currentCourses.length <= 0 ? item.Course.CourseCode : currentCourses[index]}
+//                         </td>
+//                         <td>
+//                           <CourseComboBox 
+//                           data={catalogData} 
+//                           currentCourse={item.Course.Title} 
+//                           courseStatus={courseStatus} 
+//                           handleCourseChange={handleCourseChange} 
+//                           index={index} />
+//                         </td>
+//                         <td>
+//                           {item.Course.Credits}
+//                         </td>
+//                         <td>
+//                           <GradeComboBox 
+//                           handleGradeChange={handleGradeChange} 
+//                           index={index} />
+//                         </td>
+//                       </tr>);
+//                 }
+//             })}
+//         </tbody>
+//         );
+//     }
 
 
-
-const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
-    const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
-    const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
+// {/* code used to render WhatIfSemester component....now depracated but not quite yet....
+// {Array.from({ length: 8 }, (_, i) => {
+//             const year = Math.ceil((i + 1) / 2);
+//             const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
+//             const semesterCatalogCourses = filterCatalogCourses(
+//               year,
+//               semesterStr
+//             );
+//             const semesterUserCourses = filterUserCoursesForSemester(
+//               semesterCatalogCourses
+//             );
+//             return (
+//               <WhatIfSemester
+//                 key={i + 1}
+//                 number={i + 1}
+//                 currentGPAs={currentGPAs}
+//                 setCurrentGPAs={setCurrentGPAs}
+//                 semesterCatalogData={semesterCatalogCourses} //data related to the roadmap suggested semester and year
+//                 userCourses={semesterUserCourses} //data related to the courses the user has taken
+//                 catalogData={catalog} //the whole catalog
+//               />
+//             );
+//           })} */}
+// const WhatIfSemester = ({ number, currentGPAs, setCurrentGPAs, semesterCatalogData, userCourses, catalogData }) => {
+//     const [currentCourses, setCurrentCourses] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current course
+//     const [currentGrades, setCurrentGrades] = useState(Array(semesterCatalogData.length).fill(''));//state to hold the current grades
     
 
-    const updateSemesterGPAs = () => {
-      let totalCredits = 0;
-      let totalPoints = 0;
-      currentGrades.forEach((item) => {
-        totalCredits += 3;
-        switch (item) {
-          case 'A':
-            totalPoints += 4 * 3;
-            break;
-          case 'A-':
-            totalPoints += 3.7 * 3;
-            break;
-          case 'B+':
-            totalPoints += 3.3 * 3;
-            break;
-          case 'B':
-            totalPoints += 3 * 3;
-            break;
-          case 'B-':
-            totalPoints += 2.7 * 3;
-            break;
-          case 'C+':
-            totalPoints += 2.3 * 3;
-            break;
-          case 'C':
-            totalPoints += 2 * 3;
-            break;
-          case 'C-':
-            totalPoints += 1.7 * 3;
-            break;
-          case 'D+':
-            totalPoints += 1.3 * 3;
-            break;
-          case 'D':
-            totalPoints += 1 * 3;
-            break;
-          case 'D-':
-            totalPoints += 0.7 * 3;
-            break;
-          case 'S':
-            totalCredits -= 3;
-            break;
-          case 'WC':
-            totalCredits -= 3;
-            break;
-          default:
-            totalPoints += 0;
-        }
-      });
-      return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
+//     const updateSemesterGPAs = () => {
+//       let totalCredits = 0;
+//       let totalPoints = 0;
+//       currentGrades.forEach((item) => {
+//         totalCredits += 3;
+//         switch (item) {
+//           case 'A':
+//             totalPoints += 4 * 3;
+//             break;
+//           case 'A-':
+//             totalPoints += 3.7 * 3;
+//             break;
+//           case 'B+':
+//             totalPoints += 3.3 * 3;
+//             break;
+//           case 'B':
+//             totalPoints += 3 * 3;
+//             break;
+//           case 'B-':
+//             totalPoints += 2.7 * 3;
+//             break;
+//           case 'C+':
+//             totalPoints += 2.3 * 3;
+//             break;
+//           case 'C':
+//             totalPoints += 2 * 3;
+//             break;
+//           case 'C-':
+//             totalPoints += 1.7 * 3;
+//             break;
+//           case 'D+':
+//             totalPoints += 1.3 * 3;
+//             break;
+//           case 'D':
+//             totalPoints += 1 * 3;
+//             break;
+//           case 'D-':
+//             totalPoints += 0.7 * 3;
+//             break;
+//           case 'S':
+//             totalCredits -= 3;
+//             break;
+//           case 'WC':
+//             totalCredits -= 3;
+//             break;
+//           default:
+//             totalPoints += 0;
+//         }
+//       });
+//       return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
       
-    };
+//     };
 
-    const handleGradeChange = (e, index) => {
-        const grade = e.target.value;
-        setCurrentGrades(prevGrades => {
-            const newGrades = [...prevGrades];
-            newGrades[index] = grade;
-            return newGrades;
-        });
-      };
-    const handleCourseChange = (e, index) => {
-      const course = e.target.value;
-      setCurrentCourses(prevCourses => {
-        const newCourses = [...prevCourses];
-        newCourses[index] = course;
-        return newCourses;
-      });
-    };
+//     const handleGradeChange = (e, index) => {
+//         const grade = e.target.value;
+//         setCurrentGrades(prevGrades => {
+//             const newGrades = [...prevGrades];
+//             newGrades[index] = grade;
+//             return newGrades;
+//         });
+//       };
+//     const handleCourseChange = (e, index) => {
+//       const course = e.target.value;
+//       setCurrentCourses(prevCourses => {
+//         const newCourses = [...prevCourses];
+//         newCourses[index] = course;
+//         return newCourses;
+//       });
+//     };
     
-    useEffect(() => {
-      setCurrentGPAs(prevGPAs => {
-        const newGPAs = [...prevGPAs];
-        if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
-          newGPAs[number - 1] = calculateGPA(userCourses);
-          return newGPAs;
-        }
-        else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
-          newGPAs[number - 1] = updateSemesterGPAs();
-          return newGPAs;
-        }
-        return prevGPAs;
-      });
+//     useEffect(() => {
+//       setCurrentGPAs(prevGPAs => {
+//         const newGPAs = [...prevGPAs];
+//         if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
+//           newGPAs[number - 1] = calculateGPA(userCourses);
+//           return newGPAs;
+//         }
+//         else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
+//           newGPAs[number - 1] = updateSemesterGPAs();
+//           return newGPAs;
+//         }
+//         return prevGPAs;
+//       });
       
-    }, [currentGrades, currentCourses, calculateGPA(userCourses), updateSemesterGPAs()]);
+//     }, [currentGrades, currentCourses, calculateGPA(userCourses), updateSemesterGPAs()]);
     
-    return (
-      <>
-        <div>
-          <h1 className="tooltip py-2 pl-1 text-lg" 
-          data-tip={(currentGPAs[number - 1] !== null && currentGPAs[number - 1] !== 0) ? currentGPAs[number - 1] : "No grade"}>
-            Semester {number}</h1>
-          <div className="border rounded">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th className="whitespace-nowrap">Course Code</th>
-                  <th>Course Title</th>
-                  <th>Credits</th>
-                  <th>Grade</th>
-                </tr>
-              </thead>
+//     return (
+//       <>
+//         <div>
+//           <h1 className="tooltip py-2 pl-1 text-lg" 
+//           data-tip={(currentGPAs[number - 1] !== null && currentGPAs[number - 1] !== 0) ? currentGPAs[number - 1] : "No grade"}>
+//             Semester {number}</h1>
+//           <div className="border rounded">
+//             <table className="table">
+//               <thead>
+//                 <tr>
+//                   <th className="whitespace-nowrap">Course Code</th>
+//                   <th>Course Title</th>
+//                   <th>Credits</th>
+//                   <th>Grade</th>
+//                 </tr>
+//               </thead>
              
-              <SemesterBody 
-              semesterCatalogData={semesterCatalogData} 
-              catalogData={catalogData} 
-              userCourses={userCourses} 
-              currentCourses={currentCourses} 
-              handleCourseChange={handleCourseChange} 
-              handleGradeChange={handleGradeChange} />
-            </table>
-          </div>
-        </div>
-      </>
-    );
-  };
+//               <SemesterBody 
+//               semesterCatalogData={semesterCatalogData} 
+//               catalogData={catalogData} 
+//               userCourses={userCourses} 
+//               currentCourses={currentCourses} 
+//               handleCourseChange={handleCourseChange} 
+//               handleGradeChange={handleGradeChange} />
+//             </table>
+//           </div>
+//         </div>
+//       </>
+//     );
+//   };
 
 
 const RoadMap = () => {
@@ -251,6 +275,9 @@ const RoadMap = () => {
   const [newCGPA, setNewCGPA] = useState(null);
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
   const [extraSemester, setExtraSemester] = useState([]);
+  const [realStudentData, setRealStudentData] = useState([]);
+
+  const [saveData, setSaveData] = useState([]); //state to hold the data that will be saved to the database
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -265,12 +292,19 @@ const RoadMap = () => {
   // Fetch user course data
   const fetchUserCourses = async () => {
     try {
-      const userEmail = "wals9256@fredonia.edu";
+      const userEmail = "russ9214@fredonia.edu";
       const response = await fetch(
         `/api/student/studentCourses?email=${userEmail}`
       );
       const data = await response.json();
       setUserCourses(data);
+      //console.log("User courses", data);
+      const uniqueTerms = Array.from(new Set(data.map(item => `${item.Term.Semester} ${item.Term.Year}`)));
+
+      // Organizing data by terms
+      const organized_data = uniqueTerms.map(term => data.filter(item => `${item.Term.Semester} ${item.Term.Year}` === term));
+      setRealStudentData(organized_data);
+      //console.log("Real student data", organized_data);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
     }
@@ -312,6 +346,16 @@ const RoadMap = () => {
       newSemesters.push([]);
       return newSemesters;
     });
+    setCurrentGPAs(prevGPAs => {
+      const newGPAs = [...prevGPAs];
+      newGPAs.push(0.00);
+      return newGPAs;
+    });
+    setSaveData(prevData => {
+      const newData = [...prevData];
+      newData.push([]);
+      return newData;
+    });
   }
 
   useEffect(() => {
@@ -340,75 +384,41 @@ const RoadMap = () => {
     console.log("The new CGPA is", total / acceptedGPAs);
     return total / acceptedGPAs;
   }
-  // Filter catalog by year and semester
-  const filterCatalogCourses = (year, semester) => {
-    return catalog.filter(
-      (course) =>
-        course.RecommendedYear === year &&
-        course.RecommendedSemester === semester
-    );
-  };
+  
 
-  // Filter user courses by a semester catalog
-  const filterUserCoursesForSemester = (filteredCatalogCourses) => {
-    if (!Array.isArray(userCourses) || userCourses.length === 0) {
-      return [];
-    }
-
-    return userCourses.filter((userCourse) =>
-      filteredCatalogCourses.some(
-        (catalogCourse) => catalogCourse.CRN === userCourse.CRN
-      )
-    );
-  };
+  
   return (
     <>
       <div className="p-3">
-
-        <DynamicCGPA cgpa={userCGPA}newCGPA={newCGPA} />
-        
-        <TitleCard />
-        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2">
-          {Array.from({ length: 8 }, (_, i) => {
-            const year = Math.ceil((i + 1) / 2);
-            const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
-            const semesterCatalogCourses = filterCatalogCourses(
-              year,
-              semesterStr
-            );
-            const semesterUserCourses = filterUserCoursesForSemester(
-              semesterCatalogCourses
-            );
-            return (
-              <WhatIfSemester
-                key={i + 1}
-                number={i + 1}
-                currentGPAs={currentGPAs}
-                setCurrentGPAs={setCurrentGPAs}
-                semesterCatalogData={semesterCatalogCourses} //data related to the roadmap suggested semester and year
-                userCourses={semesterUserCourses} //data related to the courses the user has taken
-                catalogData={catalog} //the whole catalog
-              />
-            );
-          })}
-          <>
-          {extraSemester.map((item, index) => (
+       
+        <h1 className="text-2xl text-center">Future Plan</h1>
+        <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
+          
+          {extraSemester.map((item, index) => {
+            
+            return(
             <WhatIfExtra
               key={index + 1}
-              number={index + 9}
+              semNumber={index}
               currentGPAs={currentGPAs}
               setCurrentGPAs={setCurrentGPAs}
-              semesterCatalogData={item}
               userCourses={[]}
               catalogData={catalog}
-            />
-          ))}
-          </>
-          <button 
-          className="btn btn-primary"
-          onClick={() => addExtraSemester()}
-          >Add A New Semester...</button>
+              setSaveData={setSaveData}
+            />)
+          })}
+          
+          <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+
+
+          
+           
         </div>
+        <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
+        {realStudentData.map((item, index) => (
+            <RegSemester key={index+1} number={index} data={item}/>
+          ))}
+         </div>
       </div>
     </>
   );
