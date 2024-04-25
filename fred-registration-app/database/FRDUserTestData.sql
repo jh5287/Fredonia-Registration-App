@@ -1,5 +1,6 @@
 -- Student Registration 
-  -- Jared
+
+---------------- Jared ---------------- 
 
   -- Spring 2024
   INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES
@@ -103,3 +104,47 @@ INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grad
 (1, 30376, 5, 'Letter', 'Completed', 'A', '2019-05-27'),
 (1, 32299, 5, 'Letter', 'Completed', 'A', '2019-05-27'),
 (1, 30614, 5, 'Letter', 'Completed', 'A', '2019-05-27');
+
+
+---------------- Camron ---------------- 
+
+-- Insert into StudentRegistrations
+-- Year1
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10001, 8, 'Letter', 'Completed', 'A', '2023-08-15'),
+(3, 10002, 8, 'Letter', 'Completed', 'B', '2023-08-15'),
+(3, 10003, 8, 'Letter', 'Failed', 'F', '2023-08-15'),
+(3, 33769, 8, 'Letter', 'Completed', 'A', '2023-08-15'), 
+(3, 33992, 8, 'Letter', 'Completed', 'A', '2023-08-15'); 
+
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10005, 9, 'Letter', 'Completed', 'A', '2024-01-20'),
+(3, 10006, 9, 'Letter', 'Completed', 'B', '2024-01-20'),
+(3, 33992, 8, 'Letter', 'Completed', 'A', '2023-08-15'),
+(3, 30376, 8, 'Letter', 'Completed', 'B', '2023-08-15'), 
+(3, 14341, 8, 'Letter', 'Completed', 'A', '2023-08-15'); 
+
+--Retaking failed class from first semester
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10003, 9, 'Letter', 'Completed', 'A', '2024-01-20');
+
+-- Year 2
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10008, 11, 'Letter', 'Completed', 'B', '2024-08-15'),
+(3, 10009, 11, 'Letter', 'Completed', 'A', '2024-08-15'),
+(3, 10010, 11, 'Letter', 'Completed', 'C', '2024-08-15');
+
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10012, 12, 'Letter', 'Completed', 'B', '2025-01-20'),
+(3, 10013, 12, 'Letter', 'Completed', 'C', '2025-01-20');
+
+-- Year 3
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10014, 14, 'Letter', 'Completed', 'A', '2025-08-15'),
+(3, 10015, 14, 'Letter', 'Completed', 'A', '2025-08-15');
+
+INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
+(3, 10016, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'),
+(3, 10017, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'),
+(3, 10018, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'),
+(3, 10019, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'); 
