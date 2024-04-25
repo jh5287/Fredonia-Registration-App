@@ -118,8 +118,10 @@ model Department {
   Name                 String                 @unique(map: "UQ__Departme__737584F63F5CD29A") @db.VarChar(64)
   Course               Course[]
   Instructor           Instructor[]
+  Advisor              Advisor[]
   InstructorDepartment InstructorDepartment[]
   StudentDepartment    StudentDepartment[]
+  AdvisorDepartment    AdvisorDepartment[]
 }
 
 model Fee {
@@ -138,6 +140,26 @@ model Instructor {
   InstructorDepartment InstructorDepartment[]
 }
 
+model Advisor {
+  AdvisorID         Int                 @id @default(autoincrement())
+  UserID            Int                 @unique
+  DepartmentID      Int
+  Department        Department          @relation(fields: [DepartmentID], references: [DepartmentID], onUpdate: NoAction)
+  User              User                @relation(fields: [UserID], references: [UserID], onUpdate: NoAction)
+  AdvisorDepartment AdvisorDepartment[]
+  AdvisorStudent AdvisorStudent[]
+}
+
+model AdvisorStudent {
+  AdvisorStudentID Int @id @default(autoincrement())
+  AdvisorID Int?
+  StudentID Int?
+  Advisor Advisor? @relation(fields: [AdvisorID], references: [AdvisorID])
+  Student Student? @relation(fields: [StudentID], references: [StudentID])
+
+  @@unique([AdvisorID, StudentID])
+}
+
 model InstructorDepartment {
   InstructorDepartmentID Int         @id(map: "PK__Instruct__C26B8DCC79CF3B48") @default(autoincrement())
   DepartmentID           Int?
@@ -145,7 +167,17 @@ model InstructorDepartment {
   Department             Department? @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Instructo__Depar__0B91BA14")
   Instructor             Instructor? @relation(fields: [InstructorID], references: [InstructorID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Instructo__Instr__0C85DE4D")
 
-  @@unique([InstructorID, DepartmentID], map: "UQ__Instruct__562172C6BCD85B08")
+  @@unique([InstructorID, DepartmentID])
+}
+
+model AdvisorDepartment {
+  AdvisorDepartmentID Int         @id @default(autoincrement())
+  DepartmentID        Int?
+  AdvisorID           Int?
+  Department          Department? @relation(fields: [DepartmentID], references: [DepartmentID], onDelete: NoAction, onUpdate: NoAction)
+  Advisor             Advisor?    @relation(fields: [AdvisorID], references: [AdvisorID], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([AdvisorID, DepartmentID])
 }
 
 model Program {
@@ -164,15 +196,16 @@ model Restriction {
 }
 
 model Student {
-  StudentID           Int                   @id(map: "PK__Student__32C52A79E116FA56")
-  UserID              Int                   @unique(map: "UQ__Student__1788CCAD7CFBB5E8")
-  Level               String                @db.VarChar(64)
-  Classification      String                @db.VarChar(64)
-  User                User                  @relation(fields: [UserID], references: [UserID], onUpdate: NoAction, map: "FK_Student_User")
-  StudentDepartment   StudentDepartment[]
-  StudentProgram      StudentProgram[]
-  StudentRegistration StudentRegistration[]
-  StudentCGPA         StudentCGPA?
+  StudentID              Int                     @id(map: "PK__Student__32C52A79E116FA56")
+  UserID                 Int                     @unique(map: "UQ__Student__1788CCAD7CFBB5E8")
+  Level                  String                  @db.VarChar(64)
+  Classification         String                  @db.VarChar(64)
+  User                   User                    @relation(fields: [UserID], references: [UserID], onUpdate: NoAction, map: "FK_Student_User")
+  StudentDepartment      StudentDepartment[]
+  StudentProgram         StudentProgram[]
+  StudentRegistration    StudentRegistration[]
+  AdvisorStudent AdvisorStudent[]
+  StudentCGPA            StudentCGPA?
   StudentFoundationsCGPA StudentFoundationsCGPA?
 }
 
@@ -229,6 +262,7 @@ model User {
   Email      String      @unique(map: "UQ__User__A9D10534DA174BBB") @db.VarChar(100)
   Phone      String?     @db.VarChar(20)
   Instructor Instructor?
+  Advisor    Advisor?
   Student    Student?
   UserRole   UserRole[]
 }
