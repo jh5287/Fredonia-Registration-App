@@ -2,6 +2,58 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 
+
+const fetchDepartements = async () => {
+  try {
+    const res = await fetch("/api/courseSearch/departments");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log("Error fetching departments: ", err);
+    return null;
+  }
+};
+
+const fetchCourses = async (params) => {
+  try {
+    const queryString = new URLSearchParams(params).toString();
+    
+    const res = await fetch(`/api/courseSearch/courses?${queryString}`);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log("Error fetching courses: ", err);
+    return null;
+  }
+};
+
+function validateInputs(data) {
+  const { CRN, courseCode, courseTitle, credits, department } = data;
+  const errors = {};
+  
+  if (CRN && !/^\d{5}$/.test(CRN)) {
+    errors.CRN = "CRN must be exactly 5 digits if provided.";
+  }
+  
+  if (courseCode && !courseCode.trim()) {
+    errors.courseCode = "Course code cannot be blank if provided.";
+  }
+  
+  if (courseTitle && !courseTitle.trim()) {
+    errors.courseTitle = "Course title cannot be blank if provided.";
+  }
+  
+  const validCredits = ["", "1", "2", "3", "4"]; // Including an empty string as a valid option
+  if (credits && !validCredits.includes(credits)) {
+    errors.credits = "Invalid credits selected.";
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+}
+
 export const CourseSearchItemTypes = {
   COURSE: "dndCourse",
 };
@@ -26,57 +78,6 @@ function DraggableCourse({ course }) {
       <td>{course?.Credits}</td>
     </tr>
   );
-}
-
-const fetchDepartements = async () => {
-  try {
-    const res = await fetch("/api/courseSearch/departments");
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.log("Error fetching departments: ", err);
-    return null;
-  }
-};
-
-const fetchCourses = async (params) => {
-  try {
-    const queryString = new URLSearchParams(params).toString();
-
-    const res = await fetch(`/api/courseSearch/courses?${queryString}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.log("Error fetching courses: ", err);
-    return null;
-  }
-};
-
-function validateInputs(data) {
-  const { CRN, courseCode, courseTitle, credits, department } = data;
-  const errors = {};
-
-  if (CRN && !/^\d{5}$/.test(CRN)) {
-    errors.CRN = "CRN must be exactly 5 digits if provided.";
-  }
-
-  if (courseCode && !courseCode.trim()) {
-    errors.courseCode = "Course code cannot be blank if provided.";
-  }
-
-  if (courseTitle && !courseTitle.trim()) {
-    errors.courseTitle = "Course title cannot be blank if provided.";
-  }
-
-  const validCredits = ["", "1", "2", "3", "4"]; // Including an empty string as a valid option
-  if (credits && !validCredits.includes(credits)) {
-    errors.credits = "Invalid credits selected.";
-  }
-
-  return {
-    isValid: Object.keys(errors).length === 0,
-    errors,
-  };
 }
 
 export default function CourseSearch() {

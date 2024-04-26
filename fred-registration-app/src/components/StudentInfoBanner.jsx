@@ -10,7 +10,6 @@ const StudentInfoBanner = ({ studentInfo }) => {
   const classification = studentInfo?.Student.Classification; 
   const studentPrograms = studentInfo?.Student?.StudentProgram;
 
-  console.log(studentInfo);
   return (
     <div className="p-4 bg-neutral-50 rounded-lg shadow-md">
       <div className="flex flex-row gap-x-4">

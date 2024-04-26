@@ -33,24 +33,18 @@ const fetchUserCGPA = async () => {
     if (Array.isArray(data) && data.length > 0) {
       const userCGPAData = data[0];
 
-      // Try and convert CGPA to a number
       const cgpa = parseFloat(userCGPAData.CGPA);
 
       if (!isNaN(cgpa)) {
-        // Check if conversion was successful
         return cgpa;
       } else {
-        // Handle case where CGPA is not a valid number
         console.log("CGPA is not a valid number.");
-        setUserCGPA(null);
       }
     } else {
       console.log("No CGPA data found for the user.");
-      setUserCGPA(null);
     }
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
-    setUserCGPA(null); // Ensure user CGPA is set to null in case of error
   }
 };
 
