@@ -145,7 +145,13 @@ INSERT INTO Department (Name) VALUES
 ('Mathematics'),
 ('Physics'),
 ('Biology'), 
-('Music');
+('Music'),
+('Spanish'), 
+('Accounting'), 
+('Communication'), 
+('Psychology'),
+('English'),
+('History');
 
 -- Insert into Advisor
 INSERT INTO Advisor (UserID, DepartmentID) VALUES
@@ -250,18 +256,13 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (7,'CAP', 'Capstone', 3, 'Undergraduate', 1);
 
 
--- Insert into Course
+-- Insert CS Courses into Course
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (10001, 'CSIT 121', 'Computer Science I', 3, 'Undergraduate', 1),
 (10002, 'CSIT 201', 'Computer Security and Ethics', 3, 'Undergraduate', 1),
-(10003, 'MATH 120', 'Survey of Calculus I', 3, 'Undergraduate', 2),
-(10004, 'MATH 122', 'University Calculus I', 0, 'Undergraduate', 2),
 (10005, 'CSIT 221', 'Computer Science II', 3, 'Undergraduate', 1),
-(10006, 'MATH 121', 'Survey of Calculus II', 3, 'Undergraduate', 2),
-(10007, 'MATH 123', 'University Calculus II', 0, 'Undergraduate', 2), 
 (10008, 'CSIT 231', 'Systems Programming', 3, 'Undergraduate', 1),
 (10009, 'CSIT 241', 'Discrete Mathematics for Computer Sci. I', 3, 'Undergraduate', 1),
-(10010, 'MATH 115', 'Survey of Matrix Algebra', 3, 'Undergraduate', 2),
 (10011, 'MATH 231', 'Linear Algebra', 0, 'Undergraduate', 2),
 (10012, 'CSIT 311', 'Assembly Language', 3, 'Undergraduate', 1),
 (10013, 'CSIT 321', 'Paradigms of Programming Languages', 3, 'Undergraduate', 1),
@@ -270,87 +271,79 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (10016, 'CSIT 431', 'Introduction to Operating Systems', 3, 'Undergraduate', 1),
 (10017, 'CSIT 435', 'Data Communications and Networks', 3, 'Undergraduate', 1),
 (10018, 'CSIT 441', 'Design and Analysis of Algorithms', 3, 'Undergraduate', 1),
-(10019, 'STAT 200', 'Statistical Methods', 3, 'Undergraduate', 2),
-(10020, 'STAT 350', 'Probability and Statistics', 0, 'Undergraduate', 2),
-(10021, 'CSIT 425', 'Software Engineering', 3, 'Undergraduate', 1);
+(10019, 'CSIT 425', 'Software Engineering', 3.000, 'Undergraduate', 1),
+(10020, 'CSIT 461', 'Introduction to AI and Knowledge Engineering', 3.000, 'Undergraduate', 1),
+(10021, 'CSIT 324', 'Object Oriented Programming', 3.000, 'Undergraduate', 1),
+(10022, 'CSIT 499', 'Senior Project', 3.000, 'Undergraduate', 1),
+(10023, 'CSIT 496', 'SpTp: Software Projects', 3.000, 'Undergraduate', 1),
+(10024, 'CSIT 300', 'Internship', 3.000, 'Undergraduate', 1),
+(35052, 'CSIT 499', 'Senior Project', 3.000, 'Undergraduate', 1);
 
--- Insert Jared's Courses into Course
+
+-- Insert Math Courses into Course
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
-(10069, 'CSIT 321', 'Paradigms of Programming Languages', 3.000, 'Undergraduate', 1),
-(16287, 'CSIT 425', 'Software Engineering', 3.000, 'Undergraduate', 1),
-(15378, 'CSIT 461', 'Introduction to AI and Knowledge Engineering', 3.000, 'Undergraduate', 1),
-(15379, 'CSIT 496', 'SpTp: Software Projects', 3.000, 'Undergraduate', 1),
-(14507, 'CSIT 499', 'Senior Project', 3.000, 'Undergraduate', 1),
-(30042, 'CSIT 300', 'Internship', 1.000, 'Undergraduate', 1),
-(30044, 'CSIT 311', 'Assembly Lang/Computer Org', 3.000, 'Undergraduate', 1),
-(33281, 'CSIT 431', 'Intro Operating Systems', 3.000, 'Undergraduate', 1),
-(31790, 'CSIT 455', 'Relational/Object Databases', 3.000, 'Undergraduate', 1),
-(35052, 'CSIT 499', 'Senior Project', 3.000, 'Undergraduate', 1),
-(20117, 'SPAN 110', 'Essential Spanish', 3.000, 'Undergraduate', 1),
-(10066, 'CSIT 231', 'Systems Programming', 3.000, 'Undergraduate', 1),
-(14942, 'CSIT 324', 'Object Oriented Programming', 3.000, 'Undergraduate', 1),
-(10070, 'CSIT 341', 'Data Structures', 3.000, 'Undergraduate', 1),
-(15890, 'MUS 047', 'Special Ens: Wind Orchestra', 1.000, 'Undergraduate', 1),
-(10579, 'MUS 120', 'Concert Attendance', 0.000, 'Undergraduate', 1),
-(11068, 'MUS 426', 'Saxophone', 2.000, 'Undergraduate', 1),
-(30040, 'CSIT 221', 'Computer Science II', 3.000, 'Undergraduate', 1),
-(31789, 'CSIT 241', 'Discrete Mathematics I', 3.000, 'Undergraduate', 1),
-(30186, 'MATH 121', 'Survey of Calculus II', 3.000, 'Undergraduate', 1),
-(35415, 'MUS 047', 'SpEns: Wind Orchestra', 3.000, 'Undergraduate', 1),
-(31398, 'MUS 400', 'Recital Seminar', 0.000, 'Undergraduate', 1),
-(31584, 'MUS 425', 'Saxophone', 2.000, 'Undergraduate', 1),
-(32171, 'STAT 250', 'Statistics for Scientists', 3.000, 'Undergraduate', 1),
-(10059, 'CSIT 121', 'Computer Science I', 3.000, 'Undergraduate', 1),
-(10586, 'MUS 120', 'Concert Attendance', 3.000, 'Undergraduate', 1),
-(14327, 'MUS 233', 'Musics of the World', 3.000, 'Undergraduate', 1),
-(11382, 'MUS 300', 'Recital Seminar', 0.000, 'Undergraduate', 1),
-(11602, 'MUS 326', 'Saxophone', 2.000, 'Undergraduate', 1),
-(14658, 'MUS 334', 'Music of Latin America', 3.000, 'Undergraduate', 1),
-(12825, 'MUS 355', 'Pedagogy Practicum - Woodwind', 0.000, 'Undergraduate', 1),
-(14354, 'THEA 460', 'Performing Arts Org & Mgmt', 3.000, 'Undergraduate', 1),
-(31792, 'ACCT 201', 'Prin of Financial Accounting', 3.000, 'Undergraduate', 1),
-(34012, 'COMM 101', 'Fundamentals of Communication', 3.000, 'Undergraduate', 1),
-(32289, 'MUS 028', 'Wind Ensemble', 3.000, 'Undergraduate', 1),
-(30524, 'MUS 120', 'Concert Attendance', 3.000, 'Undergraduate', 1),
-(31059, 'MUS 300', 'Recital Seminar', 3.000, 'Undergraduate', 1),
-(31272, 'MUS 345', 'Saxophone', 3.000, 'Undergraduate', 1),
-(35051, 'MUS 363', 'Music Entrepreneurship I', 3.000, 'Undergraduate', 1),
-(30232, 'PSY 129', 'Foundations of Psychology', 3.000, 'Undergraduate', 1),
-(12738, 'MUS 028', 'Wind Ensemble', 1.000, 'Undergraduate', 1),
-(14423, 'MUS 200', 'Recital Seminar', 1.000, 'Undergraduate', 1),
-(13957, 'MUS 218', 'Piano Class, Intermediate', 1.000, 'Undergraduate', 1),
-(13958, 'MUS 222', 'Aural Skills IV', 2.000, 'Undergraduate', 1),
-(13025, 'MUS 224', 'Music Theory IV', 3.000, 'Undergraduate', 1),
-(11287, 'MUS 246', 'Saxophone', 3.000, 'Undergraduate', 1),
-(10621, 'MUS 264', 'Music History in West Civ II', 3.000, 'Undergraduate', 1),
-(15147, 'MUS 272', 'Arts Advocacy and Leadership', 3.000, 'Undergraduate', 1),
-(34372, 'AADM 310', 'Fundraising & Grant Writing', 3.000, 'Undergraduate', 1),
-(34410, 'ENGL 260', 'Intro Creative Writing', 3.000, 'Undergraduate', 1),
-(32539, 'MUS 038', 'Saxophone Ensemble', 0.500, 'Undergraduate', 1),
-(30748, 'MUS 200', 'Recital Seminar', 0.000, 'Undergraduate', 1),
-(30383, 'MUS 217', 'Piano Class, Intermediate', 1.000, 'Undergraduate', 1),
-(30433, 'MUS 221', 'Aural Skills III', 2.000, 'Undergraduate', 1),
-(30442, 'MUS 223', 'Music Theory III', 3.000, 'Undergraduate', 1),
-(30887, 'MUS 225', 'Saxophone', 2.000, 'Undergraduate', 1),
-(32416, 'MUS 231', 'Conducting I - Instrumental', 2.000, 'Undergraduate', 1),
-(31720, 'MUS 263', 'Music History in West Civ I', 3.000, 'Undergraduate', 1),
-(14171, 'ENGL 100', 'Craft of Writing', 3.000, 'Undergraduate', 1),
-(14341, 'HIST 151', 'Global Patterns', 3.000, 'Undergraduate', 1),
-(12416, 'MUS 026', 'Concert Band', 1.000, 'Undergraduate', 1),
-(10447, 'MUS 100', 'Recital Seminar', 1.000, 'Undergraduate', 1),
-(10313, 'MUS 118', 'Piano Class, Elementary', 2.000, 'Undergraduate', 1),
-(10316, 'MUS 122', 'Aural Skills II', 2.000, 'Undergraduate', 1),
-(13591, 'MUS 124', 'Music Theory II', 3.000, 'Undergraduate', 1),
-(10672, 'MUS 126', 'Saxophone', 2.000, 'Undergraduate', 1),
-(33769, 'ENGL 144', 'Reading Humanity', 3.000, 'Undergraduate', 1),
-(32286, 'MUS 025', 'All-College Band', 1.000, 'Undergraduate', 1),
-(34145, 'MUS 052', 'Fredonia Jazz Orchestra', 0.500, 'Undergraduate', 1),
-(30563, 'MUS 100', 'Recital Seminar', 0.000, 'Undergraduate', 1),
-(33992, 'MUS 115', 'Music Appreciation -MAJORS', 3.000, 'Undergraduate', 1),
-(30380, 'MUS 117', 'Piano Class, Elementary', 1.000, 'Undergraduate', 1),
-(30376, 'MUS 121', 'Aural Skills I', 2.000, 'Undergraduate', 1),
-(32299, 'MUS 123', 'Music Theory I', 3.000, 'Undergraduate', 1),
-(30614, 'MUS 125', 'Saxophone', 2.000, 'Undergraduate', 1);
+(10003, 'MATH 120', 'Survey of Calculus I', 3, 'Undergraduate', 2),
+(10004, 'MATH 122', 'University Calculus I', 0, 'Undergraduate', 2),
+(10006, 'MATH 121', 'Survey of Calculus II', 3, 'Undergraduate', 2),
+(30186, 'MATH 121', 'Survey of Calculus II', 3.000, 'Undergraduate', 2),
+(10007, 'MATH 123', 'University Calculus II', 0, 'Undergraduate', 2), 
+(32171, 'STAT 250', 'Statistics for Scientists', 3.000, 'Undergraduate', 2),
+(10010, 'MATH 115', 'Survey of Matrix Algebra', 3, 'Undergraduate', 2),
+(20029, 'STAT 200', 'Statistical Methods', 3, 'Undergraduate', 2),
+(20020, 'STAT 350', 'Probability and Statistics', 0, 'Undergraduate', 2);
+
+
+
+-- Insert Music Courses into Course 
+INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
+(15890, 'MUS 047', 'Special Ens: Wind Orchestra', 1.000, 'Undergraduate', 5),
+(10579, 'MUS 120', 'Concert Attendance', 0.000, 'Undergraduate', 5),
+(11068, 'MUS 426', 'Saxophone', 2.000, 'Undergraduate', 5),
+(35415, 'MUS 047', 'SpEns: Wind Orchestra', 3.000, 'Undergraduate', 5),
+(31398, 'MUS 400', 'Recital Seminar', 0.000, 'Undergraduate', 5),
+(31584, 'MUS 425', 'Saxophone', 2.000, 'Undergraduate', 5),
+(10586, 'MUS 120', 'Concert Attendance', 3.000, 'Undergraduate', 5),
+(14327, 'MUS 233', 'Musics of the World', 3.000, 'Undergraduate', 5),
+(11382, 'MUS 300', 'Recital Seminar', 0.000, 'Undergraduate', 5),
+(11602, 'MUS 326', 'Saxophone', 2.000, 'Undergraduate', 5),
+(14658, 'MUS 334', 'Music of Latin America', 3.000, 'Undergraduate', 5),
+(12825, 'MUS 355', 'Pedagogy Practicum - Woodwind', 0.000, 'Undergraduate', 5),
+(14354, 'THEA 460', 'Performing Arts Org & Mgmt', 3.000, 'Undergraduate', 5),
+(32289, 'MUS 028', 'Wind Ensemble', 3.000, 'Undergraduate', 5),
+(30524, 'MUS 120', 'Concert Attendance', 3.000, 'Undergraduate', 5),
+(31059, 'MUS 300', 'Recital Seminar', 3.000, 'Undergraduate', 5),
+(31272, 'MUS 345', 'Saxophone', 3.000, 'Undergraduate', 5),
+(35051, 'MUS 363', 'Music Entrepreneurship I', 3.000, 'Undergraduate', 5),
+(12738, 'MUS 028', 'Wind Ensemble', 1.000, 'Undergraduate', 5),
+(14423, 'MUS 200', 'Recital Seminar', 1.000, 'Undergraduate', 5),
+(13957, 'MUS 218', 'Piano Class, Intermediate', 1.000, 'Undergraduate', 5),
+(13958, 'MUS 222', 'Aural Skills IV', 2.000, 'Undergraduate', 5),
+(13025, 'MUS 224', 'Music Theory IV', 3.000, 'Undergraduate', 5),
+(11287, 'MUS 246', 'Saxophone', 3.000, 'Undergraduate', 5),
+(10621, 'MUS 264', 'Music History in West Civ II', 3.000, 'Undergraduate', 5),
+(15147, 'MUS 272', 'Arts Advocacy and Leadership', 3.000, 'Undergraduate', 5),
+(32539, 'MUS 038', 'Saxophone Ensemble', 0.500, 'Undergraduate', 5),
+(30748, 'MUS 200', 'Recital Seminar', 0.000, 'Undergraduate', 5),
+(30383, 'MUS 217', 'Piano Class, Intermediate', 1.000, 'Undergraduate', 5),
+(30433, 'MUS 221', 'Aural Skills III', 2.000, 'Undergraduate', 5),
+(30442, 'MUS 223', 'Music Theory III', 3.000, 'Undergraduate', 5),
+(30887, 'MUS 225', 'Saxophone', 2.000, 'Undergraduate', 5),
+(32416, 'MUS 231', 'Conducting I - Instrumental', 2.000, 'Undergraduate', 5),
+(31720, 'MUS 263', 'Music History in West Civ I', 3.000, 'Undergraduate', 5),
+(12416, 'MUS 026', 'Concert Band', 1.000, 'Undergraduate', 5),
+(10447, 'MUS 100', 'Recital Seminar', 1.000, 'Undergraduate', 5),
+(10313, 'MUS 118', 'Piano Class, Elementary', 2.000, 'Undergraduate', 5),
+(10316, 'MUS 122', 'Aural Skills II', 2.000, 'Undergraduate', 5),
+(13591, 'MUS 124', 'Music Theory II', 3.000, 'Undergraduate', 5),
+(10672, 'MUS 126', 'Saxophone', 2.000, 'Undergraduate', 5),
+(32286, 'MUS 025', 'All-College Band', 1.000, 'Undergraduate', 5),
+(34145, 'MUS 052', 'Fredonia Jazz Orchestra', 0.500, 'Undergraduate', 5),
+(30563, 'MUS 100', 'Recital Seminar', 0.000, 'Undergraduate', 5),
+(33992, 'MUS 115', 'Music Appreciation -MAJORS', 3.000, 'Undergraduate', 5),
+(30380, 'MUS 117', 'Piano Class, Elementary', 1.000, 'Undergraduate', 5),
+(30376, 'MUS 121', 'Aural Skills I', 2.000, 'Undergraduate', 5),
+(32299, 'MUS 123', 'Music Theory I', 3.000, 'Undergraduate', 5),
+(30614, 'MUS 125', 'Saxophone', 2.000, 'Undergraduate', 5);
 
 -- Insert BIO Catalog Courses into Course
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
@@ -381,6 +374,19 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (11025, 'PHYS 122', 'Physics II', 3.000, 'Undergraduate', 4),
 (11026, 'PHYS 124', 'Physics Lab II', 1.000, 'Undergraduate', 4);
 
+-- Insert Other Courses into Course
+INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
+(20117, 'SPAN 110', 'Essential Spanish', 3.000, 'Undergraduate', 6),
+(31792, 'ACCT 201', 'Prin of Financial Accounting', 3.000, 'Undergraduate', 7),
+(34012, 'COMM 101', 'Fundamentals of Communication', 3.000, 'Undergraduate', 8),
+(30232, 'PSY 129', 'Foundations of Psychology', 3.000, 'Undergraduate', 9),
+(34372, 'AADM 310', 'Fundraising & Grant Writing', 3.000, 'Undergraduate', 10),
+(14341, 'HIST 151', 'Global Patterns', 3.000, 'Undergraduate', 11),
+(14171, 'ENGL 100', 'Craft of Writing', 3.000, 'Undergraduate', 10),
+(33769, 'ENGL 144', 'Reading Humanity', 3.000, 'Undergraduate', 11),
+(32857, 'POLI 150', 'World Affairs', 3.000, 'Undergraduate', 11),
+(33948, 'ECON 205', 'Principles of Microeconomics', 3.000, 'Undergraduate', 11),
+(34410, 'ENGL 260', 'Intro Creative Writing', 3.000, 'Undergraduate', 11);
 
 
 -- Insert into CourseAttribute
@@ -396,5 +402,7 @@ INSERT INTO CourseAttribute (CRN, AttributeID) VALUES
 (14171, 1), 
 (34410, 1), 
 (30232, 1), 
+(32857, 1), 
+(33948, 1), 
 (34012, 1);  
 
