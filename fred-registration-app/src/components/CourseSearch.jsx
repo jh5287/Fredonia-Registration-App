@@ -2,21 +2,24 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 
-export const ItemTypes = {
+export const CourseSearchItemTypes = {
   COURSE: "dndCourse",
 };
 
-function DraggableCourse({course}) {
+function DraggableCourse({ course }) {
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.COURSE,
-    item: course, 
+    type: CourseSearchItemTypes.COURSE,
+    item: course,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   }));
 
   return (
-    <tr ref={drag} className={`${isDragging ? " cursor-move bg-blue-50 " : ""}`}>
+    <tr
+      ref={drag}
+      className={`${isDragging ? " cursor-move bg-blue-50 " : ""}`}
+    >
       <td>{course?.CRN}</td>
       <td>{course?.CourseCode}</td>
       <td>{course?.Title}</td>
@@ -29,7 +32,6 @@ const fetchDepartements = async () => {
   try {
     const res = await fetch("/api/courseSearch/departments");
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (err) {
     console.log("Error fetching departments: ", err);
@@ -83,11 +85,10 @@ export default function CourseSearch() {
 
   useEffect(() => {
     const loadData = async () => {
-      try {
-        fetchDepartements().then(setDepartments);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const departmentsData = await fetchDepartements(); 
+      if (departmentsData){
+        setDepartments(departmentsData);
+      } 
     };
     loadData();
   }, []);
@@ -97,12 +98,13 @@ export default function CourseSearch() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-
     const validationRes = validateInputs(data);
 
     if (validationRes.isValid) {
       const coursesData = await fetchCourses(data);
-      setCourses(coursesData);
+      if(coursesData){
+        setCourses(coursesData);
+      }
     } else {
     }
   };
@@ -182,11 +184,12 @@ export default function CourseSearch() {
               name="department"
             >
               <option value="">Select</option>
-              {departments.map((department) => (
-                <option value={department.Name} key={department.Name}>
-                  {department.Name}
-                </option>
-              ))}
+              {departments && departments.length > 0 &&
+                departments.map((department) => (
+                  <option value={department.Name} key={department.Name}>
+                    {department.Name}
+                  </option>
+                ))}
             </select>
           </div>
           <div>
@@ -211,8 +214,12 @@ export default function CourseSearch() {
           </div>
         </div>
         <div className="flex py-4 gap-x-4">
-          <button type="submit" className="btn btn-primary">Search</button>
-          <button type="reset" className="btn">clear</button>
+          <button type="submit" className="btn btn-primary">
+            Search
+          </button>
+          <button type="reset" className="btn">
+            clear
+          </button>
         </div>
       </form>
       <div className="py-4"></div>
@@ -229,7 +236,7 @@ export default function CourseSearch() {
           <tbody>
             {courses.length > 0 ? (
               courses.map((course, index) => (
-               <DraggableCourse key={index} course={course}/> 
+                <DraggableCourse key={course.CRN} course={course} />
               ))
             ) : (
               <tr>

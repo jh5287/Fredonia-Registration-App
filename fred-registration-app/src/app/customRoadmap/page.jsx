@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
-import CustomSemester from "./CustomSemester";
-import CourseSearch from "@/components/courseSearch";
-import { BsArrowBarLeft, BsArrowBarRight, BsXLg } from "react-icons/bs";
+import { BsArrowBarLeft, BsXLg } from "react-icons/bs";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import CustomSemester from "./CustomSemester";
+import CourseSearch from "@/components/CourseSearch";
 
-function Sidebar({}) {
+function CourseSearchSidebar({}) {
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -43,12 +43,6 @@ function Sidebar({}) {
 }
 
 export default function customRoadmap() {
-  const createDefaultCourse = () => ({
-    courseCode: "",
-    courseTitle: "",
-    credits: "",
-  });
-
   const createDefaultSemester = (semesterNum) => ({
     semesterNum,
     courses: [],
@@ -57,7 +51,6 @@ export default function customRoadmap() {
   const [semestersData, setSemesterData] = useState(
     Array.from({ length: 8 }, (_, index) => createDefaultSemester(index + 1))
   );
-
   return (
     <>
       <DndProvider backend={HTML5Backend}>
@@ -65,16 +58,16 @@ export default function customRoadmap() {
           <div className="relative flex-1 overflow-y-auto px-2">
             <h1 className={"text-lg pt-1 pb-2"}>Custom Roadmap</h1>
             <div className="grid grid-cols-1 gap-5 h-full ">
-              {semestersData.map((semester) => (
-                <CustomSemester
-                  key={semester.semesterNum}
-                  semesterNum={semester.semesterNum}
-                  courses={semester.courses}
-                />
+              {semestersData.map((semester, index) => (
+                  <CustomSemester
+                    key={semester.semesterNum || index}
+                    semesterNum={semester.semesterNum}
+                    courses={semester.courses}
+                  />
               ))}
             </div>
           </div>
-          <Sidebar />
+          <CourseSearchSidebar/>
         </div>
       </DndProvider>
     </>
