@@ -3,19 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import StudentInfoBanner from './StudentInfoBanner'; 
 import AcademicSummaryBanner from './AcademicSummaryBanner'; 
-import { fetchStudentInfo, fetchUserCGPA } from '@/app/roadmap/apiCalls';
+import { fetchStudentInfo, fetchUserCGPA, fetchFoundationsCGPA } from '@/app/roadmap/apiCalls';
 
-const StudentProfileTabs = ({ studentInfo, userCGPA }) => {
+const StudentProfileTabs = ({ studentInfo }) => {
   const [activeTab, setActiveTab] = useState('info'); 
   const [stuinfo, setStuinfo] = useState(null);
-  
+  const [userCGPA, setUserCGPA] = useState(null);
+  const [foundationCgpa, setFoundationCgpa] = useState(null);
+
   useEffect(() => {
     const loadData = async () => {
       try {
         const studentInfoData = await fetchStudentInfo();
         setStuinfo(studentInfoData);
         const cgpaData = await fetchUserCGPA();
+        console.log("CGPA Data for banner: ",cgpaData);
         setUserCGPA(cgpaData);
+        const foundationCgpaData = await fetchFoundationsCGPA();
+        setFoundationCgpa(foundationCgpaData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -43,7 +48,7 @@ const StudentProfileTabs = ({ studentInfo, userCGPA }) => {
       </div>
       
       {activeTab === 'info' && <StudentInfoBanner studentInfo={stuinfo} />}
-      {activeTab === 'summary' && <AcademicSummaryBanner cgpa={userCGPA} />}
+      {activeTab === 'summary' && <AcademicSummaryBanner cgpa={userCGPA} foundationCgpa={foundationCgpa}/>}
     </div>
   );
 };

@@ -30,11 +30,10 @@ const fetchUserCGPA = async () => {
     const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
     const data = await response.json();
 
-    if (Array.isArray(data) && data.length > 0) {
-      const userCGPAData = data[0];
+    if (Array.isArray(data) && data.length > 0 || data.CGPA) {
 
       // Try and convert CGPA to a number
-      const cgpa = parseFloat(userCGPAData.CGPA);
+      const cgpa = parseFloat(data.CGPA);
 
       if (!isNaN(cgpa)) {
         // Check if conversion was successful
@@ -42,15 +41,12 @@ const fetchUserCGPA = async () => {
       } else {
         // Handle case where CGPA is not a valid number
         console.log("CGPA is not a valid number.");
-        setUserCGPA(null);
       }
     } else {
       console.log("No CGPA data found for the user.");
-      setUserCGPA(null);
     }
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
-    setUserCGPA(null); // Ensure user CGPA is set to null in case of error
   }
 };
 

@@ -5,7 +5,7 @@ export async function GET(request) {
     const prisma = new PrismaClient();
     const searchParams = request.nextUrl.searchParams;
     const email = searchParams.get("email");
-    const studentCGPA = await prisma.StudentCGPA.findMany({
+    const studentCGPA = await prisma.studentCGPA.findMany({
       where: {
         Student: {
           User: {
@@ -38,7 +38,6 @@ export async function GET(request) {
     }
 
 
-    console.log(CGPAS); 
     await prisma.$disconnect();
     return Response.json(CGPAS);
   } catch (err) {
