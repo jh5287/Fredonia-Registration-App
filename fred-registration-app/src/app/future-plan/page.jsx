@@ -10,6 +10,7 @@ import calculateGPA from "@/components/calculateGPA";
 import TitleCard from "@/components/TitleCard";
 import WhatIfExtra from "@/components/WhatIfExtra";
 import RegSemester from "@/components/RegSemester";
+import { uploadCustomSems, getCustomList, getCustomSems } from "@/firebase/firebaseManagement";
 
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
@@ -37,8 +38,14 @@ const FuturePlan = () => {
   const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
   const [extraSemester, setExtraSemester] = useState([]);
   const [realStudentData, setRealStudentData] = useState([]);
+  const { data: session, status } = useSession();
+
 
   const [saveData, setSaveData] = useState([]); //state to hold the data that will be saved to the database
+  const [saveDataID, setSaveDataID] = useState();
+  const [customList, setCustomList] = useState([]); //state to hold the list of previously saved data in db
+  const [selectedList, setSelectedList] = useState(); //state to hold the selected data from the db
+  const [planName, setPlanName] = useState(); //state to hold the name of the plan
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -119,10 +126,26 @@ const FuturePlan = () => {
     });
   }
 
+  const getCustomLists = async () => {
+    const list = await getCustomList();
+    setCustomList(list);
+  }
+
+  const loadSaveData = async () => {
+    console.error("Selected list: ", selectedList);
+    const data = await getCustomSems(selectedList);
+    setSaveData(data.semesters);
+    setPlanName(data.name);
+    console.error("Loaded data: ", data);
+  }
+
+
   useEffect(() => {
     fetchCatalog();
     fetchUserCourses();
     fetchUserCGPA();
+    setSaveDataID(crypto.randomUUID());
+    getCustomLists();
   }, []);
 
   useEffect(() => {
@@ -152,9 +175,16 @@ const FuturePlan = () => {
     <>
       <div className="p-3">
         <h1 className="text-2xl text-center">Future Plan</h1>
-        <DynamicCGPA cgpa={userCGPA} newCGPA={newCGPA} />
-
-        <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+        <div className="flex justify-center">
+          <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
+          <select defaultValue="Select a saved plan" className="select input-bordered m-5" onChange={(e) => setSelectedList(e.target.value)}>
+            {customList.map((item, index) => (
+              <option key={index} value={item.id}>{item.name}</option>
+            ))}
+          </select>
+          <button className="btn btn-primary m-5" onClick={() => loadSaveData()}>Load Saved Plan</button>
+          <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
+        </div>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
 
 
@@ -172,7 +202,8 @@ const FuturePlan = () => {
             />)
           })}
           
-          
+        <button className="btn btn-primary m-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+
            
         </div>
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
