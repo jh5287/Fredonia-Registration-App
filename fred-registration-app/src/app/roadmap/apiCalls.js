@@ -32,14 +32,11 @@ const fetchUserCGPA = async () => {
     console.log("User CGPA data after fetch from backend: ", data); 
     if (Array.isArray(data) && data.length > 0 || data.CGPA) {
 
-      // Try and convert CGPA to a number
-      const cgpa = parseFloat(data.CGPA);
+      const cgpa = parseFloat(userCGPAData.CGPA);
 
       if (!isNaN(cgpa)) {
-        // Check if conversion was successful
         return cgpa;
       } else {
-        // Handle case where CGPA is not a valid number
         console.log("CGPA is not a valid number.");
       }
     } else {
