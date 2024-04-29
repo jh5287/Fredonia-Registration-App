@@ -79,32 +79,6 @@ function validateInputs(data) {
   };
 }
 
-export const CourseSearchItemTypes = {
-  COURSE: "dndCourse",
-};
-
-function DraggableCourse({ course }) {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: CourseSearchItemTypes.COURSE,
-    item: course,
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
-  return (
-    <tr
-      ref={drag}
-      className={`${isDragging ? " cursor-move bg-blue-50 " : ""}`}
-    >
-      <td>{course?.CRN}</td>
-      <td>{course?.CourseCode}</td>
-      <td>{course?.Title}</td>
-      <td>{course?.Credits}</td>
-    </tr>
-  );
-}
-
 export default function CourseSearch() {
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
