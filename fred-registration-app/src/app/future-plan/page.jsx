@@ -110,7 +110,13 @@ const FuturePlan = () => {
   const addExtraSemester = () => {
     setExtraSemester(prevSemesters => {
       const newSemesters = [...prevSemesters];
-      newSemesters.unshift([extraSemester.length + 1]);
+      let nextValue = extraSemester.length + 1;
+      // Check if the nextValue already exists in the extraSemester array
+      while (newSemesters.some(item => item[0] === nextValue)) {
+        nextValue++;
+      }
+      // Add the unique value to the beginning of the newSemesters array
+      newSemesters.unshift([nextValue]);
       console.log("Extra semesters", newSemesters);
       return newSemesters;
     });
@@ -125,6 +131,24 @@ const FuturePlan = () => {
       return newData;
     });
   }
+  const removeExtraSemester = (indexToRemove) => {
+    setExtraSemester(prevSemesters => {
+      const newSemesters = [...prevSemesters];
+      newSemesters.splice(indexToRemove, 1);
+      return newSemesters;
+    });
+    setCurrentGPAs(prevGPAs => {
+      const newGPAs = [...prevGPAs];
+      newGPAs.splice(indexToRemove, 1);
+      return newGPAs;
+    });
+    setSaveData(prevData => {
+      const newData = [...prevData];
+      newData.splice(indexToRemove, 1);
+      return newData;
+    });
+  };
+  
 
   const getCustomLists = async () => {
     const list = await getCustomList();
@@ -194,15 +218,17 @@ const FuturePlan = () => {
           {extraSemester.map((item, index) => {
             
             return(
-            <WhatIfExtra
-              key={item[0]}
-              semNumber={item[0]}
-              currentGPAs={currentGPAs}
-              setCurrentGPAs={setCurrentGPAs}
-              userCourses={[]}
-              catalogData={catalog}
-              setSaveData={setSaveData}
-            />)
+            <div key={item[0]} className="relative">
+              <WhatIfExtra
+                semNumber={item[0]}
+                currentGPAs={currentGPAs}
+                setCurrentGPAs={setCurrentGPAs}
+                userCourses={[]}
+                catalogData={catalog}
+                setSaveData={setSaveData}
+              />
+              <button className="btn btn-error btn-circle btn-xs absolute right-0 top-0 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
+            </div>)
           })}
           
            
