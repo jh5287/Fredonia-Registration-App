@@ -1,6 +1,6 @@
 import Registration from "./registration/page";
 import RoadMap from "./roadmap/page";
-import WhatIf from "./what-if/page";
+import FuturePlan from "./future-plan/page";
 
 const Page = () => {
 
@@ -21,7 +21,7 @@ const Page = () => {
 
         <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Future Plan" />
         <div role="tabpanel" className="tab-content p-10">
-          <WhatIf />
+          <FuturePlan />
         </div>
       </div>
     </div>

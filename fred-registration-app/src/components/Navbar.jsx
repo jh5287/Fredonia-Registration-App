@@ -37,8 +37,7 @@ const Navbar = () => {
       </div>
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">
-          <Image src="/vs-one-line_no_suny.png" width={200} height={50}/>
-          Advising Roadmap
+          Advising Roadmap App
         </Link>
       </div>
       <div className="flex-none m-5">

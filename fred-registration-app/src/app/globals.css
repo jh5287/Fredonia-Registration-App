@@ -6,21 +6,3 @@
 body, html {
   font-family: 'Radikal', sans-serif;
 }
-
-::-webkit-scrollbar {
-  width: 7px;  /* Vertical scrollbar width */
-  height: 7px; /* Horizontal scrollbar height */
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Track color */
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888; /* Handle color */
-  border-radius: 4px; /* Roundness of the scrollbar handle */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Handle color on hover */
-}

@@ -1,7 +1,7 @@
-import { getDoc, setDoc, doc } from "firebase/firestore";
+import { getDoc, getDocs, setDoc, doc, collection } from "firebase/firestore";
 import { firestoreDB } from "@/firebase/config";
 
-export const uploadCustomSems = async (userId, customSems, saveID) => {
+export const uploadCustomSems = async (userId, customSems, saveID, name) => {
     try {
         const userRef = doc(firestoreDB, `customsemesters/${saveID}`);
         const semesters = {}
@@ -24,13 +24,31 @@ export const getCustomSems = async (id) => {
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
             const data = docSnap.data();
-            const customSems = []
-            data.map((item) => {
-                customSems.push(item);
+            const customSems = {name: docSnap.data().name, semesters: []};
+            Object.values(data).forEach((item) => {
+                if (Array.isArray(item)) {
+                    customSems.semesters.push(item);
+                }
+                
             })
             console.error("Getting custom semesters: ", customSems)
             return customSems;
         }
+    } catch (error) {
+        console.error("Error getting document: ", error);
+    }
+    return [];
+}
+
+export const getCustomList = async () => {
+    try {
+        const userRef = collection(firestoreDB, `customsemesters`);
+        const docSnap = await getDocs(userRef);
+        const customList = []
+        docSnap.forEach((doc) => {
+            customList.push({id: doc.id, name: doc.data().name});
+        })
+        return customList;
     } catch (error) {
         console.error("Error getting document: ", error);
     }

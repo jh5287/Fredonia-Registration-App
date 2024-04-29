@@ -26,11 +26,6 @@ const handleCourseSelection = (selectedCourse) => {
     setSelectedCourse({ CourseCode: selectedCourse.Course.CourseCode, Title: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''});
     setSearchInput(selectedCourse.Course.Title);
 
-  //   setSaveData(prevData => {
-  //     const newData = [...prevData];
-  //     newData[semNumber] = tableData;
-  //     return newData;
-  // });
 };
 
           return (
@@ -183,7 +178,6 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
           return newData;
       })
         }, [tableData]);
-
       return (
         <>
           <div>

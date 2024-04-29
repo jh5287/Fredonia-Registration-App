@@ -29,9 +29,8 @@ const fetchUserCGPA = async () => {
     const userEmail = "wals9256@fredonia.edu";
     const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
     const data = await response.json();
-
-    if (Array.isArray(data) && data.length > 0) {
-      const userCGPAData = data[0];
+    console.log("User CGPA data after fetch from backend: ", data); 
+    if (Array.isArray(data) && data.length > 0 || data.CGPA) {
 
       const cgpa = parseFloat(userCGPAData.CGPA);
 
@@ -47,6 +46,33 @@ const fetchUserCGPA = async () => {
     console.error("Failed to fetch user profile:", error);
   }
 };
+
+
+const fetchFoundationsCGPA = async () => {
+  try {
+    const userEmail = "wals9256@fredonia.edu";
+    const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+    const data = await response.json();
+    console.log("User CGPA data after fetch from backend: ", data); 
+    if (Array.isArray(data) && data.length > 0 || data.FoundationsCGPA) {
+
+      // Try and convert CGPA to a number
+      const cgpa = parseFloat(data.FoundationsCGPA);
+
+      if (!isNaN(cgpa)) {
+        // Check if conversion was successful
+        return cgpa;
+      } else {
+        // Handle case where CGPA is not a valid number
+        console.log("FoundationsCGPA is not a valid number.");
+      }
+    } else {
+      console.log("No FoundationsCGPA data found for the user.");
+    }
+  } catch (error) {
+    console.error("Failed to fetch user profile:", error);
+  }
+}
 
 // Fetch user course data
 const fetchStudentInfo = async () => {
@@ -65,5 +91,6 @@ export {
   fetchCatalogCourses,
   fetchUserCourses,
   fetchUserCGPA,
+  fetchFoundationsCGPA,
   fetchStudentInfo,
 };
