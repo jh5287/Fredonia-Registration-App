@@ -3,7 +3,7 @@ import React from 'react';
 // AcademicSummaryBanner component
 const AcademicSummaryBanner = ({ cgpa, foundationCgpa }) => {
     return (
-    <div className="p-4 bg-neutral-50 rounded-lg shadow-md">
+    <div className="p-4 bg-neutral rounded-lg shadow-md">
      <div className="flex justify-between py-2 gap-x-4">
 
             <div>
