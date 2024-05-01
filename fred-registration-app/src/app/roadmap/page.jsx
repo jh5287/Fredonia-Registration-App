@@ -8,12 +8,6 @@ import {
   fetchStudentInfo,
 } from "./apiCalls";
 import { useSession } from "next-auth/react";
-import {
-  FaCheckCircle,
-  FaTimesCircle,
-  FaUserCheck,
-  FaRegCircle,
-} from "react-icons/fa";
 import TitleCard from "@/components/TitleCard";
 
 const RoadMap = () => {

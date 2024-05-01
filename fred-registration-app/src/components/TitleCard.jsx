@@ -5,6 +5,9 @@ import {
   FaRegCircle,
 } from "react-icons/fa";
 
+import Icon from "@mdi/react";
+import { mdiProgressHelper } from "@mdi/js";
+
 const TitleCard = ({classData}) => {
     return(
     <div className={`flex flex-col items-center ${classData}`}>
@@ -16,11 +19,11 @@ const TitleCard = ({classData}) => {
         </div>
         <div className="flex flex-row items-center mx-2">
           <FaTimesCircle color="red" />
-          <p>=Incomplete</p>
+          <p>=Failed</p>
         </div>
         <div className="flex flex-row items-center mx-2">
-          <FaUserCheck color="blue" />
-          <p>=Enrolled</p>
+          <Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" />
+          <p>=In-Progress</p>
         </div>
         <div className="flex flex-row items-center mx-2">
           <FaRegCircle />

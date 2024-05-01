@@ -5,6 +5,8 @@ import {
   FaUserCheck,
   FaRegCircle,
 } from "react-icons/fa";
+import Icon from "@mdi/react";
+import { mdiProgressHelper } from "@mdi/js";
 
 import { cn } from "@/lib/utils";
 
@@ -14,7 +16,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
       case "Completed":
         return <FaCheckCircle color="green" />;
       case "Enrolled":
-        return <FaUserCheck color="blue" />;
+        return <Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" />;
       case "Failed":
         return <FaTimesCircle color="red" />;
       default:
