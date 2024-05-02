@@ -18,8 +18,8 @@ INSERT INTO Role (RoleName, Description) VALUES
 
  -- Students
 INSERT INTO [User] (UserID, FirstName, LastName, Email, Phone) VALUES
-(1, 'Jared', 'Russel', 'russ9214@fredonia.edu', '+12223331234'),
-(2, 'Ian', 'Cioppa', 'ciop1535@fredonia.edu', '+14445551234'),
+(1, 'Jared', 'Russel', 'jaredhrussell2016@gmail.com', '+12223331234'),
+(2, 'Ian', 'Cioppa', 'ian.cioppa@gmail.com', '+14445551234'),
 (3, 'Camron', 'Walsh', 'camronwalsh@gmail.com', '+16667771234'),
 (4, 'Emily', 'Smith', 'smith@fredonia.edu', '+16667771235'),
 (5, 'John', 'Davis', 'davis@fredonia.edu', '+16667771236'),
@@ -107,7 +107,7 @@ INSERT INTO UserRole (UserID, RoleID) VALUES
 -- Insert into Student
 INSERT INTO Student  (StudentID, UserID, Level, classification) VALUES 
 (1, 1, 'Undergraduate', 'Sophomore'),
-(2, 2, 'Undergraduate', 'Senior'),
+(2, 2, 'Undergraduate', 'Junior'),
 (3, 3, 'Undergraduate', 'Senior'),
 (4, 4, 'Undergraduate', 'Senior'),
 (5, 5, 'Undergraduate', 'Junior'),
