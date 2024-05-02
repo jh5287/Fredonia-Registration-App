@@ -5,6 +5,8 @@ import {
   FaUserCheck,
   FaRegCircle,
 } from "react-icons/fa";
+import Icon from "@mdi/react";
+import { mdiProgressHelper } from "@mdi/js";
 
 import { cn } from "@/lib/utils";
 
@@ -14,7 +16,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
       case "Completed":
         return <FaCheckCircle color="green" />;
       case "Enrolled":
-        return <FaUserCheck color="blue" />;
+        return <Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" />;
       case "Failed":
         return <FaTimesCircle color="red" />;
       default:
@@ -61,7 +63,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
                 const semesterTaken = course.StudentCourseRecord.Term?.Semester; 
                 const yearTaken = course.StudentCourseRecord.Term?.Year; 
                 return (
-                  <tr key={index} className={course.StudentCourseRecord?.Status == "Completed" ? "bg-green-200" : ""}>
+                  <tr key={index} className={course.StudentCourseRecord?.Status == "Completed" ? "bg-success" : ""}>
                     <td className="tooltip" data-tip={semesterTaken ? `Term Taken: ${semesterTaken} ${yearTaken}` : 'Not taken yet'}>{courseCode}</td>
                     <td className="w-[60%]">{courseTitle}</td>
                     <td>{courseCredits}</td>

@@ -32,7 +32,7 @@ const RegSemester = ({ number, data }) => {
             </thead>
             <tbody>
               {data.map((item, index) => (
-                <tr key={index} className={cn({" bg-red-200" : item.Grade === 'F', 'bg-green-200': item.Grade === 'A'}, )}>
+                <tr key={index} className={cn({" bg-red-200" : item.Grade === 'F', 'bg-success': item.Grade === 'A'}, )}>
                   <td>{item.Course.CourseCode}</td>
                   <td>{item.Course.Title}</td>
                   <td>{item.Course.Credits}</td>

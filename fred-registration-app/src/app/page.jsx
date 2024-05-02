@@ -1,13 +1,12 @@
+'use client'
 import Registration from "./registration/page";
 import RoadMap from "./roadmap/page";
 import FuturePlan from "./future-plan/page";
 
 const Page = () => {
 
-  
-
   return (
-    <div className="m-3">
+    <div className="m-3 relative">
       <div role="tablist" className="tabs tabs-bordered w-full">
         <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Registration" defaultChecked/>
         <div role="tabpanel" className="tab-content p-10">
@@ -24,6 +23,7 @@ const Page = () => {
           <FuturePlan />
         </div>
       </div>
+
     </div>
   );
 };

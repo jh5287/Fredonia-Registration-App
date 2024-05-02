@@ -11,7 +11,7 @@ const StudentInfoBanner = ({ studentInfo }) => {
   const studentPrograms = studentInfo?.Student?.StudentProgram;
 
   return (
-    <div className="p-4 bg-neutral-50 rounded-lg shadow-md">
+    <div className="p-4 bg-neutral rounded-lg shadow-md">
       <div className="flex flex-row gap-x-4">
         <div className="basis-1/3 border-2 rounded-lg px-1 py-1 ">
           <p className="text-xs text-gray-500">Name</p>

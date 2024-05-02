@@ -40,7 +40,7 @@ const fetchUserCGPA = async (email) => {
     console.log("User CGPA data after fetch from backend: ", data); 
     if (Array.isArray(data) && data.length > 0 || data.CGPA) {
 
-      const cgpa = parseFloat(userCGPAData.CGPA);
+      const cgpa = parseFloat(data.CGPA);
 
       if (!isNaN(cgpa)) {
         return cgpa;
