@@ -41,14 +41,14 @@ export async function GET(request) {
       CGPAS.CGPA = cgpaResult.CGPA;
     }
     else {
-      CGPAS.CGPA = "0";
+      CGPAS.CGPA = 0.00;
     }
 
     if (foundationsResult) {
       CGPAS.FoundationsCGPA = foundationsResult.CGPA;
     }
     else {
-      CGPAS.FoundationsCGPA = "0";
+      CGPAS.FoundationsCGPA = 0.00;
     }
 
     console.log("CGPAS: ", CGPAS);

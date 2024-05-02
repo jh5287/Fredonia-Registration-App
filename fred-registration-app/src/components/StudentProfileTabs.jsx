@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import StudentInfoBanner from './StudentInfoBanner'; 
 import AcademicSummaryBanner from './AcademicSummaryBanner'; 
 import { fetchStudentInfo, fetchUserCGPA, fetchFoundationsCGPA } from '@/app/roadmap/apiCalls';
@@ -10,16 +11,17 @@ const StudentProfileTabs = ({ studentInfo }) => {
   const [stuinfo, setStuinfo] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
   const [foundationCgpa, setFoundationCgpa] = useState(null);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const studentInfoData = await fetchStudentInfo();
+        const studentInfoData = await fetchStudentInfo(session.user.email);
         setStuinfo(studentInfoData);
-        const cgpaData = await fetchUserCGPA();
+        const cgpaData = await fetchUserCGPA(session.user.email);
         console.log("CGPA Data for banner: ",cgpaData);
         setUserCGPA(cgpaData);
-        const foundationCgpaData = await fetchFoundationsCGPA();
+        const foundationCgpaData = await fetchFoundationsCGPA(session.user.email);
         setFoundationCgpa(foundationCgpaData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -27,7 +29,7 @@ const StudentProfileTabs = ({ studentInfo }) => {
     };
 
     loadData();
-  }, []);
+  }, [status]);
 
   return (
     <div className="m-5">

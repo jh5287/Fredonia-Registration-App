@@ -56,10 +56,9 @@ const fetchUserCGPA = async (email) => {
 };
 
 
-const fetchFoundationsCGPA = async () => {
+const fetchFoundationsCGPA = async (email) => {
   try {
-    const userEmail = "wals9256@fredonia.edu";
-    const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+    const response = await fetch(`/api/student/CGPA?email=${email}`);
     const data = await response.json();
     console.log("User CGPA data after fetch from backend: ", data); 
     if (Array.isArray(data) && data.length > 0 || data.FoundationsCGPA) {
