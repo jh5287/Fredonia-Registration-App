@@ -2,6 +2,7 @@
 import Registration from "./registration/page";
 import RoadMap from "./roadmap/page";
 import FuturePlan from "./future-plan/page";
+import AdvisorChat from "./advisor-chat/page";
 
 const Page = () => {
 
@@ -21,6 +22,11 @@ const Page = () => {
         <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Future Plan" />
         <div role="tabpanel" className="tab-content p-10">
           <FuturePlan />
+        </div>
+
+        <input type="radio" name="home_tabs" role="tab" className="tab" aria-label="Advisor Chat" />
+        <div role="tabpanel" className="tab-content p-10">
+          <AdvisorChat role={'student'} />
         </div>
       </div>
 

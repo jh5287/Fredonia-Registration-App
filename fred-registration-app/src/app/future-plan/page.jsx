@@ -202,6 +202,7 @@ const FuturePlan = () => {
         <div className="flex justify-center">
           <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
           <select defaultValue="Select a saved plan" className="select input-bordered m-5" onChange={(e) => setSelectedList(e.target.value)}>
+            <option value="Select a saved plan" disabled selected>Select a saved plan</option>
             {customList.map((item, index) => (
               <option key={index} value={item.id}>{item.name}</option>
             ))}

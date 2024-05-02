@@ -5,7 +5,6 @@ import {
   FaRegCircle,
 } from "react-icons/fa";
 
-
 import Icon from "@mdi/react";
 import { mdiProgressHelper } from "@mdi/js";
 

@@ -4,7 +4,7 @@ import { firestoreDB } from "@/firebase/config";
 export const uploadCustomSems = async (userId, customSems, saveID, name) => {
     try {
         const userRef = doc(firestoreDB, `customsemesters/${saveID}`);
-        const semesters = {}
+        const semesters = {name: name};
         var id = 0;
         customSems.forEach(sem => {
             id++;
