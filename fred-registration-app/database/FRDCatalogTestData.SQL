@@ -1,108 +1,151 @@
 ---------------- Catalog Data ---------------- 
 -- Insert into Catalog
-INSERT INTO Catalog (TermID, ProgramID) VALUES (1, 1);
+INSERT INTO Catalog (TermID, ProgramID) VALUES 
+(1, 1),
+(1, 3),
+(1, 6); 
 
 -- Insert into CourseCatalog (Example Catalog for a Computer Science Degree)
 -- Year 1
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10001, 1, 'Fall', 1),
+(10002, 1, 'Fall', 1),
+(10003, 1, 'Fall', 1),
 (1, 1, 'Fall', 1),
-(2, 1, 'Fall', 1),
-(3, 1, 'Fall', 1),
-(22, 1, 'Fall', 1),
-(22, 1, 'Fall', 1);
+(1, 1, 'Fall', 1);
 
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES
-(5, 1, 'Spring', 1),
-(6, 1, 'Spring', 1),
-(22, 1, 'Spring', 1),
-(22, 1, 'Spring', 1),
-(22, 1, 'Spring', 1);
+(10005, 1, 'Spring', 1),
+(10006, 1, 'Spring', 1),
+(1, 1, 'Spring', 1),
+(1, 1, 'Spring', 1),
+(1, 1, 'Spring', 1);
 
 -- Year 2
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
-(8, 1, 'Fall', 2),
-(9, 1, 'Fall', 2),
-(10, 1, 'Fall', 2),
-(22, 1, 'Fall', 2),
-(22, 1, 'Fall', 2);
+(10008, 1, 'Fall', 2),
+(10009, 1, 'Fall', 2),
+(10010, 1, 'Fall', 2),
+(1, 1, 'Fall', 2),
+(1, 1, 'Fall', 2);
 
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
-(12, 1, 'Spring', 2),
-(13, 1, 'Spring', 2),
-(22, 1, 'Spring', 2),
-(22, 1, 'Spring', 2),
-(23, 1, 'Spring', 2);
+(10012, 1, 'Spring', 2),
+(10013, 1, 'Spring', 2),
+(1, 1, 'Spring', 2),
+(1, 1, 'Spring', 2),
+(1, 1, 'Spring', 2);
 
 -- Year 3
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
-(14, 1, 'Fall', 3),
-(15, 1, 'Fall', 3),
-(23, 1, 'Fall', 3),
-(25, 1, 'Fall', 3),
-(25, 1, 'Fall', 3);
+(10014, 1, 'Fall', 3),
+(10015, 1, 'Fall', 3),
+(2, 1, 'Fall', 3),
+(4, 1, 'Fall', 3),
+(4, 1, 'Fall', 3);
 
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
-(16, 1, 'Spring', 3),
-(17, 1, 'Spring', 3),
-(18, 1, 'Spring', 3),
-(19, 1, 'Spring', 3),
-(26, 1, 'Spring', 3);
+(10016, 1, 'Spring', 3),
+(10017, 1, 'Spring', 3),
+(10018, 1, 'Spring', 3),
+(10019, 1, 'Spring', 3),
+(5, 1, 'Spring', 3);
 
 -- Year 4
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
-(24, 1, 'Fall', 4),
-(24, 1, 'Fall', 4),
-(24, 1, 'Fall', 4),
-(26, 1, 'Fall', 4),
-(26, 1, 'Fall', 4);
+(3, 1, 'Fall', 4),
+(3, 1, 'Fall', 4),
+(3, 1, 'Fall', 4),
+(5, 1, 'Fall', 4),
+(5, 1, 'Fall', 4);
 
 INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
-(21, 1, 'Spring', 4),
-(24, 1, 'Spring', 4),
-(24, 1, 'Spring', 4),
-(25, 1, 'Spring', 4),
-(26, 1, 'Spring', 4);
+(10021, 1, 'Spring', 4),
+(3, 1, 'Spring', 4),
+(3, 1, 'Spring', 4),
+(4, 1, 'Spring', 4),
+(5, 1, 'Spring', 4);
 
 
----------------- Student Data ---------------- 
+-- Insert Bio courses into CourseCatalog
+  -- Year 1
+    -- Fall
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(11001, 2, 'Fall', 1),
+(11002, 2, 'Fall', 1),
+(11003, 2, 'Fall', 1),
+(11004, 2, 'Fall', 1),
+(11005, 2, 'Fall', 1),
+(1, 2, 'Fall', 1),
+(1, 2, 'Fall', 1);
 
--- Insert into StudentRegistrations
--- Year1
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 1, 8, 'Letter', 'Completed', 'A', '2023-08-15'),
-(03702574, 2, 8, 'Letter', 'Completed', 'B', '2023-08-15'),
-(03702574, 3, 8, 'Letter', 'Failed', 'F', '2023-08-15'),
-(03702574, 33769, 8, 'Letter', 'Completed', 'A', '2023-08-15'), 
-(03702574, 33992, 8, 'Letter', 'Completed', 'A', '2023-08-15'); 
 
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 5, 9, 'Letter', 'Completed', 'A', '2024-01-20'),
-(03702574, 6, 9, 'Letter', 'Completed', 'B', '2024-01-20'),
-(03702574, 33992, 8, 'Letter', 'Completed', 'A', '2023-08-15'),
-(03702574, 30376, 8, 'Letter', 'Completed', 'B', '2023-08-15'), 
-(03702574, 14341, 8, 'Letter', 'Completed', 'A', '2023-08-15'); 
+    -- Spring
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(11006, 2, 'Spring', 1),
+(11007, 2, 'Spring', 1),
+(11008, 2, 'Spring', 1),
+(11009, 2, 'Spring', 1),
+(11010, 2, 'Spring', 1),
+(1, 2, 'Spring', 1); 
 
---Retaking failed class from first semester
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 3, 9, 'Letter', 'Completed', 'A', '2024-01-20');
+  -- Year 2
+   -- Fall
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(11011, 2, 'Fall', 2),
+(11012, 2, 'Fall', 2),
+(11013, 2, 'Fall', 2),
+(11014, 2, 'Fall', 2),
+(1, 2, 'Fall', 2),
+(5, 2, 'Fall', 2);
 
--- Year 2
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 8, 11, 'Letter', 'Completed', 'B', '2024-08-15'),
-(03702574, 9, 11, 'Letter', 'Completed', 'A', '2024-08-15'),
-(03702574, 10, 11, 'Letter', 'Completed', 'C', '2024-08-15');
+    -- Spring
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(11015, 2, 'Spring', 2),
+(11016, 2, 'Spring', 2),
+(11017, 2, 'Spring', 2),
+(11018, 2, 'Spring', 2),
+(1, 2, 'Spring', 2),
+(5, 2, 'Spring', 2),
+(5, 2, 'Spring', 2);
 
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 12, 12, 'Letter', 'Completed', 'B', '2025-01-20'),
-(03702574, 13, 12, 'Letter', 'Completed', 'C', '2025-01-20');
 
--- Year 3
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 14, 14, 'Letter', 'Completed', 'A', '2025-08-15'),
-(03702574, 15, 14, 'Letter', 'Completed', 'A', '2025-08-15');
+-- Year 3 
+   -- Fall
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(11019, 2, 'Fall', 3),
+(11020, 2, 'Fall', 3),
+(11021, 2, 'Fall', 3),
+(11022, 2, 'Fall', 3),
+(11023, 2, 'Fall', 3),
+(11024, 2, 'Fall', 3),
+(1, 2, 'Fall', 3);
 
-INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES 
-(03702574, 16, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'),
-(03702574, 17, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'),
-(03702574, 18, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'),
-(03702574, 19, 15, 'Letter', 'Enrolled', NULL, '2026-01-20'); 
+    -- Spring
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(11025, 2, 'Spring', 3),
+(11026, 2, 'Spring', 3),
+(1, 2, 'Spring', 3),
+(6, 2, 'Spring', 3),
+(5, 2, 'Spring', 3),
+(5, 2, 'Spring', 3);
+
+
+-- Year 4 
+   -- Fall
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(7, 2, 'Fall', 4),
+(6, 2, 'Fall', 4),
+(6, 2, 'Fall', 4),
+(5, 2, 'Fall', 4),
+(5, 2, 'Fall', 4),
+(5, 2, 'Fall', 4);
+
+
+    -- Spring
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(7, 2, 'Spring', 4),
+(6, 2, 'Spring', 4),
+(5, 2, 'Spring', 4),
+(5, 2, 'Spring', 4),
+(5, 2, 'Spring', 4); 

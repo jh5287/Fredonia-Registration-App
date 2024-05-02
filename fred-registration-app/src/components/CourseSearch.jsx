@@ -42,7 +42,7 @@ const fetchDepartements = async () => {
 const fetchCourses = async (params) => {
   try {
     const queryString = new URLSearchParams(params).toString();
-    
+
     const res = await fetch(`/api/courseSearch/courses?${queryString}`);
     const data = await res.json();
     return data;
@@ -55,24 +55,24 @@ const fetchCourses = async (params) => {
 function validateInputs(data) {
   const { CRN, courseCode, courseTitle, credits, department } = data;
   const errors = {};
-  
+
   if (CRN && !/^\d{5}$/.test(CRN)) {
     errors.CRN = "CRN must be exactly 5 digits if provided.";
   }
-  
+
   if (courseCode && !courseCode.trim()) {
     errors.courseCode = "Course code cannot be blank if provided.";
   }
-  
+
   if (courseTitle && !courseTitle.trim()) {
     errors.courseTitle = "Course title cannot be blank if provided.";
   }
-  
+
   const validCredits = ["", "1", "2", "3", "4"]; // Including an empty string as a valid option
   if (credits && !validCredits.includes(credits)) {
     errors.credits = "Invalid credits selected.";
   }
-  
+
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
@@ -82,13 +82,14 @@ function validateInputs(data) {
 export default function CourseSearch() {
   const [departments, setDepartments] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const loadData = async () => {
-      const departmentsData = await fetchDepartements(); 
-      if (departmentsData){
+      const departmentsData = await fetchDepartements();
+      if (departmentsData) {
         setDepartments(departmentsData);
-      } 
+      }
     };
     loadData();
   }, []);
@@ -101,11 +102,13 @@ export default function CourseSearch() {
     const validationRes = validateInputs(data);
 
     if (validationRes.isValid) {
+      setErrors({});
       const coursesData = await fetchCourses(data);
-      if(coursesData){
+      if (coursesData) {
         setCourses(coursesData);
       }
     } else {
+      setErrors(validationRes.errors);
     }
   };
 
@@ -130,6 +133,9 @@ export default function CourseSearch() {
                   className="block flex-1  bg-transparent py-1.5 pl-1 text-gray-900  focus:ring-0"
                 />
               </div>
+              {errors.CRN && (
+                <div className="text-xs text-red-500">{errors.CRN}</div>
+              )}
             </div>
           </div>
 
@@ -149,6 +155,9 @@ export default function CourseSearch() {
                   className="block flex-1 bg-transparent py-1.5 pl-1 text-gray-900  focus:ring-0"
                 />
               </div>
+              {errors.courseCode && (
+                <div className="text-xs text-red-500">{errors.courseCode}</div>
+              )}
             </div>
           </div>
           <div>
@@ -167,6 +176,9 @@ export default function CourseSearch() {
                   className="block flex-1  bg-transparent py-1.5 pl-1 text-gray-900  focus:ring-0"
                 />
               </div>
+              {errors.courseTitle && (
+                <div className="text-xs text-red-500">{errors.courseTitle}</div>
+              )}
             </div>
           </div>
           <div></div>
@@ -184,7 +196,8 @@ export default function CourseSearch() {
               name="department"
             >
               <option value="">Select</option>
-              {departments && departments.length > 0 &&
+              {departments &&
+                departments.length > 0 &&
                 departments.map((department) => (
                   <option value={department.Name} key={department.Name}>
                     {department.Name}

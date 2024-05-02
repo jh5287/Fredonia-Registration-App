@@ -29,7 +29,7 @@ GROUP BY
 
 -- Foundations GPA / CGPA
 CREATE VIEW
-	StudentFoundationsGPA
+	StudentFoundationsGPA AS
 SELECT
   SR.StudentID,
   SR.termid,

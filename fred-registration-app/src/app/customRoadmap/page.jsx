@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { BsArrowBarLeft, BsXLg } from "react-icons/bs";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -42,15 +42,44 @@ function CourseSearchSidebar({}) {
   );
 }
 
+const SemesterContext = createContext(null);
+export const useSemesters = () => useContext(SemesterContext);
+
 export default function customRoadmap() {
   const createDefaultSemester = (semesterNum) => ({
     semesterNum,
     courses: [],
   });
 
-  const [semestersData, setSemesterData] = useState(
+  const [semesters, setSemesters] = useState(
     Array.from({ length: 8 }, (_, index) => createDefaultSemester(index + 1))
   );
+
+  const addCourse = (semesterNum, course) => {
+    setSemesters((prevSemesters) =>
+      prevSemesters.map((semester) =>
+        semester.semesterNum === semesterNum
+          ? { ...semester, courses: [...semester.courses, course] }
+          : semester
+      )
+    );
+  };
+
+  const dropCourse = (semesterNum, courseCRN) => {
+    setSemesters((prevSemesters) =>
+      prevSemesters.map((semester) =>
+        semester.semesterNum === semesterNum
+          ? {
+              ...semester,
+              courses: semester.courses.filter(
+                (course) => course.CRN !== courseCRN
+              ),
+            }
+          : semester
+      )
+    );
+  };
+
   return (
     <>
       <DndProvider backend={HTML5Backend}>
@@ -58,16 +87,20 @@ export default function customRoadmap() {
           <div className="relative flex-1 overflow-y-auto px-2">
             <h1 className={"text-lg pt-1 pb-2"}>Custom Roadmap</h1>
             <div className="grid grid-cols-1 gap-5 h-full ">
-              {semestersData.map((semester, index) => (
+              <SemesterContext.Provider
+                value={{ semesters, addCourse, dropCourse }}
+              >
+                {semesters.map((semester, index) => (
                   <CustomSemester
                     key={semester.semesterNum || index}
                     semesterNum={semester.semesterNum}
                     courses={semester.courses}
                   />
-              ))}
+                ))}
+              </SemesterContext.Provider>
             </div>
           </div>
-          <CourseSearchSidebar/>
+          <CourseSearchSidebar />
         </div>
       </DndProvider>
     </>

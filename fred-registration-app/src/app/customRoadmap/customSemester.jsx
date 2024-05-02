@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import { CourseSearchItemTypes } from "@/components/CourseSearch";
 import { FaTrash } from "react-icons/fa";
+import { useSemesters } from "./page";
 
 const CustomSemesterItemTypes = {
   COURSE: "DraggableSemesterCourse",
 };
 
-function CourseTrashBin({ courses, setCourses }) {
+function CourseTrashBin({ handleDropCourse }) {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: CustomSemesterItemTypes.COURSE,
     drop: (item, monitor) => {
       const droppedCourse = monitor.getItem();
-      const filteredCourses = courses.filter(
-        (course) => course.CRN !== droppedCourse.CRN
-      );
-      setCourses(filteredCourses);
+      handleDropCourse(droppedCourse) 
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -65,23 +63,33 @@ function DraggableSemesterCourse({ course, setCourseIsDragging }) {
 }
 
 export default function CustomSemester({ semesterNum }) {
-  const [courses, setCourses] = useState([]);
   const [justDropped, setJustDropped] = useState(false);
   const [dropSuccess, setDropSuccess] = useState(true);
   const [courseIsDragging, setCourseIsDragging] = useState(false);
+
+  const { semesters, addCourse, dropCourse } = useSemesters();
+  const semester = semesters.find((s) => s.semesterNum === semesterNum);
+
+  const handleAddCourse = (course) => {
+    addCourse(semesterNum, course);
+  };
+  const handleDropCourse = (course) => {
+    dropCourse(semesterNum, course.CRN);
+  };
 
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: CourseSearchItemTypes.COURSE,
       drop: (item, monitor) => {
         const droppedCourse = monitor.getItem();
-        const CourseAlreadyExists = courses.some(
+        const CourseAlreadyExists = semester.courses.some(
           (course) => course.CRN === droppedCourse.CRN
         );
 
         if (!CourseAlreadyExists) {
           setDropSuccess(true);
-          setCourses((prevArray) => [...prevArray, droppedCourse]);
+          handleAddCourse(droppedCourse); 
+          console.log(semester); 
         } else {
           setDropSuccess(false);
         }
@@ -92,7 +100,7 @@ export default function CustomSemester({ semesterNum }) {
         isOver: !!monitor.isOver(),
       }),
     }),
-    [courses]
+    [semester]
   );
 
   useEffect(() => {
@@ -122,7 +130,7 @@ export default function CustomSemester({ semesterNum }) {
           Semester {semesterNum ? semesterNum : ""}
         </h1>
         <table className="table">
-          {courses.length > 0 && (
+          {semester.courses.length > 0 && (
             <thead>
               <tr>
                 <th className="whitespace-nowrap">Course Code</th>
@@ -132,7 +140,7 @@ export default function CustomSemester({ semesterNum }) {
             </thead>
           )}
           <tbody>
-            {courses.map((course, index) => (
+            {semester.courses.map((course, index) => (
               <DraggableSemesterCourse
                 course={course}
                 setCourseIsDragging={setCourseIsDragging}
@@ -143,7 +151,7 @@ export default function CustomSemester({ semesterNum }) {
         </table>
         {courseIsDragging && (
           <div className="absolute bottom-0 left-0 right-0">
-            <CourseTrashBin courses={courses} setCourses={setCourses} />
+            <CourseTrashBin handleDropCourse={handleDropCourse} />
           </div>
         )}
       </div>
