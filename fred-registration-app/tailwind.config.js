@@ -32,7 +32,7 @@ module.exports = {
           "neutral": "#292C34", // Darker shade of gray
           "base-100": "#1A1A1A", // Darker shade of white for background
           "base-200": "#131313", // Darker shade of off-white for secondary background
-          "success": "#40BF75", // Darker shade of green for success
+          "success": "#236b41", // Darker shade of green for success
           "error": "#CC0000" // Darker shade of red for error
         },
         
