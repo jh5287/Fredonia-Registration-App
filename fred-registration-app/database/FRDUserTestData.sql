@@ -1,7 +1,7 @@
 -- Student Registration 
 
 ---------------- Jared ---------------- 
-INSERT INTO StudentCatalog(StudentID, CatalogID) VALUES (1,6), (1,1); 
+INSERT INTO StudentCatalog(StudentID, CatalogID) VALUES (1,3), (1,1); 
 
   -- Spring 2024
   INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES
