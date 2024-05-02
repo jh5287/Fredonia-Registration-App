@@ -6,9 +6,12 @@ import { cn } from "@/lib/utils";
 import Icon from '@mdi/react';
 import { mdiProgressHelper } from '@mdi/js';
 import calculateGPA from "@/components/calculateGPA";
+import { useSession } from "next-auth/react";
 
 const RegSemester = ({ number, data }) => {
   const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
+  const successGrades = ['A', 'B'];
+  const warnGrades = ['C', 'D'];
 
   return (
     <>
@@ -34,7 +37,11 @@ const RegSemester = ({ number, data }) => {
           </thead>
           <tbody>
             {data.map((item, index) => (
-              <tr key={index} className={cn({" bg-red-200" : item.Grade === 'F', ' bg-success': item.Grade === 'A'}, )}>
+              <tr key={index} className={cn({
+                "bg-error" : item.Grade === 'F', 
+                'bg-success': item.Grade ? successGrades.some(substring => item.Grade.includes(substring)) : false,
+                'bg-warning': item.Grade ? warnGrades.some(substring => item.Grade.includes(substring)) : false
+                }, )}>
                 <td>{item.Course.CourseCode}</td>
                 <td>{item.Course.Title}</td>
                 <td>{item.Course.Credits}</td>
@@ -55,7 +62,7 @@ const RegSemester = ({ number, data }) => {
 const Registration = () => {
   const [studentData, setStudentData] = useState([]);
   const [userCGPA, setUserCGPA] = useState(null);
-
+  const {data: session, status} = useSession();
   
 
   useEffect(() => {
@@ -69,7 +76,7 @@ const Registration = () => {
     const fetchStudentData = async () => {
       try {
         let email = "russ9214@fredonia.edu"
-        const res = await fetch(`/api/student/studentCourses?email=${email}`);
+        const res = await fetch(`/api/student/studentCourses?email=${session.user.email}`);
         const studentData = await res.json();
 
       // Extracting unique terms
@@ -86,7 +93,7 @@ const Registration = () => {
     const fetchUserCGPA = async () => {
       try {
         const userEmail = "wals9256@fredonia.edu";
-        const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+        const response = await fetch(`/api/student/CGPA?email=${session.user.email}`);
         const data = await response.json();
     
         if (Array.isArray(data) && data.length > 0) {
@@ -114,7 +121,7 @@ const Registration = () => {
 
     fetchUserCGPA();
     fetchStudentData();
-  }, []);
+  }, [status]);
 
 
 

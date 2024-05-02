@@ -258,14 +258,19 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 
 -- Insert CS Courses into Course
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
+(31812, 'CSIT 100', 'Freshman Seminar', 1, 'Undergraduate', 1),
+(34181, 'CSIT 101', 'Programming With 3-D Graphics And Multimedia', 3, 'Undergraduate', 1),
 (10001, 'CSIT 121', 'Computer Science I', 3, 'Undergraduate', 1),
+(30035, 'CSIT 107', 'Web Programming I', 3, 'Undergraduate', 1),
 (10002, 'CSIT 201', 'Computer Security and Ethics', 3, 'Undergraduate', 1),
 (10005, 'CSIT 221', 'Computer Science II', 3, 'Undergraduate', 1),
 (10008, 'CSIT 231', 'Systems Programming', 3, 'Undergraduate', 1),
 (10009, 'CSIT 241', 'Discrete Mathematics for Computer Sci. I', 3, 'Undergraduate', 1),
 (10011, 'MATH 231', 'Linear Algebra', 0, 'Undergraduate', 2),
+(14941, 'CSIT 308', 'Computer Game Design and Implementation', 3, 'Undergraduate', 1)
 (10012, 'CSIT 311', 'Assembly Language', 3, 'Undergraduate', 1),
 (10013, 'CSIT 321', 'Paradigms of Programming Languages', 3, 'Undergraduate', 1),
+(35754, 'CSIT 333', 'Mobile Applications Development', 3, 'Undergraduate', 1),
 (10014, 'CSIT 341', 'Data Structures', 3, 'Undergraduate', 1),
 (10015, 'CSIT 455', 'Relational and Object Databases', 3, 'Undergraduate', 1),
 (10016, 'CSIT 431', 'Introduction to Operating Systems', 3, 'Undergraduate', 1),
@@ -273,6 +278,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (10018, 'CSIT 441', 'Design and Analysis of Algorithms', 3, 'Undergraduate', 1),
 (10019, 'CSIT 425', 'Software Engineering', 3.000, 'Undergraduate', 1),
 (10020, 'CSIT 461', 'Introduction to AI and Knowledge Engineering', 3.000, 'Undergraduate', 1),
+(35321, 'CSIT 363', 'Introduction to Digital Image Processing and Computer Vision', 3, 'Undergraduate', 1)
 (10021, 'CSIT 324', 'Object Oriented Programming', 3.000, 'Undergraduate', 1),
 (10022, 'CSIT 499', 'Senior Project', 3.000, 'Undergraduate', 1),
 (10023, 'CSIT 496', 'SpTp: Software Projects', 3.000, 'Undergraduate', 1),
@@ -282,6 +288,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 
 -- Insert Math Courses into Course
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
+(31723, 'MATH 110', 'Mathematics In Action', 3, 'Undergraduate', 2),
 (10003, 'MATH 120', 'Survey of Calculus I', 3, 'Undergraduate', 2),
 (10004, 'MATH 122', 'University Calculus I', 0, 'Undergraduate', 2),
 (10006, 'MATH 121', 'Survey of Calculus II', 3, 'Undergraduate', 2),
@@ -296,7 +303,9 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 
 -- Insert Music Courses into Course 
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
+(32726, 'MUS 022', 'College Choir', 1, 'Undergraduate', 5),
 (15890, 'MUS 047', 'Special Ens: Wind Orchestra', 1.000, 'Undergraduate', 5),
+(15524, 'MUS 048', 'Masterworks Chorus', 0.5, 'Undergraduate', 5),
 (10579, 'MUS 120', 'Concert Attendance', 0.000, 'Undergraduate', 5),
 (11068, 'MUS 426', 'Saxophone', 2.000, 'Undergraduate', 5),
 (35415, 'MUS 047', 'SpEns: Wind Orchestra', 3.000, 'Undergraduate', 5),
@@ -350,6 +359,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (11001, 'BIOL 100', 'Study for Success', 1.000, 'Undergraduate', 4),
 (11002, 'BIOL 131', 'Intro Ecology and Evolution', 3.000, 'Undergraduate', 4),
 (11003, 'BIOL 132', 'intro Ecology and Evolution Lab 1', 1.000, 'Undergraduate', 4),
+(35094, 'CHEM 113', 'Chemistry in the Environment: Issues and Solutions', 3, 'Undergraduate', 4),
 (11004, 'CHEM 115', 'General Chemistry Lecture 1', 3.000, 'Undergraduate', 4),
 (11005, 'CHEM 125', 'General Chemistry Lab 1', 1.000, 'Undergraduate', 4),
 (11006, 'BIOL 133', 'Intro Cell and Molecular Biology', 3.000, 'Undergraduate', 4),
@@ -379,15 +389,19 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (20117, 'SPAN 110', 'Essential Spanish', 3.000, 'Undergraduate', 6),
 (31792, 'ACCT 201', 'Prin of Financial Accounting', 3.000, 'Undergraduate', 7),
 (34012, 'COMM 101', 'Fundamentals of Communication', 3.000, 'Undergraduate', 8),
+(12705, 'COMM 105', 'Public Speaking', 3.000, 'Undergraduate', 8),
+(12705, 'COMM 336', 'Introduction to Business Communication', 3.000, 'Undergraduate', 8),
 (30232, 'PSY 129', 'Foundations of Psychology', 3.000, 'Undergraduate', 9),
 (34372, 'AADM 310', 'Fundraising & Grant Writing', 3.000, 'Undergraduate', 10),
 (14341, 'HIST 151', 'Global Patterns', 3.000, 'Undergraduate', 11),
+(35351, 'HIST 160', 'Western Patterns', 3.000, 'Undergraduate', 11),
 (14171, 'ENGL 100', 'Craft of Writing', 3.000, 'Undergraduate', 10),
 (33769, 'ENGL 144', 'Reading Humanity', 3.000, 'Undergraduate', 11),
 (32857, 'POLI 150', 'World Affairs', 3.000, 'Undergraduate', 11),
 (33948, 'ECON 205', 'Principles of Microeconomics', 3.000, 'Undergraduate', 11),
-(34410, 'ENGL 260', 'Intro Creative Writing', 3.000, 'Undergraduate', 11);
-
+(34410, 'ENGL 260', 'Intro Creative Writing', 3.000, 'Undergraduate', 11),
+(34642, 'ASL 110', 'Essential American Sign Language', 3, 'Undergraduate', 11),
+(35527, 'PHED 189', 'Esports', 2, 'Undergraduate', 11);
 
 -- Insert into CourseAttribute
 INSERT INTO CourseAttribute (CRN, AttributeID) VALUES 

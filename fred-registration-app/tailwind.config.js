@@ -23,7 +23,8 @@ module.exports = {
           "base-100": "#ffffff",
           "base-200": "#f9fafb",
           "success" : "#BBF7D0",
-          "error" : "#ff0000",
+          "warning" : "#fceea2",
+          "error" : "#f6cccb",
         },
         FREDdarkTheme: {
           "primary": "#001E5D", // Darker shade of blue
@@ -33,7 +34,8 @@ module.exports = {
           "base-100": "#1A1A1A", // Darker shade of white for background
           "base-200": "#131313", // Darker shade of off-white for secondary background
           "success": "#236b41", // Darker shade of green for success
-          "error": "#CC0000" // Darker shade of red for error
+          "warning": "#827531", // Same shade of yellow for warning
+          "error": "#785959" // Darker shade of red for error
         },
         
       },

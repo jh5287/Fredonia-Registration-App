@@ -60,7 +60,7 @@ const FuturePlan = () => {
     try {
       const userEmail = "russ9214@fredonia.edu";
       const response = await fetch(
-        `/api/student/studentCourses?email=${userEmail}`
+        `/api/student/studentCourses?email=${session.user.email}`
       );
       const data = await response.json();
       setUserCourses(data);
@@ -170,7 +170,7 @@ const FuturePlan = () => {
     fetchUserCGPA();
     setSaveDataID(crypto.randomUUID());
     getCustomLists();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     setNewCGPA(updateNewCGPA());

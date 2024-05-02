@@ -25,8 +25,8 @@ const RoadMap = () => {
     if (status === "authenticated") {
       const loadData = async () => {
         try {
-          //const studentEmail = session?.user?.email;
-          const studentEmail = "camronwalsh@gmail.com";
+          const studentEmail = session?.user?.email;
+          //const studentEmail = "camronwalsh@gmail.com";
           var catalogID = null;
 
           const studentCatalogs = await fetchStudentCatalogs(studentEmail);
@@ -44,17 +44,10 @@ const RoadMap = () => {
               setUserCourses(userCourseData);
             }
           }
-
-          const cgpaData = await fetchUserCGPA(studentEmail);
-          setUserCGPA(cgpaData);
-
-          const studentInfoData = await fetchStudentInfo(studentEmail);
-          setStudentInfo(studentInfoData);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
-
       loadData();
     }
   }, [status, session?.user?.email]);

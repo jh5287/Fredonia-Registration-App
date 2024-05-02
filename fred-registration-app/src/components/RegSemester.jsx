@@ -4,9 +4,9 @@ import { mdiProgressHelper } from '@mdi/js';
 import { cn } from "@/lib/utils";
 
 const RegSemester = ({ number, data }) => {
-  
-  
     const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
+    const successGrades = ['A', 'B'];
+    const warnGrades = ['C', 'D'];
   
     return (
       <>
@@ -32,7 +32,11 @@ const RegSemester = ({ number, data }) => {
             </thead>
             <tbody>
               {data.map((item, index) => (
-                <tr key={index} className={cn({"bg-red-200" : item.Grade === 'F', 'bg-success': item.Grade === 'A'} )}>
+                <tr key={index} className={cn({
+                  "bg-error" : item.Grade === 'F', 
+                  'bg-success': item.Grade ? successGrades.some(substring => item.Grade.includes(substring)) : false,
+                  'bg-warning': item.Grade ? warnGrades.some(substring => item.Grade.includes(substring)) : false
+                  }, )}>
                   <td>{item.Course.CourseCode}</td>
                   <td>{item.Course.Title}</td>
                   <td>{item.Course.Credits}</td>
