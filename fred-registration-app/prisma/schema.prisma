@@ -21,6 +21,7 @@ model Catalog {
   Program       Program         @relation(fields: [ProgramID], references: [ProgramID], onUpdate: NoAction, map: "FK__Catalog__Program__160F4887")
   Term          Term            @relation(fields: [TermID], references: [TermID], onUpdate: NoAction, map: "FK__Catalog__TermID__151B244E")
   CourseCatalog CourseCatalog[]
+  StudentCatalog StudentCatalog[]
 
   @@unique([TermID, ProgramID], map: "UC_Catalog_TermProgram")
 }
@@ -205,6 +206,7 @@ model Student {
   StudentProgram         StudentProgram[]
   StudentRegistration    StudentRegistration[]
   AdvisorStudent AdvisorStudent[]
+  StudentCatalog StudentCatalog[]
   StudentCGPA            StudentCGPA?
   StudentFoundationsCGPA StudentFoundationsCGPA?
 }
@@ -284,6 +286,15 @@ model StudentProgram {
   Student   Student @relation(fields: [StudentID], references: [StudentID], onUpdate: NoAction, map: "FK_StudentProgram_Student")
 
   @@id([StudentID, ProgramID], map: "PK_StudentProgram")
+}
+
+model StudentCatalog {
+  StudentID Int
+  CatalogID Int
+  Student Student @relation(fields: [StudentID], references: [StudentID], onUpdate: NoAction)
+  Catalog Catalog @relation(fields: [CatalogID], references: [CatalogID], onUpdate: NoAction)
+
+  @@id([StudentID, CatalogID])
 }
 
 view StudentGPA {
