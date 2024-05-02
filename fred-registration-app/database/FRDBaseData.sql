@@ -20,7 +20,7 @@ INSERT INTO Role (RoleName, Description) VALUES
 INSERT INTO [User] (UserID, FirstName, LastName, Email, Phone) VALUES
 (1, 'Jared', 'Russel', 'russ9214@fredonia.edu', '+12223331234'),
 (2, 'Ian', 'Cioppa', 'ciop1535@fredonia.edu', '+14445551234'),
-(3, 'Camron', 'Walsh', 'wals9256@fredonia.edu', '+16667771234'),
+(3, 'Camron', 'Walsh', 'camronwalsh@gmail.com', '+16667771234'),
 (4, 'Emily', 'Smith', 'smith@fredonia.edu', '+16667771235'),
 (5, 'John', 'Davis', 'davis@fredonia.edu', '+16667771236'),
 (6, 'Anna', 'Johnson', 'johnson@fredonia.edu', '+16667771237'),

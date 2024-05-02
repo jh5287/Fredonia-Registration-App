@@ -26,10 +26,6 @@ DELETE FROM [dbo].[Instructor]
 GO
 DELETE FROM [dbo].[StudentRegistration]
 GO
-DELETE FROM [dbo].[Student]
-GO
-DELETE FROM [dbo].[User]
-GO
 DELETE FROM [dbo].[CourseRestriction]
 GO
 DELETE FROM [dbo].[Restriction]
@@ -43,6 +39,12 @@ GO
 DELETE FROM [dbo].[CourseCorequisite]
 GO
 DELETE FROM [dbo].[CourseCatalog]
+GO
+DELETE FROM [dbo].[StudentCatalog]
+GO
+DELETE FROM [dbo].[Student]
+GO
+DELETE FROM [dbo].[User]
 GO
 DELETE FROM [dbo].[Catalog]
 GO

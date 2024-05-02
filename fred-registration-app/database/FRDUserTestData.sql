@@ -1,6 +1,7 @@
 -- Student Registration 
 
 ---------------- Jared ---------------- 
+INSERT INTO StudentCatalog(StudentID, CatalogID) VALUES (1,6), (1,1); 
 
   -- Spring 2024
   INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grade, RegisteredOn) VALUES
@@ -107,6 +108,7 @@ INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grad
 
 
 ---------------- Camron ---------------- 
+ INSERT INTO StudentCatalog(StudentID, CatalogID) VALUES (3,1);
 
 -- Insert into StudentRegistrations
 -- Year1
@@ -156,6 +158,7 @@ INSERT INTO StudentRegistration (StudentID, CRN, TermID, GradeMode, Status, Grad
 
 
 ---------------- Biology Student ---------------- 
+ INSERT INTO StudentCatalog(StudentID, CatalogID) VALUES (2,2);
 
 -- Insert into StudentRegistrations
 -- Year1
