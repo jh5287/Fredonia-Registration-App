@@ -6,15 +6,11 @@ import {
   fetchUserCourses,
   fetchUserCGPA,
   fetchStudentInfo,
+  fetchStudentCatalogs,
 } from "./apiCalls";
 import { useSession } from "next-auth/react";
-import {
-  FaCheckCircle,
-  FaTimesCircle,
-  FaUserCheck,
-  FaRegCircle,
-} from "react-icons/fa";
 import TitleCard from "@/components/TitleCard";
+import { isValidUserCatalogs, isValidCourses } from "./validation";
 
 const RoadMap = () => {
   const [open, setOpen] = useState(Array(8).fill(true));
@@ -22,31 +18,46 @@ const RoadMap = () => {
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
   const [studentInfo, setStudentInfo] = useState(null);
+  const [studentCatalogs, setStudentCatalogs] = useState([]);
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const catalogData = await fetchCatalogCourses();
-        setCatalogCourses(catalogData);
+    if (status === "authenticated") {
+      const loadData = async () => {
+        try {
+          //const studentEmail = session?.user?.email;
+          const studentEmail = "camronwalsh@gmail.com";
+          var catalogID = null;
 
-        const userCourseData = await fetchUserCourses();
-        setUserCourses(userCourseData);
+          const studentCatalogs = await fetchStudentCatalogs(studentEmail);
+          if (isValidUserCatalogs(studentCatalogs)) {
+            setStudentCatalogs(studentCatalogs);
+            catalogID = studentCatalogs[0]?.catalogID;
+          }
 
-        console.log("TEST"); 
-        const cgpaData = await fetchUserCGPA();
-        console.log("HERE", cgpaData);  
-        setUserCGPA(cgpaData);
+          if (catalogID) {
+            const catalogData = await fetchCatalogCourses(catalogID);
+            setCatalogCourses(catalogData);
 
-        const studentInfoData = await fetchStudentInfo();
-        setStudentInfo(studentInfoData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+            const userCourseData = await fetchUserCourses(studentEmail);
+            if (isValidCourses) {
+              setUserCourses(userCourseData);
+            }
+          }
 
-    loadData();
-  }, []);
+          const cgpaData = await fetchUserCGPA(studentEmail);
+          setUserCGPA(cgpaData);
+
+          const studentInfoData = await fetchStudentInfo(studentEmail);
+          setStudentInfo(studentInfoData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      loadData();
+    }
+  }, [status, session?.user?.email]);
 
   const filterCoursesByTerm = (year, semester, courses) => {
     return courses.filter(
@@ -133,8 +144,6 @@ const RoadMap = () => {
     latestCourseAttempts || []
   );
 
-  //const getUserGrades =
-
   const toggleAllSemester = () => {
     const checkSameValue = () => {
       if (!Array.isArray(open) || open.length === 0) {
@@ -162,10 +171,10 @@ const RoadMap = () => {
   return (
     <>
       <div className="p-3 mb-10">
-
         <div className="relative flex flex-col items-center">
-          <TitleCard />
-          {/* md:absolute md:right-2 md:top-3*/}
+          {studentCatalogs && studentCatalogs.length > 0 && (
+            <TitleCard catalogName={studentCatalogs[0]?.programName} />
+          )}
           <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
             <label className="label cursor-pointer">
               <span className="p-2 label-text">Toggle Semester</span>
@@ -189,9 +198,8 @@ const RoadMap = () => {
               semester,
               catalogUserCourseMap
             );
-            //console.log("Semester user courses", semesterUserCourses);
             return (
-              <div className="border rounded-lg border-slate-150">
+              <div className="border rounded-lg border-slate-150" key={i + 1}>
                 <Semester
                   key={i + 1}
                   number={i + 1}

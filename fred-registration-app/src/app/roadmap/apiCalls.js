@@ -1,7 +1,7 @@
 // Fetch catalog data
-const fetchCatalogCourses = async () => {
+const fetchCatalogCourses = async (catalogID) => {
   try {
-    const res = await fetch("/api/catalog?catID=1");
+    const res = await fetch(`/api/catalog?catID=${catalogID}`);
     const data = await res.json();
     return data;
   } catch (err) {
@@ -9,12 +9,21 @@ const fetchCatalogCourses = async () => {
   }
 };
 
+const fetchStudentCatalogs = async (email) => {
+  try{
+    const res = await fetch(`/api/student/studentCatalog?email=${email}`);
+    const data = res.json(); 
+    return data; 
+  }catch(error){
+    console.log("Error fetching StudentCatalog data: ", error); 
+  }
+}
+
 // Fetch user course data
-const fetchUserCourses = async () => {
+const fetchUserCourses = async (email) => {
   try {
-    const userEmail = "wals9256@fredonia.edu";
     const response = await fetch(
-      `/api/student/studentCourses?email=${userEmail}`
+      `/api/student/studentCourses?email=${email}`
     );
     const data = await response.json();
     return data;
@@ -24,10 +33,9 @@ const fetchUserCourses = async () => {
 };
 
 // Fetch user CGPA data
-const fetchUserCGPA = async () => {
+const fetchUserCGPA = async (email) => {
   try {
-    const userEmail = "wals9256@fredonia.edu";
-    const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+    const response = await fetch(`/api/student/CGPA?email=${email}`);
     const data = await response.json();
     console.log("User CGPA data after fetch from backend: ", data); 
     if (Array.isArray(data) && data.length > 0 || data.CGPA) {
@@ -75,10 +83,9 @@ const fetchFoundationsCGPA = async () => {
 }
 
 // Fetch user course data
-const fetchStudentInfo = async () => {
+const fetchStudentInfo = async (email) => {
   try {
-    const userEmail = "wals9256@fredonia.edu";
-    const response = await fetch(`/api/student/studentInfo?email=${userEmail}`);
+    const response = await fetch(`/api/student/studentInfo?email=${email}`);
     const data = await response.json();
     const studentInfo = Array.isArray(data) && data.length > 0 ? data[0] : null;
     return studentInfo;
@@ -93,4 +100,5 @@ export {
   fetchUserCGPA,
   fetchFoundationsCGPA,
   fetchStudentInfo,
+  fetchStudentCatalogs
 };

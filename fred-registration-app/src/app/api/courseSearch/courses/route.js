@@ -35,8 +35,6 @@ export async function GET(request){
       }, 
     });
 
-    console.log(res); 
-    console.log("==============================")
     
     return NextResponse.json(res); 
   } catch(err){
