@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
 export async function GET(request) {
+  const prisma = new PrismaClient();
   try {
-    const prisma = new PrismaClient();
     const searchParams = request.nextUrl.searchParams;
     const email = searchParams.get("email");
     const studentCGPA = await prisma.studentCGPA.findMany({
@@ -31,11 +31,27 @@ export async function GET(request) {
       }
     });
 
+    const cgpaResult = studentCGPA[0];
+    const foundationsResult = studentFoundationsCGPA[0];
+    console.log("CGPA: ", cgpaResult);
+    console.log("FCGPA: ", foundationsResult);
+    const CGPAS = {}
 
-    const CGPAS = {
-      CGPA: studentCGPA[0].CGPA, 
-      FoundationsCGPA: studentFoundationsCGPA[0].CGPA 
+    if (cgpaResult) {
+      CGPAS.CGPA = cgpaResult.CGPA;
     }
+    else {
+      CGPAS.CGPA = "0";
+    }
+
+    if (foundationsResult) {
+      CGPAS.FoundationsCGPA = foundationsResult.CGPA;
+    }
+    else {
+      CGPAS.FoundationsCGPA = "0";
+    }
+
+    console.log("CGPAS: ", CGPAS);
 
 
     await prisma.$disconnect();
