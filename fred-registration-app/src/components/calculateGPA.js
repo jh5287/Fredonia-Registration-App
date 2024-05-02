@@ -1,6 +1,5 @@
-
-
 const calculateGPA = (data) => {
+  try {
     let totalCredits = 0;
     let totalPoints = 0;
     data.forEach((item) => {
@@ -51,5 +50,9 @@ const calculateGPA = (data) => {
     });
     return ((totalPoints / totalCredits).toFixed(2) !== "NaN" ? (totalPoints / totalCredits).toFixed(2) : null);
   }
-
+  catch (error) {
+    console.error("Failed to calculate GPA:", error);
+    return null;
+  }
+};
 export default calculateGPA;

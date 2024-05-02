@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
 import { fetchCatalogCourses, fetchUserCourses, fetchUserCGPA, fetchStudentInfo } from './apiCalls'; 
-import {GoDash} from "react-icons/go";
+import { GoDash } from "react-icons/go";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
@@ -27,8 +27,6 @@ const DynamicCGPA = ({ cgpa, newCGPA }) => {
     </div>
   );
 };
-
-
 
 const FuturePlan = () => {
   const [catalog, setCatalog] = useState([]);
@@ -130,7 +128,9 @@ const FuturePlan = () => {
       newData.push([]);
       return newData;
     });
+    console.log(extraSemester)
   }
+  
   const removeExtraSemester = (indexToRemove) => {
     setExtraSemester(prevSemesters => {
       const newSemesters = [...prevSemesters];
@@ -176,7 +176,6 @@ const FuturePlan = () => {
     setNewCGPA(updateNewCGPA());
   }, [currentGPAs]);
 
-
   const updateNewCGPA = () => {
     console.log("Updating new CGPA");
     let total = 0;
@@ -192,17 +191,15 @@ const FuturePlan = () => {
     console.log("The new CGPA is", total / acceptedGPAs);
     return total / acceptedGPAs;
   }
-  
 
-  
   return (
     <>
       <div className="p-3">
         <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="flex justify-center">
           <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
-          <select defaultValue="Select a saved plan" className="select input-bordered m-5" onChange={(e) => setSelectedList(e.target.value)}>
-            <option value="Select a saved plan" disabled selected>Select a saved plan</option>
+          <select value={selectedList} className="select input-bordered m-5" onChange={(e) => setSelectedList(e.target.value)}>
+            <option value="" selected disabled>Select a Plan...</option>
             {customList.map((item, index) => (
               <option key={index} value={item.id}>{item.name}</option>
             ))}
@@ -210,29 +207,22 @@ const FuturePlan = () => {
           <button className="btn btn-primary m-5" onClick={() => loadSaveData()}>Load Saved Plan</button>
           <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
         </div>
-
-
         <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
-
-
           {extraSemester.map((item, index) => {
-            
-            return(
-            <div key={item[0]} className="relative">
-              <WhatIfExtra
-                semNumber={item[0]}
-                currentGPAs={currentGPAs}
-                setCurrentGPAs={setCurrentGPAs}
-                userCourses={[]}
-                catalogData={catalog}
-                setSaveData={setSaveData}
-              />
-              <button className="btn btn-error btn-circle btn-xs absolute right-0 top-0 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
-            </div>)
-          })}
-          
-           
+            return (
+              <div key={item[0]} className="relative">
+                <WhatIfExtra
+                  semNumber={item[0]}
+                  currentGPAs={currentGPAs}
+                  setCurrentGPAs={setCurrentGPAs}
+                  userCourses={[]}
+                  catalogData={catalog}
+                  setSaveData={setSaveData}
+                />
+                <button className="btn btn-error btn-circle btn-xs absolute right-0 top-0 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
+              </div>)
+            })}      
         </div>
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
         {realStudentData.map((item, index) => (

@@ -59,7 +59,7 @@ export default function AdvisorChat({ role }) {
                     {loading ? ( <p>Loading...</p> ) : (
                             messages ? (
                             messages.map((message, index) => (
-                                <div key={index} className={`p-2 mb-2 ${message.sender === session.user.name ? "bg-blue-300" : "bg-gray-100"} rounded-md`}>
+                                <div key={index} className={`p-2 mb-2 ${message.sender === session.user.name ? "bg-primary text-white" : "bg-neutral"} rounded-md `}>
                                 {message.text} <br/> <small>({message.sender})</small> <small className="ml-auto">{message.timestamp.toDate().toLocaleString()}</small>
                                 </div>
                             ))
@@ -72,7 +72,7 @@ export default function AdvisorChat({ role }) {
                     placeholder="Type your message here"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    className="flex-1 p-2 border border-gray-300 rounded-md bg-white"
+                    className="flex-1 p-2 border border-gray-300 rounded-md bg-neutral"
                     />
                     <button
                     onClick={() => sendMessage(session.user.name)}
