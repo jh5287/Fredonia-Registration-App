@@ -267,7 +267,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (10008, 'CSIT 231', 'Systems Programming', 3, 'Undergraduate', 1),
 (10009, 'CSIT 241', 'Discrete Mathematics for Computer Sci. I', 3, 'Undergraduate', 1),
 (10011, 'MATH 231', 'Linear Algebra', 0, 'Undergraduate', 2),
-(14941, 'CSIT 308', 'Computer Game Design and Implementation', 3, 'Undergraduate', 1)
+(14941, 'CSIT 308', 'Computer Game Design and Implementation', 3, 'Undergraduate', 1),
 (10012, 'CSIT 311', 'Assembly Language', 3, 'Undergraduate', 1),
 (10013, 'CSIT 321', 'Paradigms of Programming Languages', 3, 'Undergraduate', 1),
 (35754, 'CSIT 333', 'Mobile Applications Development', 3, 'Undergraduate', 1),
