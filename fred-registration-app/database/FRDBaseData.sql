@@ -390,7 +390,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (31792, 'ACCT 201', 'Prin of Financial Accounting', 3.000, 'Undergraduate', 7),
 (34012, 'COMM 101', 'Fundamentals of Communication', 3.000, 'Undergraduate', 8),
 (12705, 'COMM 105', 'Public Speaking', 3.000, 'Undergraduate', 8),
-(12705, 'COMM 336', 'Introduction to Business Communication', 3.000, 'Undergraduate', 8),
+(12706, 'COMM 336', 'Introduction to Business Communication', 3.000, 'Undergraduate', 8),
 (30232, 'PSY 129', 'Foundations of Psychology', 3.000, 'Undergraduate', 9),
 (34372, 'AADM 310', 'Fundraising & Grant Writing', 3.000, 'Undergraduate', 10),
 (14341, 'HIST 151', 'Global Patterns', 3.000, 'Undergraduate', 11),
