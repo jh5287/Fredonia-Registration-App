@@ -278,7 +278,7 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (10018, 'CSIT 441', 'Design and Analysis of Algorithms', 3, 'Undergraduate', 1),
 (10019, 'CSIT 425', 'Software Engineering', 3.000, 'Undergraduate', 1),
 (10020, 'CSIT 461', 'Introduction to AI and Knowledge Engineering', 3.000, 'Undergraduate', 1),
-(35321, 'CSIT 363', 'Introduction to Digital Image Processing and Computer Vision', 3, 'Undergraduate', 1)
+(35321, 'CSIT 363', 'Introduction to Digital Image Processing and Computer Vision', 3, 'Undergraduate', 1),
 (10021, 'CSIT 324', 'Object Oriented Programming', 3.000, 'Undergraduate', 1),
 (10022, 'CSIT 499', 'Senior Project', 3.000, 'Undergraduate', 1),
 (10023, 'CSIT 496', 'SpTp: Software Projects', 3.000, 'Undergraduate', 1),
