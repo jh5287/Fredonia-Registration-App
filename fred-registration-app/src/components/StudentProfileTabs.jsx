@@ -34,19 +34,23 @@ const StudentProfileTabs = ({ studentInfo }) => {
   return (
     <div className="m-5">
       {/* Tab Bar */}
-      <div className="flex py-3">
+      <div className="flex py-3 ">
+        <div className='px-2'>
         <button
-          className={`py-2 px-4 ${activeTab === 'info' ? 'border-b-2 border-blue-500' : ''}`}
+          className={`py-2 px-4 border-b-2 transition-all duration-300 ${activeTab === 'info' ? 'border-b-2 border-primary' : 'hover:border-accent'}`}
           onClick={() => setActiveTab('info')}
         >
           Student Info
         </button>
+        </div>
+        <div>
         <button
-          className={`py-2 px-4 ${activeTab === 'summary' ? 'border-b-2 border-blue-500' : ''}`}
+          className={`py-2 px-4 border-b-2 transition-all duration-300 ${activeTab === 'summary' ? 'border-b-2 border-primary' : 'hover:border-accent'}`}
           onClick={() => setActiveTab('summary')}
         >
           Academic Summary
         </button>
+        </div>
       </div>
       
       {activeTab === 'info' && <StudentInfoBanner studentInfo={stuinfo} />}
