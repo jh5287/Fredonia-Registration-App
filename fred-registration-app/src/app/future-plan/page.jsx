@@ -15,14 +15,11 @@ import { uploadCustomSems, getCustomList, getCustomSems } from "@/firebase/fireb
 
 const DynamicCGPA = ({ cgpa, newCGPA }) => {
   return (
-    <div className=" z-50 w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
-      <div>
-        <h1 className="text-xl font-bold">Academic Summary</h1>
-        <p className="text-lg">CGPA: {cgpa ? cgpa?.toFixed(2) : 'Unknown'}</p>
-      </div>
-      <div>
-        <h1 className="text-xl font-bold">Dynamic GPA</h1>
-        <p className="text-lg">GPA: {newCGPA ? newCGPA?.toFixed(2) : 'Unknown'}</p>
+    <div>
+      <div className="stat py-0 ">
+        <div className="stat-title">Dynamic GPA</div>
+        <div className="stat-value">{newCGPA ? newCGPA.toFixed(2) : "Unavailable"} </div>
+        <div className="stat-desc">Edit grades to see how your CGPA will change!</div>
       </div>
     </div>
   );
@@ -80,13 +77,13 @@ const FuturePlan = () => {
   const fetchUserCGPA = async () => {
     try {
       const userEmail = "wals9256@fredonia.edu";
-      const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+      const response = await fetch(`/api/student/CGPA?email=${session.user.email}`);
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0 || data.CGPA) {
         
         // Try and convert CGPA to a number
         const cgpa = parseFloat(data.CGPA);
-        console.log("CGPA", cgpa);
+        console.log("CGPA in future plan", cgpa);
   
         if (!isNaN(cgpa)) { // Check if conversion was successful
           setUserCGPA(cgpa);
@@ -207,7 +204,10 @@ const FuturePlan = () => {
           <button className="btn btn-primary m-5" onClick={() => loadSaveData()}>Load Saved Plan</button>
           <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
         </div>
-        <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+        <div className="flex justify-between">
+          <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+          <DynamicCGPA cgpa={userCGPA} newCGPA={newCGPA} />
+        </div>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
             return (
