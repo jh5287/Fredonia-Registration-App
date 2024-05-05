@@ -7,7 +7,6 @@ import { GoDash } from "react-icons/go";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
-import TitleCard from "@/components/TitleCard";
 import WhatIfExtra from "@/components/WhatIfExtra";
 //import RegSemester from "@/components/RegSemester";
 import { uploadCustomSems, getCustomList, getCustomSems } from "@/firebase/firebaseManagement";
@@ -18,16 +17,32 @@ import { cn } from "@/lib/utils";
 
 
 const RegSemester = ({ number, data }) => {
+  const [currentGrades, setCurrentGrades] = useState([]);
   const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
   const successGrades = ['A', 'B'];
   const warnGrades = ['C', 'D'];
+
+  const handleGradeChange = (e, index) => {
+    const grade = e.target.value;
+    setCurrentGrades(prevGrades => {
+        const newGrades = [...prevGrades];
+        newGrades[index] = grade;
+        return newGrades;
+    });
+  };
+
+
+  useEffect(() => {
+    setCurrentGrades(data.map(item => item.Grade));
+  } , [data]);
 
   return (
   
     <div className="">
 
       <div className="flex justify-between items-center">
-        <h1 className="py-2 pl-1 text-lg font-semibold">{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
+        <h1 className="py-2 pl-1 text-lg font-semibold"
+        data-tip={(calculateGPA(data) !== null && calculateGPA(data)  !== 0) ? calculateGPA(data) : "No grade"}>{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
         <div>
           {totalCredits > 0 ? <span className="text-base">Total Credits: {totalCredits}</span> : null} {/*if there is no applicable grade do not display it */}
           {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
@@ -42,6 +57,7 @@ const RegSemester = ({ number, data }) => {
               <th>Course Title</th>
               <th>Credits</th>
               <th>Grade</th>
+              <th>Change Grade</th>
             </tr>
           </thead>
           <tbody>
@@ -57,6 +73,7 @@ const RegSemester = ({ number, data }) => {
                 <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
                 >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
                 item.Grade}</td>
+                <td>{item.Grade === null ? <GradeComboBox handleGradeChange={handleGradeChange} index={index}/> : null}</td>
               </tr>
             ))}
           </tbody>
@@ -177,14 +194,24 @@ const FuturePlan = () => {
       return newGPAs;
     });
     setSaveData(prevData => {
-      const newData = [...prevData];
-      newData.push([]);
-      return newData;
+      // if (prevData === undefined) {
+      //   console.log("previous data in parent", prevData);
+      //   return [[]];
+      // }
+      // else{
+        const newData = [...prevData];
+        newData.unshift([]);
+        console.log("previous data in parent after first", prevData);
+        console.log("New data parent", newData);
+        return newData;
+      //}
+      
     });
     console.log(extraSemester)
   }
   
   const removeExtraSemester = (indexToRemove) => {
+    console.log("Removing semester at index", indexToRemove);
     setExtraSemester(prevSemesters => {
       const newSemesters = [...prevSemesters];
       newSemesters.splice(indexToRemove, 1);
@@ -270,6 +297,7 @@ const FuturePlan = () => {
               <div key={item[0]} className="relative">
                 <WhatIfExtra
                   semNumber={item[0]}
+                  extraSemester={extraSemester}
                   currentGPAs={currentGPAs}
                   setCurrentGPAs={setCurrentGPAs}
                   userCourses={[]}

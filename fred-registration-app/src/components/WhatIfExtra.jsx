@@ -5,7 +5,7 @@ import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
-const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
+const SemesterRow = ({ index, semNumber, extraSemester, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({CourseCode: '', Title: '', Credits: '', Grade: ''});
@@ -21,6 +21,15 @@ const handleCourseSelection = (selectedCourse) => {
     setTableData(prevData => {
         const newData = [...prevData];
         newData[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        return newData;
+    });
+    setSaveData(prevData => {
+        const newData = [...prevData];
+        const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
+        const tableData = [...newData[semIndex]];
+        tableData[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        newData[semIndex] = tableData;
+        console.log("AFTER ADDING NEW DATA SAVE DATA: ", newData);
         return newData;
     });
     setSelectedCourse({ CourseCode: selectedCourse.Course.CourseCode, Title: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''});
@@ -57,10 +66,19 @@ const handleCourseSelection = (selectedCourse) => {
 
 };
 
-const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleGradeChange, setSaveData}) => { 
+const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catalogData, handleGradeChange, setSaveData}) => { 
 
   const handleAddRow = () => {
     setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
+    setSaveData(prevData => {
+      const newData = [...prevData];
+      console.log("extra semester data", extraSemester);
+      const index = extraSemester.findIndex(item => item[0] === semNumber);
+      console.log("index found", index, "for semNumber", semNumber);
+      newData[index] = [...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}];
+      console.log("newData child", newData);
+      return newData;
+      });
     console.log("tableData", tableData);
     };
           return (
@@ -71,6 +89,7 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
                     key={index}
                     index={index}
                     semNumber={semNumber}
+                    extraSemester={extraSemester}
                     catalogData={catalogData}
                     handleGradeChange={handleGradeChange}
                     tableData={tableData}
@@ -89,7 +108,7 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
   
   
   
-  const WhatIfExtra = ({ semNumber, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
+  const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
       const [tableData, setTableData] = useState([]);
       
@@ -171,19 +190,26 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
         
       }, [currentGrades,  calculateGPA(userCourses), updateSemesterGPAs()]);
       
-      useEffect(() => {
-        setSaveData(prevData => {
-          const newData = [...prevData];
-          newData[semNumber] = tableData;
-          return newData;
-      })
-        }, [tableData]);
       return (
         <>
           <div>
-            <h1 className="tooltip py-2 pl-1 text-lg" 
+            <h1 className="tooltip py-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-100 rounded-t-lg flex gap-3 items-center" 
             data-tip={(currentGPAs[semNumber - 1] !== null && currentGPAs[semNumber - 1] !== 0) ? currentGPAs[semNumber - 1] : "No grade"}>
-              Semester {semNumber}</h1>
+              <select className="select select-primary  max-w-xs">
+                <option disabled selected>Term</option>
+                <option>Spring</option>
+                <option>Fall</option>
+                <option>Summer</option>
+              </select>
+              <select className="select select-primary  max-w-xs">
+                <option disabled selected>Year</option>
+                <option>2024</option>
+                <option>2025</option>
+                <option>2026</option>
+                <option>2027</option>
+                <option>2028</option>
+              </select>
+            </h1>
             <div className="border rounded">
               <table className="table">
                 <thead>
@@ -197,6 +223,7 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
                
                 <SemesterBody 
                 semNumber={semNumber}
+                extraSemester={extraSemester}
                 tableData={tableData}
                 setTableData={setTableData}
                 catalogData={catalogData}
