@@ -23,7 +23,7 @@ module.exports = {
           "base-100": "#ffffff",
           "success" : "#BBF7D0",
           "warning" : "#fceea2",
-          "error" : "#f6cccb",
+          "error" : "#CC0000",
         },
         FREDdarkTheme: {
           "primary": "#001E5D", // Darker shade of blue
