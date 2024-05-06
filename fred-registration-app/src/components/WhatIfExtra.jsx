@@ -189,7 +189,7 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
           return prevGPAs;
         });
         
-      }, [currentGrades,  calculateGPA(userCourses), updateSemesterGPAs()]);
+      }, [currentGrades, updateSemesterGPAs()]);
       
       return (
         <>

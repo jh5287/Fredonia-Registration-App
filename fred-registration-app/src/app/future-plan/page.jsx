@@ -73,7 +73,7 @@ const RegSemester = ({ number, data }) => {
                 <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
                 >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
                 item.Grade}</td>
-                <td>{item.Grade === null ? <GradeComboBox handleGradeChange={handleGradeChange} index={index}/> : null}</td>
+                <td><GradeComboBox handleGradeChange={handleGradeChange} index={index}/></td>
               </tr>
             ))}
           </tbody>
@@ -189,11 +189,6 @@ const FuturePlan = () => {
       console.log("Extra semesters", newSemesters);
       return newSemesters;
     });
-    // setCurrentGPAs(prevGPAs => {
-    //   const newGPAs = [...prevGPAs];
-    //   newGPAs.push(0.00);
-    //   return newGPAs;
-    // });
     setExtraSemGPAs(prevGPAs => {
       const newGPAs = [...prevGPAs];
       newGPAs.unshift(0.00);
@@ -217,11 +212,6 @@ const FuturePlan = () => {
       newSemesters.splice(indexToRemove, 1);
       return newSemesters;
     });
-    // setCurrentGPAs(prevGPAs => {
-    //   const newGPAs = [...prevGPAs];
-    //   newGPAs.splice(indexToRemove, 1);
-    //   return newGPAs;
-    // });
     setExtraSemGPAs(prevGPAs => {
       const newGPAs = [...prevGPAs];
       newGPAs.splice(indexToRemove, 1);
@@ -248,7 +238,7 @@ const FuturePlan = () => {
     console.error("Loaded data: ", data);
   }
 
-  useEffect(() => {
+  useEffect(() => { //this useEffect is to fill the currentGPAs array with the GPAs of the real student data
     realStudentData.forEach((item, index) => {
       console.log("Item is", item);
       setCurrentGPAs(prevGPAs => {
@@ -258,9 +248,6 @@ const FuturePlan = () => {
       });
     });
   }, [realStudentData]);
-  useEffect(() => {
-    console.log("Current GPAs should contain all real data info: ", currentGPAs);
-  }, [currentGPAs]);
 
   useEffect(() => {
     fetchCatalog();
@@ -270,7 +257,9 @@ const FuturePlan = () => {
     getCustomLists();
   }, [status]);
 
-  useEffect(() => {
+
+
+  useEffect(() => { //this useEffect is to update the newCGPA whenever the currentGPAs or extraSemGPAs change
     setNewCGPA(updateNewCGPA());
   }, [currentGPAs, extraSemGPAs]);
 
@@ -316,13 +305,6 @@ const FuturePlan = () => {
         <div className="flex justify-between">
           <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
           <DynamicCGPA newCGPA={newCGPA} />
-          {/* {extraSemGPAs.map((item, index) => (
-            <div key={index} className="stat py-0 ">
-              <div className="stat-title">Semester {index + 1}</div>
-              <div className="stat-value">{item ? parseFloat(item).toFixed(2) : "Unavailable"} </div>
-              <div className="stat-desc">Edit grades to see how your GPA will change!</div>
-            </div>
-          ))} */}
         </div>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
