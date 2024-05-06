@@ -204,10 +204,10 @@ const FuturePlan = () => {
               <option key={index} value={item.id}>{item.name}</option>
             ))}
           </select>
-          <button className="btn btn-primary m-5 text-white" onClick={() => loadSaveData()}>Load Saved Plan</button>
-          <button className="btn btn-primary m-5 text-white" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
+          <button className="btn btn-primary m-5" onClick={() => loadSaveData()}>Load Saved Plan</button>
+          <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
         </div>
-        <button className="btn btn-primary my-5 text-white" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+        <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
             return (

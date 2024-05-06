@@ -25,7 +25,7 @@ module.exports = {
           "success" : "#BBF7D0",
           "warning" : "#fceea2",
           "error" : "#f6cccb",
-          "primary-content" : "#000000"
+          "info" : "#000000", // Used for navbar hamburger text
         },
         FREDdarkTheme: {
           "primary": "#001E5D", // Darker shade of blue
@@ -37,7 +37,7 @@ module.exports = {
           "success": "#236b41", // Darker shade of green for success
           "warning": "#827531", // Same shade of yellow for warning
           "error": "#785959", // Darker shade of red for error
-          "primary-content" : "#ffffff"
+          "info" : "#ffffff"// Used for navbar hamburger text
           
         },
         
