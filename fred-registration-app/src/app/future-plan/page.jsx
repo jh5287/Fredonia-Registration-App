@@ -86,7 +86,7 @@ const RegSemester = ({ number, data }) => {
 
 
 
-const DynamicCGPA = ({ cgpa, newCGPA }) => {
+const DynamicCGPA = ({  newCGPA }) => {
   return (
     <div>
       <div className="stat py-0 ">
@@ -102,9 +102,10 @@ const FuturePlan = () => {
   const [catalog, setCatalog] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
-  const [newCGPA, setNewCGPA] = useState(null);
-  const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
+  const [newCGPA, setNewCGPA] = useState(null); //state to hold the dynamic GPA
+  const [currentGPAs, setCurrentGPAs] = useState([]); //state to hold the current GPAs for each semester
   const [extraSemester, setExtraSemester] = useState([]);
+  const [extraSemGPAs, setExtraSemGPAs] = useState([]); //state to hold the GPAs for the extra semesters
   const [realStudentData, setRealStudentData] = useState([]);
   const { data: session, status } = useSession();
 
@@ -188,23 +189,22 @@ const FuturePlan = () => {
       console.log("Extra semesters", newSemesters);
       return newSemesters;
     });
-    setCurrentGPAs(prevGPAs => {
+    // setCurrentGPAs(prevGPAs => {
+    //   const newGPAs = [...prevGPAs];
+    //   newGPAs.push(0.00);
+    //   return newGPAs;
+    // });
+    setExtraSemGPAs(prevGPAs => {
       const newGPAs = [...prevGPAs];
-      newGPAs.push(0.00);
+      newGPAs.unshift(0.00);
       return newGPAs;
     });
     setSaveData(prevData => {
-      // if (prevData === undefined) {
-      //   console.log("previous data in parent", prevData);
-      //   return [[]];
-      // }
-      // else{
         const newData = [...prevData];
         newData.unshift([]);
         console.log("previous data in parent after first", prevData);
         console.log("New data parent", newData);
         return newData;
-      //}
       
     });
     console.log(extraSemester)
@@ -217,7 +217,12 @@ const FuturePlan = () => {
       newSemesters.splice(indexToRemove, 1);
       return newSemesters;
     });
-    setCurrentGPAs(prevGPAs => {
+    // setCurrentGPAs(prevGPAs => {
+    //   const newGPAs = [...prevGPAs];
+    //   newGPAs.splice(indexToRemove, 1);
+    //   return newGPAs;
+    // });
+    setExtraSemGPAs(prevGPAs => {
       const newGPAs = [...prevGPAs];
       newGPAs.splice(indexToRemove, 1);
       return newGPAs;
@@ -243,6 +248,19 @@ const FuturePlan = () => {
     console.error("Loaded data: ", data);
   }
 
+  useEffect(() => {
+    realStudentData.forEach((item, index) => {
+      console.log("Item is", item);
+      setCurrentGPAs(prevGPAs => {
+        const newGPAs = [...prevGPAs];
+        newGPAs.push(calculateGPA(item));
+        return newGPAs;
+      });
+    });
+  }, [realStudentData]);
+  useEffect(() => {
+    console.log("Current GPAs should contain all real data info: ", currentGPAs);
+  }, [currentGPAs]);
 
   useEffect(() => {
     fetchCatalog();
@@ -254,20 +272,28 @@ const FuturePlan = () => {
 
   useEffect(() => {
     setNewCGPA(updateNewCGPA());
-  }, [currentGPAs]);
+  }, [currentGPAs, extraSemGPAs]);
 
   const updateNewCGPA = () => {
     console.log("Updating new CGPA");
     let total = 0;
     let acceptedGPAs = 0;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < realStudentData.length; i++) {
       let currNum = parseFloat(currentGPAs[i]);
       if (currNum !== 0.00) {
        total = total + currNum;
        acceptedGPAs++;
       }
     }
-    console.log("All the GPAs lead to", currentGPAs);
+    for (let i = 0; i < extraSemGPAs.length; i++) {
+      let currNum = parseFloat(extraSemGPAs[i]);
+      if (currNum !== 0.00) {
+        total = total + currNum;
+        acceptedGPAs++;
+      }
+    }
+    console.log("All current GPAs", currentGPAs);
+    console.log("All extra GPAs", extraSemGPAs);
     console.log("The new CGPA is", total / acceptedGPAs);
     return total / acceptedGPAs;
   }
@@ -289,7 +315,14 @@ const FuturePlan = () => {
         </div>
         <div className="flex justify-between">
           <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
-          <DynamicCGPA cgpa={userCGPA} newCGPA={newCGPA} />
+          <DynamicCGPA newCGPA={newCGPA} />
+          {/* {extraSemGPAs.map((item, index) => (
+            <div key={index} className="stat py-0 ">
+              <div className="stat-title">Semester {index + 1}</div>
+              <div className="stat-value">{item ? parseFloat(item).toFixed(2) : "Unavailable"} </div>
+              <div className="stat-desc">Edit grades to see how your GPA will change!</div>
+            </div>
+          ))} */}
         </div>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
@@ -298,8 +331,8 @@ const FuturePlan = () => {
                 <WhatIfExtra
                   semNumber={item[0]}
                   extraSemester={extraSemester}
-                  currentGPAs={currentGPAs}
-                  setCurrentGPAs={setCurrentGPAs}
+                  currentGPAs={extraSemGPAs}
+                  setCurrentGPAs={setExtraSemGPAs}
                   userCourses={[]}
                   catalogData={catalog}
                   setSaveData={setSaveData}

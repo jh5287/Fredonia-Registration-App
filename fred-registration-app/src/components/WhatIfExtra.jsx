@@ -111,7 +111,7 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
   const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
       const [tableData, setTableData] = useState([]);
-      
+      const extraSemIndex = extraSemester.findIndex(item => item[0] === semNumber)
   
       const updateSemesterGPAs = () => {
         let totalCredits = 0;
@@ -177,12 +177,13 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
       useEffect(() => {
         setCurrentGPAs(prevGPAs => {
           const newGPAs = [...prevGPAs];
+          const index = extraSemester.findIndex(item => item[0] === semNumber);
           if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
-            newGPAs[semNumber - 1] = calculateGPA(userCourses);
+            newGPAs[index] = calculateGPA(userCourses);
             return newGPAs;
           }
           else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
-            newGPAs[semNumber - 1] = updateSemesterGPAs();
+            newGPAs[index] = updateSemesterGPAs();
             return newGPAs;
           }
           return prevGPAs;
@@ -194,7 +195,7 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
         <>
           <div>
             <h1 className="tooltip py-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-100 rounded-t-lg flex gap-3 items-center" 
-            data-tip={(currentGPAs[semNumber - 1] !== null && currentGPAs[semNumber - 1] !== 0) ? currentGPAs[semNumber - 1] : "No grade"}>
+            data-tip={(currentGPAs[extraSemIndex] !== null && currentGPAs[extraSemIndex] !== 0) ? currentGPAs[extraSemIndex] : "No grade"}>
               <select className="select select-primary  max-w-xs">
                 <option disabled selected>Term</option>
                 <option>Spring</option>
