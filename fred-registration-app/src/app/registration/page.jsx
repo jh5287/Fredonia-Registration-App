@@ -127,7 +127,7 @@ const Registration = () => {
 
   return (
     <>
-    <h1 className="p-3 py-5 text-2xl text-center">Actual Registration</h1>
+    <h1 className="p-3 py-6 text-2xl text-center">Actual Registration</h1>
     <div className="m-3 grid grid-cols-1 gap-8 h-full md:grid-cols-2">
     {studentData.map((item, index) => (
             <RegSemester key={index+1} number={index} data={item}/>

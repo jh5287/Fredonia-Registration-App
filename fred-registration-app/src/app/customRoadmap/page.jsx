@@ -22,7 +22,7 @@ function CourseSearchSidebar({}) {
         ""
       )}
       <aside className={`${expanded ? "w-1/2" : "w-0"}`}>
-        <nav className={`h-full ${expanded ? " shadow-md px-2" : ""}`}>
+        <nav className={`h-full ${expanded ? " px-2" : ""}`}>
           <div
             className={`relative overflow-hidden h-full ${
               expanded ? "w-full" : "w-0"
@@ -83,7 +83,7 @@ export default function customRoadmap() {
   return (
     <>
       <DndProvider backend={HTML5Backend}>
-        <div className="flex flex-row gap-x-4 h-screen w-full ">
+        <div className="flex flex-row gap-x-4 h-screen w-full bg-base-100 rounded-lg m-3 p-3 pb-8">
           <div className="relative flex-1 overflow-y-auto px-2">
             <h1 className={"text-lg pt-1 pb-2"}>Custom Roadmap</h1>
             <div className="grid grid-cols-1 gap-5 h-full ">

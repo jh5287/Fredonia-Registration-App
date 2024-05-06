@@ -194,7 +194,7 @@ const FuturePlan = () => {
 
   return (
     <>
-      <div className="p-3">
+      <div className="p-3 pt-6">
         <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="flex justify-center">
           <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />

@@ -163,7 +163,7 @@ const RoadMap = () => {
 
   return (
     <>
-      <div className="p-3 mb-10">
+      <div className="p-3 pt-6 mb-10">
         <div className="relative flex flex-col items-center">
           {studentCatalogs && studentCatalogs.length > 0 && (
             <TitleCard catalogName={studentCatalogs[0]?.programName} />
