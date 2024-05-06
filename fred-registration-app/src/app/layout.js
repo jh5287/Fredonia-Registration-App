@@ -14,10 +14,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="FREDtheme">
-      <body className={`${inter.className} bg-base-200`}>
+      <body className={`${inter.className} bg-base-200 h-full`}>
         <NextAuthProvider>
           <Navbar />
-          <div className="flex justify-center h-full">
+          <div className="flex justify-center  min-h-screen">
             <div className="max-w-screen-xl w-full">
               <div className="min-w-full">
               <StudentProfileTabs />
