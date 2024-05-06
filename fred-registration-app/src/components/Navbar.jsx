@@ -30,7 +30,7 @@ const Navbar = () => {
             className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52 absolute z-50"
           >
             <li>
-              <Link href="/customRoadmap">Roadmap Builder</Link>
+              <Link href="/customRoadmap" className="text-primary-content">Roadmap Builder</Link>
             </li>
           </ul>
         </div>
