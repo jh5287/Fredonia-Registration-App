@@ -11,6 +11,7 @@ import {
 } from "@/app/roadmap/apiCalls";
 
 const StudentProfileTabs = ({ studentInfo }) => {
+  const [activeTab, setActiveTab] = useState('studentProfile'); 
   const [stuinfo, setStuinfo] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
   const [foundationCgpa, setFoundationCgpa] = useState(null);
@@ -44,6 +45,8 @@ const StudentProfileTabs = ({ studentInfo }) => {
         role="tab"
         className="tab"
         aria-label="Student Profile"
+        checked={activeTab === 'studentProfile'}
+        onChange={() => setActiveTab('studentProfile')}
       />
       <div
         role="tabpanel"
@@ -58,6 +61,8 @@ const StudentProfileTabs = ({ studentInfo }) => {
         role="tab"
         className="tab"
         aria-label="Academic Summary"
+        checked={activeTab === 'academicSummary'}
+        onChange={() => setActiveTab('academicSummary')}
       />
       <div
         role="tabpanel"
