@@ -180,11 +180,11 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
         }, [tableData]);
       return (
         <>
-          <div>
-            <h1 className="tooltip py-2 pl-1 text-lg" 
+          <div className="rounded-lg shadow px-3 pt-2 pb-4">
+            <h1 className="tooltip pb-2 pl-1 text-lg" 
             data-tip={(currentGPAs[semNumber - 1] !== null && currentGPAs[semNumber - 1] !== 0) ? currentGPAs[semNumber - 1] : "No grade"}>
               Semester {semNumber}</h1>
-            <div className="border rounded">
+            <div className="border rounded-lg border-base-200 overflow-hidden">
               <table className="table">
                 <thead>
                   <tr>

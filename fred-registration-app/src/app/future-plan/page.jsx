@@ -220,7 +220,7 @@ const FuturePlan = () => {
                   catalogData={catalog}
                   setSaveData={setSaveData}
                 />
-                <button className="btn btn-error btn-circle btn-xs absolute right-0 top-0 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
+                <button className="btn btn-error btn-circle btn-xs absolute right-2 top-2 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
               </div>)
             })}      
         </div>
