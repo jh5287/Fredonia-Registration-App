@@ -192,7 +192,7 @@ const RoadMap = () => {
               catalogUserCourseMap
             );
             return (
-              <div className="border rounded-lg border-slate-150" key={i + 1}>
+              <div className="rounded-lg bg-base-100 shadow" key={i + 1}>
                 <Semester
                   key={i + 1}
                   number={i + 1}
