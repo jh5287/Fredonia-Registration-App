@@ -312,10 +312,11 @@ const FuturePlan = () => {
               <div key={item[0]} className="relative">
                 <WhatIfExtra
                   semNumber={item[0]}
-                  extraSemester={extraSemester}
-                  currentGPAs={extraSemGPAs}
+                  extraSemester={extraSemester} //this is the array of extra semesters and holds unique values that are used as keys for the semesters so they will always be unique. 
+                                                //In WhatIfExtra I have to find the exact index from the extraSemester array to be able to accurately handle save data manipulation and GPA calculations
+                  currentGPAs={extraSemGPAs}//its named current GPAs but it is the GPAs for the extra semesters
                   setCurrentGPAs={setExtraSemGPAs}
-                  userCourses={[]}
+                  userCourses={[]} //I have to remove this field currently it does nothing in the whatIfExtra component
                   catalogData={catalog}
                   setSaveData={setSaveData}
                 />
@@ -325,7 +326,7 @@ const FuturePlan = () => {
         </div>
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
         {realStudentData.map((item, index) => (
-            <RegSemester key={index+1} number={index} data={item}/>
+            <RegSemester key={index+1} number={index} data={item}/> //regSemester was moved out of components folder and is local to this page to include the grade change combo boxes
           ))}
          </div>
       </div>
