@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
+import { GoDash } from "react-icons/go";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
 const SemesterRow = ({ index, semNumber, extraSemester, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
@@ -16,6 +17,12 @@ const SemesterRow = ({ index, semNumber, extraSemester, catalogData, handleGrade
     const filteredResults = catalogData.filter(course => course.Course.Title.toLowerCase().includes(inputValue.toLowerCase()));
     setSearchResults(filteredResults);
 };
+
+useEffect(() => { //useEffect is to update the table row data after a course is removed
+    setSelectedCourse({CourseCode: tableData[index].CourseCode, Title: tableData[index].CourseTitle, Credits: tableData[index].Credits, Grade: tableData[index].Grade});
+    setSearchInput(tableData[index].CourseTitle);
+}, [tableData]);
+
 
 const handleCourseSelection = (selectedCourse) => {
     setTableData(prevData => {
@@ -81,20 +88,41 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
       });
     console.log("tableData", tableData);
     };
+
+    const handleRemoveRow = (index) => {
+      console.log("INDEX TO REMOVE: ", index);
+      setTableData(prevData => {
+          const newData = [...prevData];
+          newData.splice(index, 1);
+          return newData;
+      })
+      setSaveData(prevData => {
+        const newData = [...prevData];
+        const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
+        const tableData = [...newData[semIndex]];
+        tableData.splice(index, 1);
+        newData[semIndex] = tableData;
+        console.log("AFTER REMOVING DATA SAVE DATA: ", newData);
+        return newData;
+    });
+  }
           return (
               <tbody>
                 {tableData.map((item, index) => {
                   return (
-                    <SemesterRow 
-                    key={index}
-                    index={index}
-                    semNumber={semNumber}
-                    extraSemester={extraSemester}
-                    catalogData={catalogData}
-                    handleGradeChange={handleGradeChange}
-                    tableData={tableData}
-                    setTableData={setTableData}
-                    setSaveData={setSaveData} />
+                    < >
+                      <button className="btn btn-error btn-circle btn-xs text-white" onClick={() => handleRemoveRow(index)}><GoDash/></button>
+                      <SemesterRow
+                      key={index}
+                      index={index}
+                      semNumber={semNumber}
+                      extraSemester={extraSemester}
+                      catalogData={catalogData}
+                      handleGradeChange={handleGradeChange}
+                      tableData={tableData}
+                      setTableData={setTableData}
+                      setSaveData={setSaveData} />
+                    </>
                     );
               })}
               <tr>
@@ -193,8 +221,8 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
       
       return (
         <>
-          <div className="rounded-lg shadow px-3 pt-2 pb-4">
-            <h1 className="tooltip pb-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-100 rounded-t-lg flex gap-3 items-center" 
+          <div className="rounded-lg shadow px-3 pt-2 pb-4 bg-base-200">
+            <h1 className="tooltip pb-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-200 rounded-t-lg flex gap-3 items-center" 
             data-tip={(currentGPAs[extraSemIndex] !== null && currentGPAs[extraSemIndex] !== 0) ? currentGPAs[extraSemIndex] : "No grade"}>
               <select className="select select-primary  max-w-xs">
                 <option disabled selected>Term</option>
@@ -211,7 +239,7 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
                 <option>2028</option>
               </select>
             </h1>
-            <div className="border rounded-lg border-base-200 overflow-hidden">
+            <div className="border rounded-lg border-base-200 bg-base-100 overflow-hidden">
               <table className="table">
                 <thead>
                   <tr>

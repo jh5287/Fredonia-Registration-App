@@ -27,20 +27,33 @@ module.exports = {
           "error" : "#f6cccb",
           "info" : "#000000", // Used for navbar hamburger text
         },
-        FREDdarkTheme: {
-          "primary": "#001E5D", // Darker shade of blue
-          "primary-content": "#ffffff",
-          "secondary": "#001133", // Darker shade of navy blue
-          "accent": "#6C992F", // Darker shade of green
-          "neutral": "#292C34", // Darker shade of gray
-          "base-100": "#1A1A1A", // Darker shade of white for background
-          "base-200": "#131313", // Darker shade of off-white for secondary background
-          "success": "#236b41", // Darker shade of green for success
-          "warning": "#827531", // Same shade of yellow for warning
-          "error": "#785959", // Darker shade of red for error
-          "info" : "#ffffff"// Used for navbar hamburger text
+        // FREDdarkTheme: {
+        //   "primary": "#001E5D", // Darker shade of blue
+        //   "primary-content": "#ffffff",
+        //   "secondary": "#001133", // Darker shade of navy blue
+        //   "accent": "#6C992F", // Darker shade of green
+        //   "neutral": "#292C34", // Darker shade of gray
+        //   "base-100": "#1A1A1A", // Darker shade of white for background
+        //   "base-200": "#131313", // Darker shade of off-white for secondary background
+        //   "success": "#236b41", // Darker shade of green for success
+        //   "warning": "#827531", // Same shade of yellow for warning
+        //   "error": "#785959", // Darker shade of red for error
+        //   "info" : "#ffffff"// Used for navbar hamburger text
           
-        },
+        // },
+        FREDdarkTheme: {
+          "primary": "#001E5D", // Slightly lighter shade of blue
+          "primary-content": "#ffffff",
+          "secondary": "#001E3A", // Slightly lighter shade of navy blue
+          "accent": "#749B41", // Slightly lighter shade of green
+          "neutral": "#40444C", // Slightly lighter shade of gray
+          "base-100": "#2D2D2D", // Slightly lighter shade of white for background
+          "base-200": "#222222", // Slightly lighter shade of off-white for secondary background
+          "success": "#2D6E45", // Slightly lighter shade of green for success
+          "warning": "#958741", // Slightly lighter shade of yellow for warning
+          "error": "#8B6B6B", // Slightly lighter shade of red for error
+          "info": "#ffffff" // Used for navbar hamburger text
+        }
         
       },
       "light", 

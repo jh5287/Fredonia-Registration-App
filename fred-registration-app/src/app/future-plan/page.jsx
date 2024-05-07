@@ -38,8 +38,7 @@ const RegSemester = ({ number, data }) => {
 
   return (
   
-    <div className="">
-
+    <div className="rounded-lg shadow px-3 pt-2 pb-4 bg-base-200">
       <div className="flex justify-between items-center">
         <h1 className="py-2 pl-1 text-lg font-semibold"
         data-tip={(calculateGPA(data) !== null && calculateGPA(data)  !== 0) ? calculateGPA(data) : "No grade"}>{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
@@ -49,7 +48,7 @@ const RegSemester = ({ number, data }) => {
         </div>
       </div>
       
-      <div className="border rounded">
+      <div className="border rounded-lg border-base-200 overflow-hidden bg-base-100">
         <table className="table">
           <thead>
             <tr>
@@ -240,7 +239,6 @@ const FuturePlan = () => {
 
   useEffect(() => { //this useEffect is to fill the currentGPAs array with the GPAs of the real student data
     realStudentData.forEach((item, index) => {
-      console.log("Item is", item);
       setCurrentGPAs(prevGPAs => {
         const newGPAs = [...prevGPAs];
         newGPAs.push(calculateGPA(item));
