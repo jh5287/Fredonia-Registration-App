@@ -40,7 +40,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
           Semester {number}
         </h1>
         <div className="collapse-content overflow-hidden">
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-lg border overflow-hidden bg-base-100">
           <table className="table">
             <thead>
               <tr>

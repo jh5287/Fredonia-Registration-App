@@ -15,7 +15,7 @@ const RegSemester = ({ number, data }) => {
 
   return (
     <>
-      <div className="rounded-lg shadow px-3 pt-2 pb-4">
+      <div className="rounded-lg shadow px-3 pt-2 pb-4 bg-base-200">
         <div className="flex justify-between items-center">
           <h1 className="py-2 pl-1 text-lg font-semibold">
             {data[0]?.Term.Semester + " " + data[0]?.Term.Year}
@@ -32,7 +32,7 @@ const RegSemester = ({ number, data }) => {
           </div>
         </div>
 
-        <div className="border rounded-lg border-base-200 overflow-hidden">
+        <div className="border rounded-lg border-base-200 overflow-hidden bg-base-100">
           <table className="table">
             <thead>
               <tr>
@@ -98,13 +98,6 @@ const Registration = () => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    /*
-    fetchStudentData gets all of the courses the student has taken
-    this includes S.FirstName, SR.Grade, C.CourseCode, C.Title, C.Credits, SR.TermID
-    It is then filtered by TermID in order to separate which courses were taken during which semester
-    The data is then organized into an array of arrays, where each array is a semester
-    The array is mapped onto the RegSemester component
-    */
     const fetchStudentData = async () => {
       try {
         let email = "russ9214@fredonia.edu";
