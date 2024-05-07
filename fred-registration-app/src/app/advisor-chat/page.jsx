@@ -51,7 +51,7 @@ export default function AdvisorChat({ role }) {
     
     return (
         <>
-            <h1 className="text-2xl text-center m-2">Advisor Chat</h1>
+            <h1 className="p-3 pt-6 text-2xl text-center">Advisor Chat</h1>
             <h2 className="text-lg text-center m-2">Your advisor is Shahin Mehdipour Atatee!</h2>
             {status === "authenticated" ? (
                 <div className="flex flex-col h-full">

@@ -289,7 +289,7 @@ const FuturePlan = () => {
 
   return (
     <>
-      <div className="p-3">
+      <div className="p-3 pt-6">
         <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="flex justify-center">
           <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
@@ -319,7 +319,7 @@ const FuturePlan = () => {
                   catalogData={catalog}
                   setSaveData={setSaveData}
                 />
-                <button className="btn btn-error btn-circle btn-xs absolute right-0 top-0 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
+                <button className="btn btn-error btn-circle btn-xs absolute right-2 top-2 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
               </div>)
             })}
         </div>

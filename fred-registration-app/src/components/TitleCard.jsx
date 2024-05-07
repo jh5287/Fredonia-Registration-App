@@ -11,7 +11,7 @@ import { mdiProgressHelper } from "@mdi/js";
 const TitleCard = ({classData, catalogName}) => {
     return(
     <div className={`flex flex-col items-center ${classData}`}>
-      <h1 className="py-5 text-2xl">{catalogName} Roadmap</h1>
+      <h1 className="text-2xl">{catalogName} Roadmap</h1>
       <div className="flex flex-row mb-10">
         <div className="flex flex-row items-center mx-2">
           <FaCheckCircle color="green" />

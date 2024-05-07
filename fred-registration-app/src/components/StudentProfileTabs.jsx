@@ -1,13 +1,17 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import StudentInfoBanner from './StudentInfoBanner'; 
-import AcademicSummaryBanner from './AcademicSummaryBanner'; 
-import { fetchStudentInfo, fetchUserCGPA, fetchFoundationsCGPA } from '@/app/roadmap/apiCalls';
+import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import StudentInfoBanner from "./StudentInfoBanner";
+import AcademicSummaryBanner from "./AcademicSummaryBanner";
+import {
+  fetchStudentInfo,
+  fetchUserCGPA,
+  fetchFoundationsCGPA,
+} from "@/app/roadmap/apiCalls";
 
 const StudentProfileTabs = ({ studentInfo }) => {
-  const [activeTab, setActiveTab] = useState('info'); 
+  const [activeTab, setActiveTab] = useState('studentProfile'); 
   const [stuinfo, setStuinfo] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
   const [foundationCgpa, setFoundationCgpa] = useState(null);
@@ -19,9 +23,11 @@ const StudentProfileTabs = ({ studentInfo }) => {
         const studentInfoData = await fetchStudentInfo(session.user.email);
         setStuinfo(studentInfoData);
         const cgpaData = await fetchUserCGPA(session.user.email);
-        console.log("CGPA Data for banner: ",cgpaData);
+        console.log("CGPA Data for banner: ", cgpaData);
         setUserCGPA(cgpaData);
-        const foundationCgpaData = await fetchFoundationsCGPA(session.user.email);
+        const foundationCgpaData = await fetchFoundationsCGPA(
+          session.user.email
+        );
         setFoundationCgpa(foundationCgpaData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -32,25 +38,41 @@ const StudentProfileTabs = ({ studentInfo }) => {
   }, [status]);
 
   return (
-    <div className="m-5">
-      {/* Tab Bar */}
-      <div className="flex py-3">
-        <button
-          className={`py-2 px-4 ${activeTab === 'info' ? 'border-b-2 border-blue-500' : ''}`}
-          onClick={() => setActiveTab('info')}
-        >
-          Student Info
-        </button>
-        <button
-          className={`py-2 px-4 ${activeTab === 'summary' ? 'border-b-2 border-blue-500' : ''}`}
-          onClick={() => setActiveTab('summary')}
-        >
-          Academic Summary
-        </button>
+    <div role="tablist" className="tabs tabs-lifted m-3 ">
+      <input
+        type="radio"
+        name="my_tabs_2"
+        role="tab"
+        className="tab"
+        aria-label="Student Profile"
+        checked={activeTab === 'studentProfile'}
+        onChange={() => setActiveTab('studentProfile')}
+      />
+      <div
+        role="tabpanel"
+        className="tab-content bg-base-100 border-base-300 rounded-box "
+      >
+        <StudentInfoBanner studentInfo={stuinfo} />
       </div>
-      
-      {activeTab === 'info' && <StudentInfoBanner studentInfo={stuinfo} />}
-      {activeTab === 'summary' && <AcademicSummaryBanner cgpa={userCGPA} foundationCgpa={foundationCgpa}/>}
+
+      <input
+        type="radio"
+        name="my_tabs_2"
+        role="tab"
+        className="tab"
+        aria-label="Academic Summary"
+        checked={activeTab === 'academicSummary'}
+        onChange={() => setActiveTab('academicSummary')}
+      />
+      <div
+        role="tabpanel"
+        className="tab-content bg-base-100 border-base-300 rounded-box "
+      >
+        <AcademicSummaryBanner
+          cgpa={userCGPA}
+          foundationCgpa={foundationCgpa}
+        />
+      </div>
     </div>
   );
 };

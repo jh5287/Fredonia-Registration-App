@@ -36,10 +36,11 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
   return (
     <>
       <div tabIndex={0} className={cn({"collapse-open": open, "collapse-close": !open},"collapse collapse-arrow")}>
-        <h1 className="collapse-title w-full py-2 pl-2 text-lg hover:cursor-pointer" onClick={() => toggleSemester(number - 1)}>
+        <h1 className="collapse-title w-full pr-4 text-lg hover:cursor-pointer" onClick={() => toggleSemester(number - 1)}>
           Semester {number}
         </h1>
         <div className="collapse-content overflow-hidden">
+          <div className="rounded-lg border overflow-hidden bg-base-100">
           <table className="table">
             <thead>
               <tr>
@@ -74,6 +75,7 @@ const Semester = ({ number, courses, toggleSemester, open }) => {
               })}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </>

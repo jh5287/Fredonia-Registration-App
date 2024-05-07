@@ -193,8 +193,8 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
       
       return (
         <>
-          <div>
-            <h1 className="tooltip py-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-100 rounded-t-lg flex gap-3 items-center" 
+          <div className="rounded-lg shadow px-3 pt-2 pb-4">
+            <h1 className="tooltip pb-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-100 rounded-t-lg flex gap-3 items-center" 
             data-tip={(currentGPAs[extraSemIndex] !== null && currentGPAs[extraSemIndex] !== 0) ? currentGPAs[extraSemIndex] : "No grade"}>
               <select className="select select-primary  max-w-xs">
                 <option disabled selected>Term</option>
@@ -211,7 +211,7 @@ const SemesterBody = ({ semNumber, extraSemester, tableData, setTableData, catal
                 <option>2028</option>
               </select>
             </h1>
-            <div className="border rounded">
+            <div className="border rounded-lg border-base-200 overflow-hidden">
               <table className="table">
                 <thead>
                   <tr>

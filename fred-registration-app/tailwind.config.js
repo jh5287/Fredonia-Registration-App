@@ -21,9 +21,11 @@ module.exports = {
           "accent": "#8BC53F",
           "neutral": "#f9fafb",
           "base-100": "#ffffff",
+          "base-200": "#f6f7f8",
           "success" : "#BBF7D0",
           "warning" : "#fceea2",
-          "error" : "#CC0000",
+          "error" : "#f6cccb",
+          "info" : "#000000", // Used for navbar hamburger text
         },
         FREDdarkTheme: {
           "primary": "#001E5D", // Darker shade of blue
@@ -33,9 +35,11 @@ module.exports = {
           "neutral": "#292C34", // Darker shade of gray
           "base-100": "#1A1A1A", // Darker shade of white for background
           "base-200": "#131313", // Darker shade of off-white for secondary background
-          "base-content": "#ffffff", // White text
-          "success": "#40BF75", // Darker shade of green for success
-          "error": "#CC0000" // Darker shade of red for error
+          "success": "#236b41", // Darker shade of green for success
+          "warning": "#827531", // Same shade of yellow for warning
+          "error": "#785959", // Darker shade of red for error
+          "info" : "#ffffff"// Used for navbar hamburger text
+          
         },
         
       },
