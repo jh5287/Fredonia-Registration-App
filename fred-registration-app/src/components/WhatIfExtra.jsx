@@ -158,9 +158,9 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
   
   const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData, saveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
-      const [tableData, setTableData] = useState(saveData || []);
-      const [term, setTerm] = useState(''); //state to hold the term
-      const [year, setYear] = useState('');
+      const [tableData, setTableData] = useState([]);
+      const [term, setTerm] = useState(); //state to hold the term
+      const [year, setYear] = useState();
       const extraSemIndex = extraSemester.findIndex(item => item[0] === semNumber)
 
   
@@ -239,7 +239,16 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
             });
         };
 
-
+      useEffect(() => {
+        try {
+          setTableData(saveData.Courses);
+          setTerm(saveData.Term);
+          setYear(saveData.Year);
+        }
+        catch (error) {
+          console.error("No previous data exists. Skipping... ", error);
+        }
+      }, []);
 
       useEffect(() => {
         setCurrentGPAs(prevGPAs => {
@@ -263,13 +272,13 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
           <div className="rounded-lg shadow px-3 pt-2 pb-4 bg-base-200">
             <h1 className="tooltip pb-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-200 rounded-t-lg flex gap-3 items-center" 
             data-tip={(currentGPAs[extraSemIndex] !== null && currentGPAs[extraSemIndex] !== 0) ? currentGPAs[extraSemIndex] : "No grade"}>
-              <select className="select select-primary  max-w-xs" onChange={(e) => setTerm(e.target.value)}>
-                <option disabled selected>Term</option>
-                <option value="Spring">Spring</option>
-                <option value="Fall">Fall</option>
-                <option value="Summer">Summer</option>
+              <select value={term} className="select select-primary  max-w-xs" onChange={(e) => setTerm(e.target.value)}>
+                <option key={1} disabled selected>Term</option>
+                <option key={2} value="Spring">Spring</option>
+                <option key={3} value="Fall">Fall</option>
+                <option key={4} value="Summer">Summer</option>
               </select>
-              <select className="select select-primary  max-w-xs"  onChange={(e) => setYear(e.target.value)}>
+              <select value={year} className="select select-primary  max-w-xs"  onChange={(e) => setYear(e.target.value)}>
                 <option disabled selected>Year</option>
                 <option value="2024">2024</option>
                 <option value="2025">2025</option>

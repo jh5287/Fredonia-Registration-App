@@ -113,7 +113,7 @@ const FuturePlan = () => {
   const [saveDataID, setSaveDataID] = useState();
   const [customList, setCustomList] = useState([]); //state to hold the list of previously saved data in db
   const [selectedList, setSelectedList] = useState(); //state to hold the selected data from the db
-  const [planName, setPlanName] = useState(); //state to hold the name of the plan
+  const [planName, setPlanName] = useState(''); //state to hold the name of the plan
   // Fetch catalog data
   const fetchCatalog = async () => {
     try {
@@ -232,10 +232,9 @@ const FuturePlan = () => {
   const loadSaveData = async () => {
     console.error("Selected list: ", selectedList);
     const data = await getCustomSems(selectedList);
+    setExtraSemester(data.semesters.map((item, index) => [index]));
     setSaveData(data.semesters);
     setPlanName(data.name);
-    setExtraSemester(data.semesters.map((item, index) => [index + 1]));
-    console.log("Save data", saveData);
   }
 
   useEffect(() => { //this useEffect is to fill the currentGPAs array with the GPAs of the real student data
@@ -290,7 +289,7 @@ const FuturePlan = () => {
       <div className="p-3 pt-6">
         <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="flex justify-center">
-          <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
+          <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" onChange={(e) => setPlanName(e.target.value)} />
           <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
           <button className="btn btn-primary m-5" onClick={()=>document.getElementById('loadModal').showModal()}>Load Saved Plan</button>
         </div>
