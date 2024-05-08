@@ -262,7 +262,6 @@ const FuturePlan = () => {
   }, [currentGPAs, extraSemGPAs]);
 
   const updateNewCGPA = () => {
-    console.log("Updating new CGPA");
     let total = 0;
     let acceptedGPAs = 0;
     for (let i = 0; i < realStudentData.length; i++) {
