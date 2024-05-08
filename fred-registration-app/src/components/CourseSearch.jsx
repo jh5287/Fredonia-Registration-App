@@ -116,11 +116,11 @@ export default function CourseSearch() {
     <>
       <h1 className={"text-lg pt-1 pb-4"}>Course Search</h1>
       <form onSubmit={handleFormSubmit} className="border-2 rounded-lg p-2">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 m-3">
           <div>
             <label
               htmlFor="CRN"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6"
             >
               CRN
             </label>
@@ -130,7 +130,7 @@ export default function CourseSearch() {
                   type="number"
                   name="CRN"
                   id="CRN"
-                  className="block flex-1  bg-transparent py-1.5 pl-1 text-gray-900  focus:ring-0"
+                  className="block flex-1  bg-transparent py-1.5 pl-1 focus:ring-0"
                 />
               </div>
               {errors.CRN && (
@@ -142,7 +142,7 @@ export default function CourseSearch() {
           <div>
             <label
               htmlFor="courseCode"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6"
             >
               Course Code
             </label>
@@ -152,7 +152,7 @@ export default function CourseSearch() {
                   type="text"
                   name="courseCode"
                   id="courseCode"
-                  className="block flex-1 bg-transparent py-1.5 pl-1 text-gray-900  focus:ring-0"
+                  className="block flex-1 bg-transparent py-1.5 pl-1  focus:ring-0"
                 />
               </div>
               {errors.courseCode && (
@@ -163,7 +163,7 @@ export default function CourseSearch() {
           <div>
             <label
               htmlFor="CRN"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6"
             >
               Course Title
             </label>
@@ -173,7 +173,7 @@ export default function CourseSearch() {
                   type="text"
                   name="courseTitle"
                   id="courseTitle"
-                  className="block flex-1  bg-transparent py-1.5 pl-1 text-gray-900  focus:ring-0"
+                  className="block flex-1  bg-transparent py-1.5 pl-1  focus:ring-0"
                 />
               </div>
               {errors.courseTitle && (
@@ -185,7 +185,7 @@ export default function CourseSearch() {
           <div>
             <label
               htmlFor="Department"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6 "
             >
               Department
             </label>
@@ -208,7 +208,7 @@ export default function CourseSearch() {
           <div>
             <label
               htmlFor="Credits"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6"
             >
               Credits
             </label>
@@ -226,19 +226,19 @@ export default function CourseSearch() {
             </select>
           </div>
         </div>
-        <div className="flex py-4 gap-x-4">
+        <div className="flex py-4 gap-x-4 m-3">
           <button type="submit" className="btn btn-primary">
             Search
           </button>
           <button type="reset" className="btn">
-            clear
+            Clear
           </button>
         </div>
       </form>
       <div className="py-4"></div>
       <div className="border-2 rounded-lg overflow-y-auto h-[60%] ">
         <table className="table">
-          <thead className="bg-slate-100 sticky top-0">
+          <thead className="bg-base-100 sticky top-0">
             <tr>
               <th>CRN</th>
               <th className="whitespace-nowrap">Course Code</th>
