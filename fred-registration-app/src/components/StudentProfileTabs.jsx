@@ -38,42 +38,46 @@ const StudentProfileTabs = ({ studentInfo }) => {
   }, [status]);
 
   return (
-    <div role="tablist" className="tabs tabs-lifted m-3 ">
-      <input
-        type="radio"
-        name="my_tabs_2"
-        role="tab"
-        className="tab"
-        aria-label="Student Profile"
-        checked={activeTab === 'studentProfile'}
-        onChange={() => setActiveTab('studentProfile')}
-      />
-      <div
-        role="tabpanel"
-        className="tab-content bg-base-100 border-base-300 rounded-box "
-      >
-        <StudentInfoBanner studentInfo={stuinfo} />
-      </div>
+    <>
+      {status === "authenticated" && (
+        <div role="tablist" className="tabs tabs-lifted m-3 ">
+          <input
+            type="radio"
+            name="my_tabs_2"
+            role="tab"
+            className="tab"
+            aria-label="Student Profile"
+            checked={activeTab === 'studentProfile'}
+            onChange={() => setActiveTab('studentProfile')}
+          />
+          <div
+            role="tabpanel"
+            className="tab-content bg-base-100 border-base-300 rounded-box "
+          >
+            <StudentInfoBanner studentInfo={stuinfo} />
+          </div>
 
-      <input
-        type="radio"
-        name="my_tabs_2"
-        role="tab"
-        className="tab"
-        aria-label="Academic Summary"
-        checked={activeTab === 'academicSummary'}
-        onChange={() => setActiveTab('academicSummary')}
-      />
-      <div
-        role="tabpanel"
-        className="tab-content bg-base-100 border-base-300 rounded-box "
-      >
-        <AcademicSummaryBanner
-          cgpa={userCGPA}
-          foundationCgpa={foundationCgpa}
-        />
-      </div>
-    </div>
+          <input
+            type="radio"
+            name="my_tabs_2"
+            role="tab"
+            className="tab"
+            aria-label="Academic Summary"
+            checked={activeTab === 'academicSummary'}
+            onChange={() => setActiveTab('academicSummary')}
+          />
+          <div
+            role="tabpanel"
+            className="tab-content bg-base-100 border-base-300 rounded-box "
+          >
+            <AcademicSummaryBanner
+              cgpa={userCGPA}
+              foundationCgpa={foundationCgpa}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
