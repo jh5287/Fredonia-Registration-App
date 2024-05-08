@@ -15,13 +15,13 @@ const SemesterRow = ({ index,
   tableData, setTableData, 
   setSaveData 
 }) => {
-  const [searchInput, setSearchInput] = useState(tableData[index].CourseTitle);
+  const [searchInput, setSearchInput] = useState(tableData.CourseTitle);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({
-    CourseCode: tableData[index].CourseCode, 
-    Title: tableData[index].CourseTitle, 
-    Credits: tableData[index].Credits, 
-    Grade: tableData[index].Grade});
+    CourseCode: tableData.CourseCode, 
+    Title: tableData.CourseTitle, 
+    Credits: tableData.Credits, 
+    Grade: tableData.Grade});
 
   const handleSearchInputChange = (e) => {
     const inputValue = e.target.value;
@@ -31,8 +31,8 @@ const SemesterRow = ({ index,
 };
 
   useEffect(() => { //useEffect is to update the table row data after a course is removed
-      setSelectedCourse({CourseCode: tableData[index].CourseCode, Title: tableData[index].CourseTitle, Credits: tableData[index].Credits, Grade: tableData[index].Grade});
-      setSearchInput(tableData[index].CourseTitle);
+      setSelectedCourse({CourseCode: tableData.CourseCode, Title: tableData.CourseTitle, Credits: tableData.Credits, Grade: tableData.Grade});
+      setSearchInput(tableData.CourseTitle);
   }, [tableData]);
 
 
@@ -128,7 +128,7 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
               <tbody>
                 { tableData ? tableData.map((item, index) => {
                   return (
-                    < >
+                    <>
                       <button className="btn btn-error btn-circle btn-xs text-white" onClick={() => handleRemoveRow(index)}><GoDash/></button>
                       <SemesterRow
                       key={index}
@@ -139,7 +139,7 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
                       term={term}
                       catalogData={catalogData}
                       handleGradeChange={handleGradeChange}
-                      tableData={tableData}
+                      tableData={item}
                       setTableData={setTableData}
                       setSaveData={setSaveData} />
                     </>
@@ -155,9 +155,9 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
 };
   
   
-  const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
+  const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData, saveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
-      const [tableData, setTableData] = useState([]);
+      const [tableData, setTableData] = useState(saveData);
       const [term, setTerm] = useState(''); //state to hold the term
       const [year, setYear] = useState('');
       const extraSemIndex = extraSemester.findIndex(item => item[0] === semNumber)
