@@ -14,6 +14,7 @@ const SemesterRow = ({
   term,
   catalogData,
   handleGradeChange,
+  handleRemoveRow,
   tableData,
   setTableData,
   setSaveData,
@@ -79,6 +80,17 @@ const SemesterRow = ({
     setSearchInput(selectedCourse.Course.Title);
   };
 
+  const RemoveRowBtn = ({ index }) => {
+    return (
+      <button
+        className="btn btn-error btn-circle btn-xs text-white mt-5"
+        onClick={() => handleRemoveRow(index)}
+      >
+        <GoDash />
+      </button>
+    );
+  };
+
   return (
     <tr key={index}>
       <td>
@@ -111,6 +123,7 @@ const SemesterRow = ({
       <td>
         <GradeComboBox handleGradeChange={handleGradeChange} index={index} />
       </td>
+      <RemoveRowBtn index={index} />
     </tr>
   );
 };
@@ -175,18 +188,13 @@ const SemesterBody = ({
       return newGrades;
     });
   };
+
   return (
     <tbody>
       {tableData
         ? tableData.map((item, index) => {
             return (
               <>
-                <button
-                  className="btn btn-error btn-circle btn-xs text-white"
-                  onClick={() => handleRemoveRow(index)}
-                >
-                  <GoDash />
-                </button>
                 <SemesterRow
                   key={index}
                   index={index}
@@ -196,6 +204,7 @@ const SemesterBody = ({
                   term={term}
                   catalogData={catalogData}
                   handleGradeChange={handleGradeChange}
+                  handleRemoveRow={handleRemoveRow}
                   tableData={tableData}
                   setTableData={setTableData}
                   setSaveData={setSaveData}
@@ -307,16 +316,15 @@ const WhatIfExtra = ({
     });
   };
 
-      useEffect(() => {
-        try {
-          setTableData(saveData.Courses);
-          setTerm(saveData.Term);
-          setYear(saveData.Year);
-        }
-        catch (error) {
-          console.error("No previous data exists. Skipping... ", error);
-        }
-      }, []);
+  useEffect(() => {
+    try {
+      setTableData(saveData.Courses);
+      setTerm(saveData.Term);
+      setYear(saveData.Year);
+    } catch (error) {
+      console.error("No previous data exists. Skipping... ", error);
+    }
+  }, []);
   useEffect(() => {
     setCurrentGPAs((prevGPAs) => {
       const newGPAs = [...prevGPAs];
@@ -350,18 +358,26 @@ const WhatIfExtra = ({
               : "No grade"
           }
         >
-          <select value={term}
+          <select
+            value={term}
             className="select select-primary  max-w-xs"
             onChange={(e) => setTerm(e.target.value)}
           >
             <option key={1} disabled selected>
               Term
             </option>
-            <option key={2} value="Spring">Spring</option>
-            <option key={3} value="Fall">Fall</option>
-            <option key={4} value="Summer">Summer</option>
+            <option key={2} value="Spring">
+              Spring
+            </option>
+            <option key={3} value="Fall">
+              Fall
+            </option>
+            <option key={4} value="Summer">
+              Summer
+            </option>
           </select>
-          <select value={year}
+          <select
+            value={year}
             className="select select-primary  max-w-xs"
             onChange={(e) => setYear(e.target.value)}
           >
@@ -406,8 +422,3 @@ const WhatIfExtra = ({
   );
 };
 export default WhatIfExtra;
-
-
-
-
-
