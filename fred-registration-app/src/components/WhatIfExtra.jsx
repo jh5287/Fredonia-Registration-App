@@ -1,11 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
 import GradeComboBox from "@/components/GradeComboBox";
-import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
+import { GoDash } from "react-icons/go";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
-const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
+
+const SemesterRow = ({ index, 
+  semNumber, 
+  extraSemester, 
+  year, term,  
+  catalogData, 
+  handleGradeChange, 
+  tableData, setTableData, 
+  setSaveData 
+}) => {
   const [searchInput, setSearchInput] = useState(tableData[index].CourseTitle);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({
@@ -21,10 +30,23 @@ const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableDa
     setSearchResults(filteredResults);
 };
 
-const handleCourseSelection = (selectedCourse) => {
+  useEffect(() => { //useEffect is to update the table row data after a course is removed
+      setSelectedCourse({CourseCode: tableData[index].CourseCode, Title: tableData[index].CourseTitle, Credits: tableData[index].Credits, Grade: tableData[index].Grade});
+      setSearchInput(tableData[index].CourseTitle);
+  }, [tableData]);
+
+
+  const handleCourseSelection = (selectedCourse) => {
     setTableData(prevData => {
         const newData = [...prevData];
         newData[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        return newData;
+    });
+    setSaveData(prevData => {
+        const newData = [...prevData];
+        const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
+        newData[semIndex].Courses[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        console.log("AFTER ADDING NEW DATA SAVE DATA: ", newData);
         return newData;
     });
     setSelectedCourse({ CourseCode: selectedCourse.Course.CourseCode, Title: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''});
@@ -61,25 +83,66 @@ const handleCourseSelection = (selectedCourse) => {
 
 };
 
-const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleGradeChange, setSaveData}) => { 
+const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTableData, catalogData, grades, setGrades, handleGradeChange, setSaveData}) => { 
 
   const handleAddRow = () => {
     setTableData([...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}]);
-    console.log("tableData", tableData);
+    const newSemesterData = {
+      Term: term, // Set the term value here
+      Year: year, // Set the year value here
+      Courses: [...tableData, {CourseCode: '', CourseTitle: '', Credits: '', Grade: ''}] // Copy the tableData into the Courses array
     };
+    setSaveData(prevData => {
+      const newData = [...prevData];
+      console.log("DATA B4 ADDING NEW ROW", prevData);
+      console.log("NEW weird DATA", newData);
+      const index = extraSemester.findIndex(item => item[0] === semNumber);
+      console.log("index found", index, "for semNumber", semNumber);
+      newData[index] = newSemesterData;
+      console.log("SAVE DATA NEW ROW", newData);
+      return newData;
+      });
+    };
+
+    const handleRemoveRow = (indexToRemove) => {
+      setTableData(prevData => {
+        const newData = prevData.filter((_, index) => index !== indexToRemove);
+        return newData;
+      });
+      setSaveData(prevData => {
+          const newData = [...prevData];
+          const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
+          newData[semIndex] = {
+              ...prevData[semIndex],
+              Courses: prevData[semIndex].Courses.filter((_, index) => index !== indexToRemove)
+          };
+          return newData;
+      });
+      setGrades(prevGrades => {
+          const newGrades = [...prevGrades];
+          newGrades.splice(indexToRemove, 1);
+          return newGrades;
+      });
+  }
           return (
               <tbody>
                 { tableData ? tableData.map((item, index) => {
                   return (
-                    <SemesterRow 
-                    key={index}
-                    index={index}
-                    semNumber={semNumber}
-                    catalogData={catalogData}
-                    handleGradeChange={handleGradeChange}
-                    tableData={tableData}
-                    setTableData={setTableData}
-                    setSaveData={setSaveData} />
+                    < >
+                      <button className="btn btn-error btn-circle btn-xs text-white" onClick={() => handleRemoveRow(index)}><GoDash/></button>
+                      <SemesterRow
+                      key={index}
+                      index={index}
+                      semNumber={semNumber}
+                      extraSemester={extraSemester}
+                      year={year}
+                      term={term}
+                      catalogData={catalogData}
+                      handleGradeChange={handleGradeChange}
+                      tableData={tableData}
+                      setTableData={setTableData}
+                      setSaveData={setSaveData} />
+                    </>
                     );
               }) : null}
               <tr>
@@ -92,11 +155,13 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
 };
   
   
-  
-  const WhatIfExtra = ({ semNumber, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData, saveData }) => {
+  const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
-      const [tableData, setTableData] = useState(saveData);
-      
+      const [tableData, setTableData] = useState([]);
+      const [term, setTerm] = useState(''); //state to hold the term
+      const [year, setYear] = useState('');
+      const extraSemIndex = extraSemester.findIndex(item => item[0] === semNumber)
+
   
       const updateSemesterGPAs = () => {
         let totalCredits = 0;
@@ -158,37 +223,59 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
               newGrades[index] = grade;
               return newGrades;
           });
+          setTableData(prevData => {
+              const newData = [...prevData];
+              newData[index].Grade = grade;
+              return newData;
+          });
+          setSaveData(prevData => {
+            const newData = [...prevData];
+            const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
+            newData[semIndex].Courses[index].Grade = grade;
+            console.log("AFTER ADDING NEW GRADE SAVE DATA: ", newData);
+            return newData;
+            });
         };
+
+
       useEffect(() => {
         setCurrentGPAs(prevGPAs => {
           const newGPAs = [...prevGPAs];
+          const index = extraSemester.findIndex(item => item[0] === semNumber);
           if (calculateGPA(userCourses) !== null && calculateGPA(userCourses) !== '0.00') {
-            newGPAs[semNumber - 1] = calculateGPA(userCourses);
+            newGPAs[index] = calculateGPA(userCourses);
             return newGPAs;
           }
           else if (updateSemesterGPAs() !== null && updateSemesterGPAs() !== '0.00') {
-            newGPAs[semNumber - 1] = updateSemesterGPAs();
+            newGPAs[index] = updateSemesterGPAs();
             return newGPAs;
           }
           return prevGPAs;
         });
         
-      }, [currentGrades,  calculateGPA(userCourses), updateSemesterGPAs()]);
+      }, [currentGrades, updateSemesterGPAs()]);
       
-      useEffect(() => {
-        setSaveData(prevData => {
-          const newData = [...prevData];
-          newData[semNumber] = tableData;
-          return newData;
-      })
-        }, [tableData]);
       return (
         <>
-          <div>
-            <h1 className="tooltip py-2 pl-1 text-lg" 
-            data-tip={(currentGPAs[semNumber - 1] !== null && currentGPAs[semNumber - 1] !== 0) ? currentGPAs[semNumber - 1] : "No grade"}>
-              Semester {semNumber}</h1>
-            <div className="border rounded">
+          <div className="rounded-lg shadow px-3 pt-2 pb-4 bg-base-200">
+            <h1 className="tooltip pb-2 pl-1 pr-2 text-2xl font-bold text-center bg-base-200 rounded-t-lg flex gap-3 items-center" 
+            data-tip={(currentGPAs[extraSemIndex] !== null && currentGPAs[extraSemIndex] !== 0) ? currentGPAs[extraSemIndex] : "No grade"}>
+              <select className="select select-primary  max-w-xs" onChange={(e) => setTerm(e.target.value)}>
+                <option disabled selected>Term</option>
+                <option value="Spring">Spring</option>
+                <option value="Fall">Fall</option>
+                <option value="Summer">Summer</option>
+              </select>
+              <select className="select select-primary  max-w-xs"  onChange={(e) => setYear(e.target.value)}>
+                <option disabled selected>Year</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+              </select>
+            </h1>
+            <div className="border rounded-lg border-base-200 bg-base-100">
               <table className="table">
                 <thead>
                   <tr>
@@ -201,9 +288,14 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
                
                 <SemesterBody 
                 semNumber={semNumber}
+                extraSemester={extraSemester}
+                year={year}
+                term={term}
                 tableData={tableData}
                 setTableData={setTableData}
                 catalogData={catalogData}
+                grades={currentGrades}
+                setGrades={setCurrentGrades}
                 handleGradeChange={handleGradeChange}
                 setSaveData={setSaveData}
                  />

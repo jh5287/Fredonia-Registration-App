@@ -7,22 +7,91 @@ import { GoDash } from "react-icons/go";
 import GradeComboBox from "@/components/GradeComboBox";
 import CourseComboBox from "@/components/CourseComboBox";
 import calculateGPA from "@/components/calculateGPA";
-import TitleCard from "@/components/TitleCard";
 import WhatIfExtra from "@/components/WhatIfExtra";
-import RegSemester from "@/components/RegSemester";
+//import RegSemester from "@/components/RegSemester";
 import { uploadCustomSems, getCustomList, getCustomSems } from "@/firebase/firebaseManagement";
+import Icon from '@mdi/react';
+import { mdiProgressHelper } from '@mdi/js';
+import { cn } from "@/lib/utils";
 
 
-const DynamicCGPA = ({ cgpa, newCGPA }) => {
+
+const RegSemester = ({ number, data }) => {
+  const [currentGrades, setCurrentGrades] = useState([]);
+  const totalCredits = data.reduce((acc, item) => acc + item.Course.Credits, 0);
+  const successGrades = ['A', 'B'];
+  const warnGrades = ['C', 'D'];
+
+  const handleGradeChange = (e, index) => {
+    const grade = e.target.value;
+    setCurrentGrades(prevGrades => {
+        const newGrades = [...prevGrades];
+        newGrades[index] = grade;
+        return newGrades;
+    });
+  };
+
+
+  useEffect(() => {
+    setCurrentGrades(data.map(item => item.Grade));
+  } , [data]);
+
   return (
-    <div className=" z-50 w-auto flex justify-between p-4 mx-20 bg-neutral-50 rounded-lg shadow-md sticky top-20">
-      <div>
-        <h1 className="text-xl font-bold">Academic Summary</h1>
-        <p className="text-lg">CGPA: {cgpa ? cgpa?.toFixed(2) : 'Unknown'}</p>
+  
+    <div className="rounded-lg shadow px-3 pt-2 pb-4 bg-base-200">
+      <div className="flex justify-between items-center">
+        <h1 className="py-2 pl-1 text-lg font-semibold"
+        data-tip={(calculateGPA(data) !== null && calculateGPA(data)  !== 0) ? calculateGPA(data) : "No grade"}>{data[0]?.Term.Semester + " " + data[0]?.Term.Year}</h1>
+        <div>
+          {totalCredits > 0 ? <span className="text-base">Total Credits: {totalCredits}</span> : null} {/*if there is no applicable grade do not display it */}
+          {calculateGPA(data) > 0.0 ? <span className="text-base">GPA: {calculateGPA(data)}</span> : null} {/*if there is no applicable grade do not display it */}
+        </div>
       </div>
-      <div>
-        <h1 className="text-xl font-bold">Dynamic GPA</h1>
-        <p className="text-lg">GPA: {newCGPA ? newCGPA?.toFixed(2) : 'Unknown'}</p>
+      
+      <div className="border rounded-lg border-base-200 overflow-hidden bg-base-100">
+        <table className="table">
+          <thead>
+            <tr>
+              <th className="whitespace-nowrap">Course Code</th>
+              <th>Course Title</th>
+              <th>Credits</th>
+              <th>Grade</th>
+              <th>Change Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index} className={cn({
+                "bg-error" : item.Grade === 'F', 
+                'bg-success': item.Grade ? successGrades.some(substring => item.Grade.includes(substring)) : false,
+                'bg-warning': item.Grade ? warnGrades.some(substring => item.Grade.includes(substring)) : false
+                }, )}>
+                <td>{item.Course.CourseCode}</td>
+                <td>{item.Course.Title}</td>
+                <td>{item.Course.Credits}</td>
+                <td className={cn({"text-red-600" : item.Grade === 'F', 'text-green-600': item.Grade === 'A'}, )}
+                >{ item.Grade === null ? <span className="tooltip" data-tip="In Progress..."><Icon path={mdiProgressHelper} title="Progress" size={1} color="blue" /></span> : 
+                item.Grade}</td>
+                <td><GradeComboBox handleGradeChange={handleGradeChange} index={index}/></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      </div>
+  
+  );
+};
+
+
+
+const DynamicCGPA = ({  newCGPA }) => {
+  return (
+    <div>
+      <div className="stat py-0 ">
+        <div className="stat-title">Dynamic GPA</div>
+        <div className="stat-value">{newCGPA ? newCGPA.toFixed(2) : "Unavailable"} </div>
+        <div className="stat-desc">Edit grades to see how your CGPA will change!</div>
       </div>
     </div>
   );
@@ -32,9 +101,10 @@ const FuturePlan = () => {
   const [catalog, setCatalog] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
-  const [newCGPA, setNewCGPA] = useState(null);
-  const [currentGPAs, setCurrentGPAs] = useState(Array(8).fill(0.00)); //state to hold the current GPAs for each semester
+  const [newCGPA, setNewCGPA] = useState(null); //state to hold the dynamic GPA
+  const [currentGPAs, setCurrentGPAs] = useState([]); //state to hold the current GPAs for each semester
   const [extraSemester, setExtraSemester] = useState([]);
+  const [extraSemGPAs, setExtraSemGPAs] = useState([]); //state to hold the GPAs for the extra semesters
   const [realStudentData, setRealStudentData] = useState([]);
   const { data: session, status } = useSession();
 
@@ -80,13 +150,13 @@ const FuturePlan = () => {
   const fetchUserCGPA = async () => {
     try {
       const userEmail = "wals9256@fredonia.edu";
-      const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
+      const response = await fetch(`/api/student/CGPA?email=${session.user.email}`);
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0 || data.CGPA) {
         
         // Try and convert CGPA to a number
         const cgpa = parseFloat(data.CGPA);
-        console.log("CGPA", cgpa);
+        console.log("CGPA in future plan", cgpa);
   
         if (!isNaN(cgpa)) { // Check if conversion was successful
           setUserCGPA(cgpa);
@@ -118,26 +188,30 @@ const FuturePlan = () => {
       console.log("Extra semesters", newSemesters);
       return newSemesters;
     });
-    setCurrentGPAs(prevGPAs => {
+    setExtraSemGPAs(prevGPAs => {
       const newGPAs = [...prevGPAs];
-      newGPAs.push(0.00);
+      newGPAs.unshift(0.00);
       return newGPAs;
     });
     setSaveData(prevData => {
-      const newData = [...prevData];
-      newData.push([]);
-      return newData;
+        const newData = [...prevData];
+        newData.unshift([]);
+        console.log("previous data in parent after first", prevData);
+        console.log("New data parent", newData);
+        return newData;
+      
     });
     console.log(extraSemester)
   }
   
   const removeExtraSemester = (indexToRemove) => {
+    console.log("Removing semester at index", indexToRemove);
     setExtraSemester(prevSemesters => {
       const newSemesters = [...prevSemesters];
       newSemesters.splice(indexToRemove, 1);
       return newSemesters;
     });
-    setCurrentGPAs(prevGPAs => {
+    setExtraSemGPAs(prevGPAs => {
       const newGPAs = [...prevGPAs];
       newGPAs.splice(indexToRemove, 1);
       return newGPAs;
@@ -164,6 +238,15 @@ const FuturePlan = () => {
     console.log("Save data", saveData);
   }
 
+  useEffect(() => { //this useEffect is to fill the currentGPAs array with the GPAs of the real student data
+    realStudentData.forEach((item, index) => {
+      setCurrentGPAs(prevGPAs => {
+        const newGPAs = [...prevGPAs];
+        newGPAs.push(calculateGPA(item));
+        return newGPAs;
+      });
+    });
+  }, [realStudentData]);
 
   useEffect(() => {
     fetchCatalog();
@@ -173,29 +256,38 @@ const FuturePlan = () => {
     getCustomLists();
   }, [status]);
 
-  useEffect(() => {
+
+
+  useEffect(() => { //this useEffect is to update the newCGPA whenever the currentGPAs or extraSemGPAs change
     setNewCGPA(updateNewCGPA());
-  }, [currentGPAs]);
+  }, [currentGPAs, extraSemGPAs]);
 
   const updateNewCGPA = () => {
-    console.log("Updating new CGPA");
     let total = 0;
     let acceptedGPAs = 0;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < realStudentData.length; i++) {
       let currNum = parseFloat(currentGPAs[i]);
       if (currNum !== 0.00) {
        total = total + currNum;
        acceptedGPAs++;
       }
     }
-    console.log("All the GPAs lead to", currentGPAs);
+    for (let i = 0; i < extraSemGPAs.length; i++) {
+      let currNum = parseFloat(extraSemGPAs[i]);
+      if (currNum !== 0.00) {
+        total = total + currNum;
+        acceptedGPAs++;
+      }
+    }
+    console.log("All current GPAs", currentGPAs);
+    console.log("All extra GPAs", extraSemGPAs);
     console.log("The new CGPA is", total / acceptedGPAs);
     return total / acceptedGPAs;
   }
 
   return (
     <>
-      <div className="p-3">
+      <div className="p-3 pt-6">
         <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="flex justify-center">
           <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
@@ -208,27 +300,32 @@ const FuturePlan = () => {
           <button className="btn btn-primary m-5" onClick={() => loadSaveData()}>Load Saved Plan</button>
           <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
         </div>
-        <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+        <div className="flex justify-between">
+          <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
+          <DynamicCGPA newCGPA={newCGPA} />
+        </div>
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
             return (
               <div key={item[0]} className="relative">
                 <WhatIfExtra
                   semNumber={item[0]}
-                  currentGPAs={currentGPAs}
-                  setCurrentGPAs={setCurrentGPAs}
-                  userCourses={[]}
+                  extraSemester={extraSemester} //this is the array of extra semesters and holds unique values that are used as keys for the semesters so they will always be unique. 
+                                                //In WhatIfExtra I have to find the exact index from the extraSemester array to be able to accurately handle save data manipulation and GPA calculations
+                  currentGPAs={extraSemGPAs}//its named current GPAs but it is the GPAs for the extra semesters
+                  setCurrentGPAs={setExtraSemGPAs}
+                  userCourses={[]} //I have to remove this field currently it does nothing in the whatIfExtra component
                   catalogData={catalog}
                   setSaveData={setSaveData}
                   saveData={saveData[item[0]]}
                 />
-                <button className="btn btn-error btn-circle btn-xs absolute right-0 top-0 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
+                <button className="btn btn-error btn-circle btn-xs absolute right-2 top-2 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
               </div>)
-            })}      
+            })}
         </div>
         <div className="grid grid-cols-1 gap-8 h-full lg:grid-cols-2">
         {realStudentData.map((item, index) => (
-            <RegSemester key={index+1} number={index} data={item}/>
+            <RegSemester key={index+1} number={index} data={item}/> //regSemester was moved out of components folder and is local to this page to include the grade change combo boxes
           ))}
          </div>
       </div>

@@ -163,7 +163,7 @@ const RoadMap = () => {
 
   return (
     <>
-      <div className="p-3 mb-10">
+      <div className="p-3 pt-6 mb-10">
         <div className="relative flex flex-col items-center">
           {studentCatalogs && studentCatalogs.length > 0 && (
             <TitleCard catalogName={studentCatalogs[0]?.programName} />
@@ -192,7 +192,7 @@ const RoadMap = () => {
               catalogUserCourseMap
             );
             return (
-              <div className="border rounded-lg border-slate-150" key={i + 1}>
+              <div className="rounded-lg bg-base-200 shadow" key={i + 1}>
                 <Semester
                   key={i + 1}
                   number={i + 1}

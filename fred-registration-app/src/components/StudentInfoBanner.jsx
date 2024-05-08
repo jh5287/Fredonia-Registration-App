@@ -11,19 +11,19 @@ const StudentInfoBanner = ({ studentInfo }) => {
   const studentPrograms = studentInfo?.Student?.StudentProgram;
 
   return (
-    <div className="p-4 bg-neutral rounded-lg shadow-md">
+    <div className="p-4 rounded-lg">
       <div className="flex flex-row gap-x-4">
-        <div className="basis-1/3 border-2 rounded-lg px-1 py-1 ">
+        <div className="basis-1/3 border rounded-lg  px-1 py-1 ">
           <p className="text-xs text-gray-500">Name</p>
           <p className="">
             {fName} {lName}
           </p>
         </div>
-        <div className="basis-1/3 border-2 rounded-lg px-1 py-1">
+        <div className="basis-1/3 border  rounded-lg px-1 py-1">
           <p className="text-xs text-gray-500">Student ID</p>
           <p className="">{studentID}</p>
         </div>
-        <div className="basis-1/3 border-2 rounded-lg px-1 py-1">
+        <div className="basis-1/3 border rounded-lg px-1 py-1">
           <p className="text-xs text-gray-500">Email</p>
           <p className="">{email}</p>
         </div>
