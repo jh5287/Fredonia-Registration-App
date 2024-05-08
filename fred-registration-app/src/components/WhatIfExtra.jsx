@@ -6,9 +6,13 @@ import calculateGPA from "@/components/calculateGPA";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
 const SemesterRow = ({ index, semNumber, catalogData, handleGradeChange, tableData, setTableData, setSaveData }) => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState(tableData[index].CourseTitle);
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState({CourseCode: '', Title: '', Credits: '', Grade: ''});
+  const [selectedCourse, setSelectedCourse] = useState({
+    CourseCode: tableData[index].CourseCode, 
+    Title: tableData[index].CourseTitle, 
+    Credits: tableData[index].Credits, 
+    Grade: tableData[index].Grade});
 
   const handleSearchInputChange = (e) => {
     const inputValue = e.target.value;
@@ -65,7 +69,7 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
     };
           return (
               <tbody>
-                {tableData.map((item, index) => {
+                { tableData ? tableData.map((item, index) => {
                   return (
                     <SemesterRow 
                     key={index}
@@ -77,7 +81,7 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
                     setTableData={setTableData}
                     setSaveData={setSaveData} />
                     );
-              })}
+              }) : null}
               <tr>
                 <td colSpan="4">
                     <button className='btn btn-accent w-full'onClick={handleAddRow}><FaPlus/></button>
@@ -89,9 +93,9 @@ const SemesterBody = ({ semNumber, tableData, setTableData, catalogData, handleG
   
   
   
-  const WhatIfExtra = ({ semNumber, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
+  const WhatIfExtra = ({ semNumber, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData, saveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
-      const [tableData, setTableData] = useState([]);
+      const [tableData, setTableData] = useState(saveData);
       
   
       const updateSemesterGPAs = () => {
