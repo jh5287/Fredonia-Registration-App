@@ -291,14 +291,8 @@ const FuturePlan = () => {
         <h1 className="text-2xl text-center">Future Plan</h1>
         <div className="flex justify-center">
           <input type="text" value={planName} className="input input-bordered m-5" placeholder="Plan Name" />
-          <select value={selectedList} className="select input-bordered m-5" onChange={(e) => setSelectedList(e.target.value)}>
-            <option value="" selected disabled>Select a Plan...</option>
-            {customList.map((item, index) => (
-              <option key={index} value={item.id}>{item.name}</option>
-            ))}
-          </select>
-          <button className="btn btn-primary m-5" onClick={() => loadSaveData()}>Load Saved Plan</button>
           <button className="btn btn-primary m-5" onClick={() => uploadCustomSems(session.user.email, saveData, saveDataID, planName)}>Save Current Plan</button>
+          <button className="btn btn-primary m-5" onClick={()=>document.getElementById('loadModal').showModal()}>Load Saved Plan</button>
         </div>
         <div className="flex justify-between">
           <button className="btn btn-primary my-5" onClick={() => addExtraSemester()}>Add A New Semester...</button>
@@ -307,7 +301,7 @@ const FuturePlan = () => {
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
             return (
-              <div key={item[0]} className="relative">
+              <div key={index} className="relative">
                 <WhatIfExtra
                   semNumber={index}
                   extraSemester={extraSemester} //this is the array of extra semesters and holds unique values that are used as keys for the semesters so they will always be unique. 
@@ -329,8 +323,22 @@ const FuturePlan = () => {
           ))}
          </div>
       </div>
+      <dialog id="loadModal" className="modal">
+        <div className="modal-box">
+          <div className="flex flex-col">
+            <h3 className="font-bold text-lg text-center">Select a plan</h3>
+            <select value={selectedList} className="select input-bordered m-5" onChange={(e) => setSelectedList(e.target.value)}>
+              <option value="" selected disabled>Select a Plan...</option>
+              {customList.map((item, index) => (
+                <option key={index} value={item.id}>{item.name}</option>
+              ))}
+            </select>
+            <button className="btn btn-primary m-2" onClick={() => loadSaveData().then(document.getElementById('loadModal').close())}>Load</button>
+            <button className="btn btn-error m-2" onClick={() => document.getElementById('loadModal').close()}>Cancel</button>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 };
-
 export default FuturePlan;

@@ -45,7 +45,8 @@ const SemesterRow = ({ index,
     setSaveData(prevData => {
         const newData = [...prevData];
         const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
-        newData[semIndex].Courses[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        console.log(newData);
+        newData[semIndex][index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
         console.log("AFTER ADDING NEW DATA SAVE DATA: ", newData);
         return newData;
     });
