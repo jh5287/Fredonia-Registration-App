@@ -2,9 +2,11 @@ const calculateGPA = (data) => {
   try {
     let totalCredits = 0;
     let totalPoints = 0;
+    
     data.forEach((item) => {
+      const grade = item.modifiedGrade ? item.modifiedGrade : item.Grade;
       totalCredits += item.Course.Credits;
-      switch (item.Grade) {
+      switch (grade) {
         case 'A':
           totalPoints += 4 * item.Course.Credits;
           break;
