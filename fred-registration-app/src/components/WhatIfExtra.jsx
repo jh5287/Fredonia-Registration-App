@@ -231,7 +231,8 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
           setSaveData(prevData => {
             const newData = [...prevData];
             const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
-            newData[semIndex].Courses[index].Grade = grade;
+            console.log(newData);
+            newData[semIndex][index].Grade = grade;
             console.log("AFTER ADDING NEW GRADE SAVE DATA: ", newData);
             return newData;
             });

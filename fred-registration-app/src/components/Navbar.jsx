@@ -67,7 +67,7 @@ const Navbar = () => {
             </label>
 
             {status === "authenticated" ? (
-              <Link href="/api/auth/signout">{session.user?.name}</Link>
+              <Link className="my-5" href="/api/auth/signout">{session.user?.name}</Link>
             ) : (
               <Link href="/api/auth/signin">Sign In</Link>
             )}

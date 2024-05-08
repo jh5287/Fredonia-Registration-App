@@ -27,9 +27,8 @@ export const getCustomSems = async (id) => {
             const customSems = {name: docSnap.data().name, semesters: []};
             Object.values(data).forEach((item) => {
                 if (Array.isArray(item)) {
-                    customSems.semesters.push(item);
+                    customSems.semesters.unshift(item);
                 }
-                
             })
             console.error("Getting custom semesters: ", customSems)
             return customSems;
