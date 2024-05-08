@@ -43,7 +43,11 @@ const RegSemester = ({ number, data, updateRealStudentData }) => {
     });
 
     // Set modified grade field
-    data[index].modifiedGrade = grade;
+    if (grade === "DEFAULT") {
+      data[index].modifiedGrade = null;
+    } else {
+      data[index].modifiedGrade = grade;
+    }
     updateRealStudentData(number, data);
   };
 
@@ -314,7 +318,7 @@ const FuturePlan = () => {
   useEffect(() => {
     //this useEffect is to fill the currentGPAs array with the GPAs of the real student data
     const newGPAs = realStudentData.map((item) => calculateGPA(item));
-    setCurrentGPAs(newGPAs); 
+    setCurrentGPAs(newGPAs);
   }, [realStudentData]);
 
   useEffect(() => {

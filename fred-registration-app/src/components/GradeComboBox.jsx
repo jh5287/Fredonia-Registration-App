@@ -1,7 +1,7 @@
 const GradeComboBox = ({ handleGradeChange, index }) => {
     return (
         <select defaultValue={'DEFAULT'} className="select select-primary w-full" onChange={(e) => handleGradeChange(e, index)}>
-            <option value="DEFAULT" disabled>Select a grade</option>
+            <option value="DEFAULT" >Select a grade</option>
             <option value="A">A</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
