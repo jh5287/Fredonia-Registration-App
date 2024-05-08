@@ -301,9 +301,9 @@ const FuturePlan = () => {
         <div className="mb-10 grid grid-cols-1 gap-8 h-full lg:grid-cols-2 grid-flow-row">
           {extraSemester.map((item, index) => {
             return (
-              <div key={index} className="relative">
+              <div key={item[0]} className="relative">
                 <WhatIfExtra
-                  semNumber={index}
+                  semNumber={item[0]}
                   extraSemester={extraSemester} //this is the array of extra semesters and holds unique values that are used as keys for the semesters so they will always be unique. 
                                                 //In WhatIfExtra I have to find the exact index from the extraSemester array to be able to accurately handle save data manipulation and GPA calculations
                   currentGPAs={extraSemGPAs}//its named current GPAs but it is the GPAs for the extra semesters
@@ -311,7 +311,7 @@ const FuturePlan = () => {
                   userCourses={[]} //I have to remove this field currently it does nothing in the whatIfExtra component
                   catalogData={catalog}
                   setSaveData={setSaveData}
-                  saveData={saveData[index]}
+                  saveData={saveData[item[0]]}
                 />
                 <button className="btn btn-error btn-circle btn-xs absolute right-2 top-2 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
               </div>)

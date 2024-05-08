@@ -15,13 +15,13 @@ const SemesterRow = ({ index,
   tableData, setTableData, 
   setSaveData 
 }) => {
-  const [searchInput, setSearchInput] = useState(tableData.CourseTitle);
+  const [searchInput, setSearchInput] = useState(tableData[index].CourseTitle);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({
-    CourseCode: tableData.CourseCode, 
-    Title: tableData.CourseTitle, 
-    Credits: tableData.Credits, 
-    Grade: tableData.Grade});
+    CourseCode: tableData[index].CourseCode, 
+    Title: tableData[index].CourseTitle, 
+    Credits: tableData[index].Credits, 
+    Grade: tableData[index].Grade});
 
   const handleSearchInputChange = (e) => {
     const inputValue = e.target.value;
@@ -30,10 +30,10 @@ const SemesterRow = ({ index,
     setSearchResults(filteredResults);
 };
 
-  useEffect(() => { //useEffect is to update the table row data after a course is removed
-      setSelectedCourse({CourseCode: tableData.CourseCode, Title: tableData.CourseTitle, Credits: tableData.Credits, Grade: tableData.Grade});
-      setSearchInput(tableData.CourseTitle);
-  }, [tableData]);
+useEffect(() => { //useEffect is to update the table row data after a course is removed
+  setSelectedCourse({CourseCode: tableData[index].CourseCode, Title: tableData[index].CourseTitle, Credits: tableData[index].Credits, Grade: tableData[index].Grade});
+  setSearchInput(tableData[index].CourseTitle);
+}, [tableData]);
 
 
   const handleCourseSelection = (selectedCourse) => {
@@ -46,7 +46,7 @@ const SemesterRow = ({ index,
         const newData = [...prevData];
         const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
         console.log(newData);
-        newData[semIndex][index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
+        newData[semIndex].Courses[index] = {CourseCode: selectedCourse.Course.CourseCode, CourseTitle: selectedCourse.Course.Title, Credits: selectedCourse.Course.Credits, Grade: ''};
         console.log("AFTER ADDING NEW DATA SAVE DATA: ", newData);
         return newData;
     });
@@ -140,7 +140,7 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
                       term={term}
                       catalogData={catalogData}
                       handleGradeChange={handleGradeChange}
-                      tableData={item}
+                      tableData={tableData}
                       setTableData={setTableData}
                       setSaveData={setSaveData} />
                     </>
@@ -158,7 +158,7 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
   
   const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData, saveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
-      const [tableData, setTableData] = useState(saveData);
+      const [tableData, setTableData] = useState(saveData || []);
       const [term, setTerm] = useState(''); //state to hold the term
       const [year, setYear] = useState('');
       const extraSemIndex = extraSemester.findIndex(item => item[0] === semNumber)
@@ -233,11 +233,12 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
             const newData = [...prevData];
             const semIndex = extraSemester.findIndex(item => item[0] === semNumber);
             console.log(newData);
-            newData[semIndex][index].Grade = grade;
+            newData[semIndex].Courses[index].Grade = grade;
             console.log("AFTER ADDING NEW GRADE SAVE DATA: ", newData);
             return newData;
             });
         };
+
 
 
       useEffect(() => {
@@ -310,3 +311,6 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
 
 
     export default WhatIfExtra;
+
+
+
