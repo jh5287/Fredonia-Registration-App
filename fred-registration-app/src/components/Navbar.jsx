@@ -43,7 +43,7 @@ const Navbar = () => {
               Advising Roadmap App
             </Link>
           </div>
-          <div className="flex-none m-5">
+          <div className="flex m-5 items-center">
             <label className="swap swap-rotate mx-5">
               <input
                 type="checkbox"
@@ -67,9 +67,9 @@ const Navbar = () => {
             </label>
 
             {status === "authenticated" ? (
-              <Link className="my-5" href="/api/auth/signout">{session.user?.name}</Link>
+              <Link href="/api/auth/signout"><p>{session.user?.name}</p></Link>
             ) : (
-              <Link href="/api/auth/signin">Sign In</Link>
+              <Link href="/api/auth/signin"><p>Sign In</p></Link>
             )}
           </div>
         </div>
