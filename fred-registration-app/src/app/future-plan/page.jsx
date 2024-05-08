@@ -234,7 +234,8 @@ const FuturePlan = () => {
     const data = await getCustomSems(selectedList);
     setSaveData(data.semesters);
     setPlanName(data.name);
-    console.error("Loaded data: ", data);
+    setExtraSemester(data.semesters.map((item, index) => [index + 1]));
+    console.log("Save data", saveData);
   }
 
   useEffect(() => { //this useEffect is to fill the currentGPAs array with the GPAs of the real student data
@@ -316,6 +317,7 @@ const FuturePlan = () => {
                   userCourses={[]} //I have to remove this field currently it does nothing in the whatIfExtra component
                   catalogData={catalog}
                   setSaveData={setSaveData}
+                  saveData={saveData[item[0]]}
                 />
                 <button className="btn btn-error btn-circle btn-xs absolute right-2 top-2 text-white" onClick={() => removeExtraSemester(index)}><GoDash/></button>
               </div>)

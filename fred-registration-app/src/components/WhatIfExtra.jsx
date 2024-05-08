@@ -6,8 +6,7 @@ import { GoDash } from "react-icons/go";
 import { cn } from "@/lib/utils";
 import { FaPlus } from "react-icons/fa";
 
-const SemesterRow = ({ 
-  index, 
+const SemesterRow = ({ index, 
   semNumber, 
   extraSemester, 
   year, term,  
@@ -16,9 +15,13 @@ const SemesterRow = ({
   tableData, setTableData, 
   setSaveData 
 }) => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState(tableData[index].CourseTitle);
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState({CourseCode: '', Title: '', Credits: '', Grade: ''});
+  const [selectedCourse, setSelectedCourse] = useState({
+    CourseCode: tableData[index].CourseCode, 
+    Title: tableData[index].CourseTitle, 
+    Credits: tableData[index].Credits, 
+    Grade: tableData[index].Grade});
 
   const handleSearchInputChange = (e) => {
     const inputValue = e.target.value;
@@ -123,7 +126,7 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
   }
           return (
               <tbody>
-                {tableData.map((item, index) => {
+                { tableData ? tableData.map((item, index) => {
                   return (
                     < >
                       <button className="btn btn-error btn-circle btn-xs text-white" onClick={() => handleRemoveRow(index)}><GoDash/></button>
@@ -141,7 +144,7 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
                       setSaveData={setSaveData} />
                     </>
                     );
-              })}
+              }) : null}
               <tr>
                 <td colSpan="4">
                     <button className='btn btn-accent w-full'onClick={handleAddRow}><FaPlus/></button>
@@ -152,14 +155,13 @@ const SemesterBody = ({ semNumber, extraSemester, year, term, tableData, setTabl
 };
   
   
-  
   const WhatIfExtra = ({ semNumber, extraSemester, currentGPAs, setCurrentGPAs,  userCourses, catalogData, setSaveData }) => {
       const [currentGrades, setCurrentGrades] = useState([]);//state to hold the current grades
       const [tableData, setTableData] = useState([]);
       const [term, setTerm] = useState(''); //state to hold the term
       const [year, setYear] = useState('');
-
       const extraSemIndex = extraSemester.findIndex(item => item[0] === semNumber)
+
   
       const updateSemesterGPAs = () => {
         let totalCredits = 0;
