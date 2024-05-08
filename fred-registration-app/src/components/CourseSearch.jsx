@@ -115,7 +115,7 @@ export default function CourseSearch() {
   return (
     <>
       <h1 className={"text-lg pt-1 pb-4"}>Course Search</h1>
-      <form onSubmit={handleFormSubmit} className="border-2 rounded-md p-2">
+      <form onSubmit={handleFormSubmit} className="border-2 rounded-lg p-2">
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label
@@ -236,7 +236,7 @@ export default function CourseSearch() {
         </div>
       </form>
       <div className="py-4"></div>
-      <div className="border-2 rounded overflow-y-auto h-full ">
+      <div className="border-2 rounded-lg overflow-y-auto h-[60%] ">
         <table className="table">
           <thead className="bg-slate-100 sticky top-0">
             <tr>
