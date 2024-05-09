@@ -76,13 +76,13 @@ export default function AdvisorChat({ role }) {
                     />
                     <button
                     onClick={() => sendMessage(session.user.name)}
-                    className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                    className="ml-2 px-4 py-2 bg-primary text-white rounded-md"
                     >
                     Send as Student
                     </button>
                     <button
                     onClick={() => sendMessage("Shahin Mehdipour Ataee")}
-                    className="ml-2 px-4 py-2 bg-gray-100 text-black rounded-md"
+                    className="ml-2 px-4 py-2 bg-neutral rounded-md"
                     >
                     Send as Advisor
                     </button>
