@@ -232,6 +232,7 @@ const WhatIfExtra = ({
   userCourses,
   catalogData,
   setSaveData,
+  saveData
 }) => {
   const [currentGrades, setCurrentGrades] = useState([]); //state to hold the current grades
   const [tableData, setTableData] = useState([]);

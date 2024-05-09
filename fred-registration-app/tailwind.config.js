@@ -24,7 +24,7 @@ module.exports = {
           "base-200": "#f6f7f8",
           "success" : "#BBF7D0",
           "warning" : "#fceea2",
-          "error" : "#d82925",
+          "error" : "#ffa19e",
           "info" : "#000000", // Used for navbar hamburger text
         },
         FREDdarkTheme: {
@@ -37,7 +37,7 @@ module.exports = {
           "base-200": "#222222", // Slightly lighter shade of off-white for secondary background
           "success": "#2D6E45", // Slightly lighter shade of green for success
           "warning": "#958741", // Slightly lighter shade of yellow for warning
-          "error": "#d82925", // Slightly lighter shade of red for error
+          "error": "#855452", // Slightly lighter shade of red for error
           "info": "#ffffff" // Used for navbar hamburger text
         }
         

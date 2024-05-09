@@ -36,7 +36,7 @@ const RoadMap = () => {
           }
 
           if (catalogID) {
-            const catalogData = await fetchCatalogCourses(catalogID);
+            const catalogData = await fetchCatalogCourses(3);
             setCatalogCourses(catalogData);
 
             const userCourseData = await fetchUserCourses(studentEmail);

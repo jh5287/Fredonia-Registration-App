@@ -63,7 +63,7 @@ const RegSemester = ({ number, data }) => {
                   <td>{item.Course.Credits}</td>
                   <td
                     className={cn({
-                      "text-red-600": item.Grade === "F",
+                      "text-red-500": item.Grade === "F",
                       "text-green-600": item.Grade === "A",
                     })}
                   >

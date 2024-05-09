@@ -67,6 +67,68 @@ INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear)
 (5, 1, 'Spring', 4);
 
 
+-- Insert into CourseCatalog Computer Science Track 2
+-- Year 1
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10001, 3, 'Fall', 1),
+(34181, 3, 'Fall', 1),
+(31812, 3, 'Fall', 1),
+(10003, 3, 'Fall', 1),
+(1, 3, 'Fall', 1);
+
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES
+(10005, 3, 'Spring', 1),
+(10006, 3, 'Spring', 1),
+(1, 3, 'Spring', 1),
+(1, 3, 'Spring', 1),
+(1, 3, 'Spring', 1);
+
+-- Year 2
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10008, 3, 'Fall', 2),
+(10009, 3, 'Fall', 2),
+(32171, 3, 'Fall', 2),
+(1, 3, 'Fall', 2),
+(1, 3, 'Fall', 2);
+
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10012, 3, 'Spring', 2),
+(10013, 3, 'Spring', 2),
+(1, 3, 'Spring', 2),
+(1, 3, 'Spring', 2),
+(1, 3, 'Spring', 2);
+
+-- Year 3
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10014, 3, 'Fall', 3),
+(10015, 3, 'Fall', 3),
+(1, 3, 'Fall', 3),
+(4, 3, 'Fall', 3),
+(4, 3, 'Fall', 3);
+
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10016, 3, 'Spring', 3),
+(10017, 3, 'Spring', 3),
+(10018, 3, 'Spring', 3),
+(10019, 3, 'Spring', 3),
+(1, 3, 'Spring', 3);
+
+-- Year 4
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(4, 3, 'Fall', 4),
+(4, 3, 'Fall', 4),
+(4, 3, 'Fall', 4),
+(1, 3, 'Fall', 4),
+(1, 3, 'Fall', 4);
+
+INSERT INTO CourseCatalog (CRN, CatalogID, RecommendedSemester, RecommendedYear) VALUES 
+(10021, 3, 'Spring', 4),
+(4, 3, 'Spring', 4),
+(4, 3, 'Spring', 4),
+(5, 3, 'Spring', 4),
+(5, 3, 'Spring', 4);
+
+
 -- Insert Bio courses into CourseCatalog
   -- Year 1
     -- Fall

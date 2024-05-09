@@ -300,7 +300,6 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (20020, 'STAT 350', 'Probability and Statistics', 0, 'Undergraduate', 2);
 
 
-
 -- Insert Music Courses into Course 
 INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 (32726, 'MUS 022', 'College Choir', 1, 'Undergraduate', 5),
@@ -405,7 +404,8 @@ INSERT INTO Course (CRN, CourseCode, Title, Credits, Level, DepartmentID) VALUES
 
 -- Insert into CourseAttribute
 INSERT INTO CourseAttribute (CRN, AttributeID) VALUES 
-(1, 1);
+(1, 1),
+(4, 4);
 
 -- Insert Jared's classes into CourseAttribute
 INSERT INTO CourseAttribute (CRN, AttributeID) VALUES 
@@ -420,3 +420,20 @@ INSERT INTO CourseAttribute (CRN, AttributeID) VALUES
 (33948, 1), 
 (34012, 1);  
 
+-- Insert Ian's Classes into CourseAttribute
+INSERT INTO CourseAttribute (CRN, AttributeID) VALUES 
+(35351, 1),
+(34642, 1),
+(12706, 1),
+(12705, 1),
+(32726, 1),
+(35094, 1),
+(15524, 1),
+(31723, 1),
+(14327, 1),
+(14941, 1),
+(10021, 1),
+(10020, 1),
+(10015, 1),
+(10022, 1),
+(34410, 1);
