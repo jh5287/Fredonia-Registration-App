@@ -15,28 +15,36 @@ export async function GET(request) {
         },
       },
       select: {
-        CRN: true,
         TermID: true,
         Status: true,
         Grade: true,
         Term: {
           select: {
             Semester: true,
-            Year: true
+            Year: true,
           },
         },
         Course: {
           select: {
+            CRN: true, 
             Title: true,
             CourseCode: true,
             Credits: true,
+            CourseAttribute: {
+              select: {
+                Attribute: {
+                  select: {
+                    Description: true, 
+                  }
+                }
+              }
+            }
           },
         },
       },
     });
     return Response.json(res);
-  } 
-  catch (err) {
+  } catch (err) {
     console.error("Prisma error: ", err);
     return new Response("Error fetching data", { status: 500 });
   }

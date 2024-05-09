@@ -1,102 +1,141 @@
 "use client";
 import { useState, useEffect } from "react";
-import Semester from "@/components/Semester";
-import AcademicSummaryBanner from "@/components/AcademicSummary";
+import Semester from "./Semester";
+import {
+  fetchCatalogCourses,
+  fetchUserCourses,
+  fetchUserCGPA,
+  fetchStudentInfo,
+  fetchStudentCatalogs,
+} from "./apiCalls";
 import { useSession } from "next-auth/react";
-import { FaCheckCircle, FaTimesCircle, FaUserCheck, FaRegCircle } from "react-icons/fa";
+import TitleCard from "@/components/TitleCard";
+import { isValidUserCatalogs, isValidCourses } from "./validation";
 
 const RoadMap = () => {
   const [open, setOpen] = useState(Array(8).fill(true));
-  const [catalog, setCatalog] = useState([]);
+  const [catalogCourses, setCatalogCourses] = useState([]);
   const [userCourses, setUserCourses] = useState(null);
   const [userCGPA, setUserCGPA] = useState(null);
+  const [studentInfo, setStudentInfo] = useState(null);
+  const [studentCatalogs, setStudentCatalogs] = useState([]);
   const { data: session, status } = useSession();
 
-  // Fetch catalog data
-  const fetchCatalog = async () => {
-    try {
-      const res = await fetch("/api/catalog?catID=1");
-      const data = await res.json();
-      setCatalog(data);
-    } catch (err) {
-      console.error("Failed to fetch catalog:", err);
-    }
-  };
-
-  // Fetch user course data
-  const fetchUserCourses = async () => {
-    try {
-      const userEmail = "wals9256@fredonia.edu";
-      const response = await fetch(
-        `/api/student/studentCourses?email=${userEmail}`
-      );
-      const data = await response.json();
-      setUserCourses(data);
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-    }
-  };
-
-  // Fetch user CGPA data
-  const fetchUserCGPA = async () => {
-    try {
-      const userEmail = "wals9256@fredonia.edu";
-      const response = await fetch(`/api/student/CGPA?email=${userEmail}`);
-      const data = await response.json();
-  
-      if (Array.isArray(data) && data.length > 0) {
-        const userCGPAData = data[0];
-        
-        // Try and convert CGPA to a number
-        const cgpa = parseFloat(userCGPAData.CGPA);
-  
-        if (!isNaN(cgpa)) { // Check if conversion was successful
-          setUserCGPA(cgpa);
-        } else {
-          // Handle case where CGPA is not a valid number
-          console.log("CGPA is not a valid number.");
-          setUserCGPA(null);
-        }
-      } else {
-        console.log("No CGPA data found for the user.");
-        setUserCGPA(null);
-      }
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-      setUserCGPA(null); // Ensure user CGPA is set to null in case of error
-    }
-  };
-  
-
   useEffect(() => {
-    fetchCatalog();
-    fetchUserCourses();
-    fetchUserCGPA();
-  }, []);
+    if (status === "authenticated") {
+      const loadData = async () => {
+        try {
+          const studentEmail = session?.user?.email;
+          //const studentEmail = "camronwalsh@gmail.com";
+          var catalogID = null;
 
-  // Filter catalog by year and semester
-  const filterCatalogCourses = (year, semester) => {
-    return catalog.filter(
+          const studentCatalogs = await fetchStudentCatalogs(studentEmail);
+          if (isValidUserCatalogs(studentCatalogs)) {
+            setStudentCatalogs(studentCatalogs);
+            catalogID = studentCatalogs[0]?.catalogID;
+          }
+
+          if (catalogID) {
+            const catalogData = await fetchCatalogCourses(3);
+            setCatalogCourses(catalogData);
+
+            const userCourseData = await fetchUserCourses(studentEmail);
+            if (isValidCourses) {
+              setUserCourses(userCourseData);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      loadData();
+    }
+  }, [status, session?.user?.email]);
+
+  const filterCoursesByTerm = (year, semester, courses) => {
+    return courses.filter(
       (course) =>
         course.RecommendedYear === year &&
         course.RecommendedSemester === semester
     );
   };
 
-  // Filter user courses by a semester catalog
-  const filterUserCoursesForSemester = (filteredCatalogCourses) => {
-    if (!Array.isArray(userCourses) || userCourses.length === 0) {
-      return [];
-    }
-
-    return userCourses.filter((userCourse) =>
-      filteredCatalogCourses.some(
-        (catalogCourse) => catalogCourse.CRN === userCourse.CRN
-      )
+  const isFoundationCourse = (course) => {
+    return course.Course.CourseAttribute.some(
+      (attributeObj) => attributeObj.Attribute.Description === "Foundation"
     );
   };
 
-  //const getUserGrades = 
+  const getFoundationCourses = (userCourses) => {
+    var foundationCourses = [];
+
+    if (Array.isArray(userCourses) && userCourses.length > 0) {
+      userCourses.forEach(function (course) {
+        const isFoundation = isFoundationCourse(course);
+
+        if (isFoundation) {
+          foundationCourses.push(course);
+        }
+      });
+    }
+
+    return foundationCourses;
+  };
+
+  // Filter courses to only include latest attemps
+  const filterToLatestAttempts = (userCourses) => {
+    if (!userCourses) {
+      return [];
+    }
+
+    const courseMap = new Map();
+    userCourses.forEach((course) => {
+      // Check if this course (by CRN) has been encountered before
+      // and if the current one is more recent based on TermID.
+      if (
+        !courseMap.has(course.Course.CRN) ||
+        courseMap.get(course.Course.CRN).TermID < course.TermID
+      ) {
+        courseMap.set(course.Course.CRN, course);
+      }
+    });
+
+    return Array.from(courseMap.values());
+  };
+
+  const createCatalogToUserCourseMap = (catalog, userCourses) => {
+    const foundationCourses = getFoundationCourses(userCourses);
+
+    return catalog.map((catalogCourse) => {
+      const matchingUserCourse = userCourses.find(
+        (userCourse) => userCourse.Course.CRN === catalogCourse.Course.CRN
+      );
+
+      var studentCourseRecord;
+
+      if (isFoundationCourse(catalogCourse)) {
+        if (foundationCourses.length > 0) {
+          studentCourseRecord = foundationCourses.shift();
+        } else {
+          studentCourseRecord = catalogCourse;
+        }
+      } else {
+        studentCourseRecord = matchingUserCourse || catalogCourse;
+      }
+
+      return {
+        StudentCourseRecord: studentCourseRecord,
+        RecommendedSemester: catalogCourse.RecommendedSemester,
+        RecommendedYear: catalogCourse.RecommendedYear,
+      };
+    });
+  };
+
+  const latestCourseAttempts = filterToLatestAttempts(userCourses);
+  const catalogUserCourseMap = createCatalogToUserCourseMap(
+    catalogCourses,
+    latestCourseAttempts || []
+  );
 
   const toggleAllSemester = () => {
     const checkSameValue = () => {
@@ -111,75 +150,57 @@ const RoadMap = () => {
     if (allSame) {
       setOpen(open.map((isOpen) => !isOpen));
     } else {
-      const changeOpen = open.map((isOpen) => isOpen === false ? true : true);
+      const changeOpen = open.map((isOpen) => (isOpen === false ? true : true));
       setOpen(changeOpen);
     }
-  }
+  };
 
   const toggleSemester = (index) => {
     const newOpen = [...open];
     newOpen[index] = !newOpen[index];
     setOpen(newOpen);
-  }
+  };
 
   return (
     <>
-      <div className="p-3 mb-10">
-        <AcademicSummaryBanner cgpa={userCGPA} />
+      <div className="p-3 pt-6 mb-10">
         <div className="relative flex flex-col items-center">
-          <h1 className="py-5 text-2xl">Computer Science Roadmap</h1>
-          <div className="flex flex-row">
-            <div className="flex flex-row items-center mx-2">
-              <FaCheckCircle color="green" />
-              <p>=Completed</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaTimesCircle color="red" />
-              <p>=Incomplete</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaUserCheck color="blue" />
-              <p>=Enrolled</p>
-            </div>
-            <div className="flex flex-row items-center mx-2">
-              <FaRegCircle />
-              <p>=Not Taken</p>
-            </div>
-          </div>
-          {/* md:absolute md:right-2 md:top-3*/}
-            <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
-              <label className="label cursor-pointer">
-                <span className="p-2 label-text">Toggle Semester</span> 
-                <input 
-                type="checkbox" 
+          {studentCatalogs && studentCatalogs.length > 0 && (
+            <TitleCard catalogName={studentCatalogs[0]?.programName} />
+          )}
+          <div className="md:fixed md:bottom-4 md:right-4 md:bg-base-200 md:rounded-md md:z-50 form-control">
+            <label className="label cursor-pointer">
+              <span className="p-2 label-text">Toggle Semester</span>
+              <input
+                type="checkbox"
                 className="toggle toggle-primary"
-                onChange={() => {toggleAllSemester()}}
+                onChange={() => {
+                  toggleAllSemester();
+                }}
                 checked={open[0]}
-                 />
-              </label>
-            </div>
+              />
+            </label>
+          </div>
         </div>
-        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 ">
+        <div className="grid grid-cols-1 gap-5 h-full lg:grid-cols-2 py-2">
           {Array.from({ length: 8 }, (_, i) => {
             const year = Math.ceil((i + 1) / 2);
-            const semesterStr = i % 2 === 0 ? "Fall" : "Spring";
-            const semesterCatalogCourses = filterCatalogCourses(
+            const semester = i % 2 === 0 ? "Fall" : "Spring";
+            const semesterCourses = filterCoursesByTerm(
               year,
-              semesterStr
+              semester,
+              catalogUserCourseMap
             );
-            const semesterUserCourses = filterUserCoursesForSemester(
-              semesterCatalogCourses
-            );
-              //console.log("Semester user courses", semesterUserCourses);
             return (
-              <Semester
-                key={i + 1}
-                number={i + 1}
-                catalogData={semesterCatalogCourses}
-                userCourses={semesterUserCourses}
-                open={open[i]}
-                toggleSemester={toggleSemester}
-              />
+              <div className="rounded-lg bg-base-200 shadow" key={i + 1}>
+                <Semester
+                  key={i + 1}
+                  number={i + 1}
+                  courses={semesterCourses}
+                  toggleSemester={toggleSemester}
+                  open={open[i]}
+                />
+              </div>
             );
           })}
         </div>
